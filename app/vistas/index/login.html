@@ -1,0 +1,64 @@
+<body class="login">
+	<div class="logo">
+		<img src="public/img/logo_sirge.png" alt="" /> 
+	</div>
+	<div class="content">
+		<form class="form-vertical login-form">
+			<h3 class="form-title">Inicie sesi&oacute;n</h3>
+			<div class="alert alert-error">
+				<span class="alert-mensaje"></span>
+			</div>
+			<div class="control-group">
+				<label class="control-label visible-ie8 visible-ie9">Usuario</label>
+				<div class="controls">
+					<div class="input-icon left">
+						<i class="icon-user"></i>
+						<input class="m-wrap placeholder-no-fix" type="text" autocomplete="off" placeholder="Usuario" name="usuario"/>
+					</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label visible-ie8 visible-ie9">Password</label>
+				<div class="controls">
+					<div class="input-icon left">
+						<i class="icon-lock"></i>
+						<input class="m-wrap placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password"/>
+					</div>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn green pull-right">
+				Login <i class="m-icon-swapright m-icon-white"></i>
+				</button>            
+			</div>
+		</form>
+	</div>
+	<div class="copyright">
+		2012 &copy; SIRGe
+	</div>
+</body>
+</html>
+<!-- Programado por Gustavo Damián Hekel -->
+
+<script>
+$(document).ready(function(){
+	$('.alert').hide();
+	$('form').submit(function(event){
+		event.preventDefault();
+		$.ajax({
+			type : 'post' ,
+			url  : 'modulos/index/login.php' ,
+			data : $(this).serialize() ,
+			success : function (data) {
+				console.log (data);
+				if (data == true) {
+					window.location.href = 'index.php';
+				} else {
+					$('.alert').show();
+					$('.alert-mensaje').html('Error en ingreso');
+				}
+			}
+		});
+	});
+});
+</script>
