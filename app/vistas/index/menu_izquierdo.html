@@ -9,7 +9,7 @@
 <script>
 $(document).ready(function(){
 	mostrar_loading();
-	$('.page-content').load('modulos/dashboard.php', function () {ocultar_loading()});
+	$('.page-content').load('app/controladores/dashboard/dashboard.php', function () {ocultar_loading()});
 	
 	$('.page-sidebar-menu a').click(function(event){
 		event.preventDefault();

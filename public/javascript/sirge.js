@@ -12,7 +12,7 @@ function pad(n, width, z) {
 
 function mostrar_loading () {
 	$.blockUI({ 
-		message : '<img src="vistas/sirge_img/ajax-modal-loading.gif" /><h3>Procesando, por favor espere ...</h3>' ,
+		message : '<img src="public/img/ajax-modal-loading.gif" /><h3>Procesando, por favor espere ...</h3>' ,
 		css : {
 			border : '' ,
 			backgroundColor : '' ,
@@ -24,7 +24,7 @@ function mostrar_loading () {
 
 function bloquear_elemento (elemento) {
 	$(elemento).block({ 
-		message: '<img src="vistas/sirge_img/ajax-modal-loading.gif" /><h3>Actualice la página...</h3>' ,
+		message: '<img src="public/img/ajax-modal-loading.gif" /><h3>Actualice la página...</h3>' ,
 		css : {
 			border : '' ,
 			backgroundColor : '' ,
@@ -36,7 +36,7 @@ function bloquear_elemento (elemento) {
 
 function bloquear_elemento_small (elemento) {
 	$(elemento).block({ 
-		message: '<img src="vistas/sirge_img/ajax-modal-loading.gif" />' ,
+		message: '<img src="public/img/ajax-modal-loading.gif" />' ,
 		css : {
 			border : '' ,
 			backgroundColor : '' ,
@@ -101,7 +101,7 @@ TableTools.DEFAULTS.aButtons = 	[
 		"sButtonText"			: "PDF"
 	}];
 
-TableTools.DEFAULTS.sSwfPath = "javascript/data-tables/table_tools/media/swf/copy_csv_xls_pdf.swf";
+TableTools.DEFAULTS.sSwfPath = "public/javascript/plugins/data-tables/table_tools/media/swf/copy_csv_xls_pdf.swf";
 
 $.datepicker.setDefaults ({
 	dateFormat	: "yy-mm-dd" ,

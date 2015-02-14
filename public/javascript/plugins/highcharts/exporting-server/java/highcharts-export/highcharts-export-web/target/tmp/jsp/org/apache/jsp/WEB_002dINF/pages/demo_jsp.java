@@ -51,7 +51,6 @@ public final class demo_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
-      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("<head>\n");
@@ -60,7 +59,7 @@ public final class demo_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"resources/css/demo.css\" />\n");
       out.write("<link rel=\"stylesheet\" type=\"text/css\"\n");
       out.write("\thref=\"resources/lib/codemirror/codemirror.css\" />\n");
-      out.write("<script src=\"http://code.jquery.com/jquery-1.8.2.min.js\"></script>\n");
+      out.write("<script src=\"resources/lib//jquery-1.11.0.min.js\"></script>\n");
       out.write("<script src=\"resources/lib/codemirror/codemirror.js\"></script>\n");
       out.write("<script src=\"resources/lib/codemirror/mode/javascript/javascript.js\"></script>\n");
       out.write("<script src=\"resources/lib/codemirror/mode/xml/xml.js\"></script>\n");

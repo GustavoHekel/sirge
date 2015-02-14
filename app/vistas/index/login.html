@@ -46,17 +46,23 @@ $(document).ready(function(){
 	$('form').submit(function(event){
 		event.preventDefault();
 		$.ajax({
-			type : 'post' ,
-			url  : 'modulos/index/login.php' ,
-			data : $(this).serialize() ,
-			success : function (data) {
-				console.log (data);
+			type 		: 'post' ,
+			url  		: 'app/parserAjax.php' ,
+			data 		: {
+				c : 'Usuarios' ,
+				m : 'Login' ,
+				p : $(this).serialize()
+			} ,
+			dataType 	: 'json' ,
+			success 	: function (data) {
+				
 				if (data == true) {
 					window.location.href = 'index.php';
 				} else {
 					$('.alert').show();
 					$('.alert-mensaje').html('Error en ingreso');
 				}
+				
 			}
 		});
 	});

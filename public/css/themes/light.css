@@ -14,7 +14,7 @@ Page header
 .header .navbar-inner {
   filter: none !important;
   background-image: none !important;
-  background-color: #434343 !important;
+  background-color: #747F8C !important;
 }
 .header .btn-navbar {
   background-color: #434343 !important;
@@ -68,11 +68,13 @@ ul.page-sidebar-menu > li:hover > a {
   border-top: 1px solid #e8e8e8;
 }
 ul.page-sidebar-menu > li.active > a .selected {
+ /* 
   right:-7px;
   top:0px;
   width: 7px;
   height: 39px;
   background-image: url("../../img/sidebar-menu-arrow-green.png");
+ */
 }  
 ul.page-sidebar-menu > li.active i {
   color: #fff !important;
@@ -81,7 +83,7 @@ ul.page-sidebar-menu > li.active i {
   display: none;
 }
 ul.page-sidebar-menu > li.active > a{
-  background: #28b779 !important;
+  background: #3FD5C0 !important;
   border-top-color: transparent !important;
   color:#fff !important;
 }  
@@ -237,31 +239,31 @@ Footer Layouts (new in v1.3)
 /* end:fixed footer */
 /***
 Gritter Notifications 
-*/
+***/
 .gritter-top {
-  background: url(../../../javascript/gritter/images/gritter.png) no-repeat left -30px !important;
+  background: url(../../javascript/plugins/gritter/images/gritter.png) no-repeat left -30px !important;
 }
 .gritter-bottom {
-  background: url(../../../javascript/gritter/images/gritter.png) no-repeat left bottom !important;
+  background: url(../../javascript/plugins/gritter/images/gritter.png) no-repeat left bottom !important;
 }
 .gritter-item {
   display: block;
-  background: url(../../../javascript/gritter/images/gritter.png) no-repeat left -40px !important;
+  background: url(../../javascript/plugins/gritter/images/gritter.png) no-repeat left -40px !important;
 }
 .gritter-close {
-  background: url(../../../javascript/gritter/images/gritter.png) no-repeat left top !important;
+  background: url(../../javascript/plugins/gritter/images/gritter.png) no-repeat left top !important;
 }
 .gritter-title {
   text-shadow: none !important;
-  /* Not supported by IE :(*/
+  /* Not supported by IE :( */
 
 }
-for the light (white) version of the gritter notice
+/* for the light (white) version of the gritter notice */
 .gritter-light .gritter-item,
 .gritter-light .gritter-bottom,
 .gritter-light .gritter-top,
 .gritter-light .gritter-close {
-  background-image: url(../../../javascript/gritter/images/gritter-light.png) !important;
+  background-image: url(../../plugins/gritter/images/gritter-light.png) !important;
 }
 .gritter-item-wrapper a {
   color: #18a5ed;
@@ -325,7 +327,7 @@ Landscape phone to portrait tablet
   }
   ul.page-sidebar-menu > li.active > a {
     color: #ffffff !important;
-    background-color: #28b779 !important;
+    background-color: #3FD5C0 !important;
   }
 
   ul.page-sidebar-menu ul.sub-menu > li > a {

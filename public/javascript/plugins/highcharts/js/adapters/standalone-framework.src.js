@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v3.0.5 (2013-08-23)
+ * @license Highcharts JS v4.0.4 (2014-09-02)
  *
  * Standalone Highcharts Framework
  *
@@ -15,6 +15,7 @@ var UNDEFINED,
 	emptyArray = [],
 	timers = [],
 	timerId,
+	animSetters = {},
 	Fx;
 
 Math.easeInOutSine = function (t, b, c, d) {
@@ -88,6 +89,7 @@ function augment(obj) {
 				} else if (el.attachEvent) {
 					
 					wrappedFn = function (e) {
+						e.target = e.srcElement || window; // #2820
 						fn.call(el, e);
 					};
 
@@ -140,6 +142,7 @@ function augment(obj) {
 				var events = this.HCEvents[name] || [],
 					target = this,
 					len = events.length,
+					i,
 					preventDefault,
 					fn;
 
@@ -147,10 +150,9 @@ function augment(obj) {
 				preventDefault = function () {
 					args.defaultPrevented = true;
 				};
-
-				while (len--) {
-
-					fn = events[len];
+				
+				for (i = 0; i < len; i++) {
+					fn = events[i];
 
 					// args is never null here
 					if (args.stopped) {
@@ -160,6 +162,15 @@ function augment(obj) {
 					args.preventDefault = preventDefault;
 					args.target = target;
 
+					// If the type is not set, we're running a custom event (#2297). If it is set,
+					// we're running a browser event, and setting it will cause en error in
+					// IE8 (#2465).
+					if (!args.type) {
+						args.type = name;
+					}
+					
+
+					
 					// If the event handler return false, prevent the default handler from executing
 					if (fn.call(this, args) === false) {
 						args.preventDefault();
@@ -174,6 +185,7 @@ function augment(obj) {
 
 
 return {
+
 	/**
 	 * Initialize the adapter. This is run once as Highcharts is first run.
 	 */
@@ -192,6 +204,7 @@ return {
 					if (prop === 'opacity') {
 						prop = 'filter';
 					}
+					/*jslint unparam: true*/
 					val = el.currentStyle[prop.replace(/\-(\w)/g, function (a, b) { return b.toUpperCase(); })];
 					if (prop === 'filter') {
 						val = val.replace(
@@ -201,6 +214,7 @@ return {
 							}
 						);
 					}
+					/*jslint unparam: false*/
 					return val === '' ? 1 : val;
 				} 
 			};
@@ -280,10 +294,14 @@ return {
 					elem = this.elem,
 					elemelem = elem.element; // if destroyed, it is null
 
+				// Animation setter defined from outside
+				if (animSetters[this.prop]) {
+					animSetters[this.prop](this);
+
 				// Animating a path definition on SVGElement
-				if (paths && elemelem) {
+				} else if (paths && elemelem) {
 					elem.attr('d', pathAnim.step(paths[0], paths[1], this.now, this.toD));
-				
+
 				// Other animations on SVGElement
 				} else if (elem.attr) {
 					if (elemelem) {
@@ -293,7 +311,7 @@ return {
 				// HTML styles
 				} else {
 					styles = {};
-					styles[elem] = this.now + this.unit;
+					styles[this.prop] = this.now + this.unit;
 					Highcharts.css(elem, styles);
 				}
 				
@@ -339,9 +357,10 @@ return {
 					ret,
 					done,
 					options = this.options,
+					elem = this.elem,
 					i;
-
-				if (this.elem.stopAnimation) {
+				
+				if (elem.stopAnimation || (elem.attr && !elem.element)) { // #2616, element including flag is destroyed
 					ret = false;
 
 				} else if (gotoEnd || t >= options.duration + this.startTime) {
@@ -360,7 +379,7 @@ return {
 
 					if (done) {
 						if (options.complete) {
-							options.complete.call(this.elem);
+							options.complete.call(elem);
 						}
 					}
 					ret = false;
@@ -420,14 +439,14 @@ return {
 				} else if (el.attr) {
 					start = el.attr(name);
 				} else {
-					start = parseFloat(this._getStyle(el, name)) || 0;
+					start = parseFloat(HighchartsAdapter._getStyle(el, name)) || 0;
 					if (name !== 'opacity') {
 						unit = 'px';
 					}
 				}
 	
 				if (!end) {
-					end = parseFloat(prop[name]);
+					end = prop[name];
 				}
 				fx.custom(start, end, unit);
 			}	
@@ -438,7 +457,14 @@ return {
 	 * Internal method to return CSS value for given element and property
 	 */
 	_getStyle: function (el, prop) {
-		return window.getComputedStyle(el).getPropertyValue(prop);
+		return window.getComputedStyle(el, undefined).getPropertyValue(prop);
+	},
+
+	/**
+	 * Add an animation setter for a specific property
+	 */
+	addAnimSetter: function (prop, fn) {
+		animSetters[prop] = fn;
 	},
 
 	/**
@@ -493,19 +519,16 @@ return {
 		return results;
 	},
 
+	/**
+	 * Get the element's offset position, corrected by overflow:auto. Loosely based on jQuery's offset method.
+	 */
 	offset: function (el) {
-		var left = 0,
-			top = 0;
-
-		while (el) {
-			left += el.offsetLeft;
-			top += el.offsetTop;
-			el = el.offsetParent;
-		}
+		var docElem = document.documentElement,
+			box = el.getBoundingClientRect();
 
 		return {
-			left: left,
-			top: top
+			top: box.top  + (window.pageYOffset || docElem.scrollTop)  - (docElem.clientTop  || 0),
+			left: box.left + (window.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft || 0)
 		};
 	},
 

@@ -12,12 +12,12 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 
 /***
 Colors
-blue:  #4b8df8
+blue:  #4B77BE
 light blue: #bfd5fa
-red: #e02222
+red: #E26A6A
 yellow: #ffb848
-green: #35aa47
-purple: #852b99
+green: #3ea7a0
+purple: #8775a7
 grey: #555555;
 light grey: #fafafa;
 ***/
@@ -80,12 +80,12 @@ General backgrounds
 ***/
 .bg-blue {
   background-image: none !important;
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
 }
 
 .bg-red {
   background-image: none !important;
-  background-color: #e02222 !important;
+  background-color: #E26A6A !important;
 }
 
 .bg-yellow {
@@ -95,12 +95,12 @@ General backgrounds
 
 .bg-green {
   background-image: none !important;
-  background-color: #35aa47 !important;
+  background-color: #3ea7a0 !important;
 }
 
 .bg-purple {
   background-image: none !important;
-  background-color: #852b99 !important;
+  background-color: #8775a7 !important;
 }
 
 .bg-grey {
@@ -449,7 +449,7 @@ Header and header elements.
   right: 24px;
   text-align: center;
   height: 14px;
-  background-color: #e02222;
+  background-color: #E26A6A;
   padding: 2px 6px 2px 6px;
   -webkit-border-radius: 12px !important;
      -moz-border-radius: 12px !important;
@@ -1057,7 +1057,7 @@ Dashboard date range panel
   padding-bottom: 7px;
   cursor: pointer;
   color: #fff;
-  background-color: #e02222;
+  background-color: #E26A6A;
 }
 
 .page-content .breadcrumb .dashboard-date-range span {
@@ -1267,7 +1267,7 @@ Input icons
 }
 
 .input-icon .input-info {
-  color:#27a9e3;
+  color:#578ebe;
 }
 .input-icon .input-error {
   color:#B94A48;
@@ -1458,11 +1458,11 @@ Portlets
 }
 
 .portlet > .portlet-body.blue, .portlet.blue {
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
 }
 
 .portlet > .portlet-body.red, .portlet.red {
-  background-color: #e02222 !important;
+  background-color: #E26A6A !important;
 }
 
 .portlet > .portlet-body.yellow, .portlet.yellow {
@@ -1470,11 +1470,11 @@ Portlets
 }
 
 .portlet > .portlet-body.green, .portlet.green {
-  background-color: #35aa47 !important;
+  background-color: #3ea7a0 !important;
 }
 
 .portlet > .portlet-body.purple, .portlet.purple {
-  background-color: #852b99 !important;
+  background-color: #8775a7 !important;
 }
 
 .portlet > .portlet-body.light-grey, .portlet.light-grey {
@@ -1621,20 +1621,20 @@ Box portlet
 }
 
 .portlet.box.blue > .portlet-title {
-  background-color: #4b8df8;
+  background-color: #4B77BE;
 } 
 
 .portlet.box.blue {  
-   border: 1px solid #b4cef8;
+   border: 1px solid #7093cc;
    border-top: 0;
 }
 
 .portlet.box.red > .portlet-title {
-  background-color: #e02222;
+  background-color: #E26A6A;
 } 
 
 .portlet.box.red {  
-   border: 1px solid #ef8476;
+   border: 1px solid #ea9595;
    border-top: 0;
 }
 
@@ -1648,20 +1648,20 @@ Box portlet
 }
 
 .portlet.box.green > .portlet-title {
-  background-color: #35aa47;
+  background-color: #3ea7a0;
 } 
 
 .portlet.box.green {  
-   border: 1px solid #77e588;
+   border: 1px solid #67c6bf;
    border-top: 0;
 }
 
 .portlet.box.purple > .portlet-title {
-  background-color: #852b99;
+  background-color: #8775a7;
 } 
 
 .portlet.box.purple {  
-   border: 1px solid #af5cc1;
+   border: 1px solid #b07cc6;
    border-top: 0;
 }
 
@@ -2311,7 +2311,7 @@ textarea.placeholder {
 }
 
 .control-label .required {
-  color: #e02222;
+  color: #E26A6A;
   font-size: 12px;
   padding-left: 2px;
 }
@@ -2517,7 +2517,7 @@ Chats
 
 .chats li.in .message {
   text-align: left;
-  border-left: 2px solid #35aa47;
+  border-left: 2px solid #3ea7a0;
   margin-left: 65px;
   background: #fafafa 
 }
@@ -2532,7 +2532,7 @@ Chats
 
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;  
-  border-right: 8px solid #35aa47;  
+  border-right: 8px solid #3ea7a0;  
 }
 
 .chats li.out .message .arrow {
@@ -3147,11 +3147,11 @@ Dashboard stats
 }
 
 .dashboard-stat.blue {
-  background-color: #27a9e3;
+  background-color: #578ebe;
 }
 
 .dashboard-stat.blue .more { 
-  background-color: #208dbe;
+  background-color: #4884b8;
 } 
 
 .dashboard-stat.green {
@@ -3163,11 +3163,11 @@ Dashboard stats
 } 
 
 .dashboard-stat.red {
-  background-color: #e7191b;
+  background-color: #e35b5a;
 }
 
 .dashboard-stat.red .more { 
-  background-color:#bc0d0e;
+  background-color:#e04a49;
 } 
 
 .dashboard-stat.yellow {
@@ -3179,11 +3179,11 @@ Dashboard stats
 } 
 
 .dashboard-stat.purple {
-  background-color: #852b99;
+  background-color: #8775a7;
 }
 
 .dashboard-stat.purple .more { 
-  background-color: #6e1881;
+  background-color: #7c699f;
 } 
 
 /***
@@ -3883,7 +3883,7 @@ Form wizard
 }
  
 .form-wizard .active .step .number {
-  background-color: #35aa47;
+  background-color: #3ea7a0;
   color: #fff;
 }
 
@@ -4005,7 +4005,7 @@ Daterangepicker plugin css changes
 }
 
 .daterangepicker td.active {
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
   background-image: none !important;
   filter:none !important;
 }
@@ -4396,7 +4396,7 @@ div.tagsinput span.tag a {
 div.tagsinput .not_valid {
   color: #fff !important;
   padding: 3px 6px !important;
-  background-color: #e02222 !important;
+  background-color: #E26A6A !important;
 }
 
 /***
@@ -4651,8 +4651,8 @@ jQuery UI Datepicker(new in v1.2.2)
 
 .ui-datepicker button.ui-state-default {
   background-image: none !important;
-  background-color: #35aa47 !important;
-  border-color: #35aa47 !important;
+  background-color: #3ea7a0 !important;
+  border-color: #3ea7a0 !important;
   color: #fff;
 } 
 
@@ -4710,7 +4710,7 @@ jQuery UI Dialogs(new in v1.2.4)
 /*dialog title bg colors*/
 .ui-dialog.ui-dialog-blue .ui-dialog-titlebar {
   color: #fff !important;
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
 }
 
 .ui-dialog.ui-dialog-blue .ui-dialog-titlebar-close {
@@ -4719,7 +4719,7 @@ jQuery UI Dialogs(new in v1.2.4)
 
 .ui-dialog.ui-dialog-red .ui-dialog-titlebar {
   color: #fff !important;
-  background-color: #e02222 !important;
+  background-color: #E26A6A !important;
 }
 
 .ui-dialog.ui-dialog-red .ui-dialog-titlebar-close {
@@ -4737,7 +4737,7 @@ jQuery UI Dialogs(new in v1.2.4)
 
 .ui-dialog.ui-dialog-green .ui-dialog-titlebar {
   color: #fff !important;
-  background-color: #35aa47 !important;
+  background-color: #3ea7a0 !important;
 }
 
 .ui-dialog.ui-dialog-green .ui-dialog-titlebar-close {
@@ -4746,7 +4746,7 @@ jQuery UI Dialogs(new in v1.2.4)
 
 .ui-dialog.ui-dialog-purple .ui-dialog-titlebar {
   color: #fff !important;
-  background-color: #852b99 !important;
+  background-color: #8775a7 !important;
 }
 
 .ui-dialog.ui-dialog-purple .ui-dialog-titlebar-close {
@@ -4811,7 +4811,7 @@ Horezantal Menu(new in v1.2)
 
 .header .hor-menu ul.nav li.active > a,
 .header .hor-menu ul.nav li.active > a:hover {
-  background: #e02222 !important; 
+  background: #E26A6A !important; 
 }
 
 .ie8 .header .hor-menu ul.nav li.active > a {
@@ -4830,7 +4830,7 @@ Horezantal Menu(new in v1.2)
   position: absolute;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #e02222;
+  border-top: 6px solid #E26A6A;
   display: inline-block;
   margin: 0;
   width: 0px;
@@ -4892,7 +4892,7 @@ Horezantal Menu(new in v1.2)
 .header .hor-menu .dropdown-menu li.active > a {
     color: #fff;
     filter:none !important;
-    background: #e02222 !important;
+    background: #E26A6A !important;
 }
 
 .header .hor-menu .nav > li > .dropdown-menu:after,
@@ -5332,7 +5332,7 @@ Bootstrap Datetimepickers Restyle(in v1.2.4)
 
 .datetimepicker table .active {
   background-image: none !important;
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
   filter: none !important;
 }
 
@@ -5355,7 +5355,7 @@ Bootstrap Datepickers Restyle(in v1.2.4)
 
 .datepicker table .active {
   background-image: none !important;
-  background-color: #4b8df8 !important;
+  background-color: #4B77BE !important;
   filter: none !important;
 }
 

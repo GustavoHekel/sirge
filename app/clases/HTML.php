@@ -18,7 +18,7 @@ class HTML {
 			self::$_template = str_replace('{'.$clave.'}', $valor, self::$_template);
 		}
 		
-		return self::$_template;
+		echo self::$_template;
 	}
 	
 	public function ArmarMenu ($id_menu) {
@@ -69,6 +69,7 @@ class HTML {
 	}
 	
 	private function ArmarSubMenu ($nivel_padre , $id_menu) {
+	
 		$sql="
 			select
 				m2.* 

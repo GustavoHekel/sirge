@@ -1,6 +1,6 @@
 <?php
 
-abstract class SIRGe {
+class SIRGe {
 	
 	private 
 		$_db ,
@@ -9,6 +9,8 @@ abstract class SIRGe {
 	public function __construct () {
 		$this->_db = BDD::GetInstance();
 	}
+	
+	
 	
 	public function JSONDT ($data = array() , $ajax = false) {
 		
@@ -73,12 +75,12 @@ abstract class SIRGe {
 			"select	
 				descripcion as nombre
 				, comentario
-				, fecha
-				, extract (day from fecha) || '/' || lpad (extract (month from fecha) :: text , 2 , '0') || '/' || extract (year from fecha) || ' - ' || extract (hour from fecha) || ':' || lpad (extract (minutes from fecha) :: text , 2 , '0') as fecha_comentario
+				, fecha_comentario
+				, extract (day from fecha_comentario) || '/' || lpad (extract (month from fecha_comentario) :: text , 2 , '0') || '/' || extract (year from fecha_comentario) || ' - ' || extract (hour from fecha_comentario) || ':' || lpad (extract (minutes from fecha_comentario) :: text , 2 , '0') as fecha_comentario
 			from 
 				sistema.comentarios c left join
 				sistema.usuarios u on c.id_usuario = u.id_usuario 
-			order by fecha desc";
+			order by 3 desc";
 		
 		$this->_comentario = '';
 
@@ -103,14 +105,14 @@ abstract class SIRGe {
 			"select * 
 			from (
 				select
-					extract (year from timestamp) :: text || lpad (extract (month from timestamp) ::text , 2 , '0') as periodo
+					extract (year from fecha_login) :: text || lpad (extract (month from fecha_login) ::text , 2 , '0') as periodo
 					, count (*) as visitas
-				from sistema.log_inicio_sesion
+				from logs.log_logins
 				group by
 					1
 				order by
 					1 desc
-				limit 8 ) a
+				limit 6 ) a
 			order by 1 asc";
 		
 		$data = $this->_db->Query($sql)->GetResults();
@@ -129,7 +131,7 @@ abstract class SIRGe {
 			
 			$sql = "
 				select round (count (*) / 27 :: numeric * 100 , 0) as valor
-				from sistema.procesos_obras_sociales
+				from puco.procesos_obras_sociales
 				where periodo = (extract (year from now()) :: text || lpad (extract (month from now()) :: text , 2 , '0')) :: int";
 				
 		} else {
@@ -140,7 +142,7 @@ abstract class SIRGe {
 				select id_provincia
 				from 
 					sistema.lotes l left join
-					sistema.impresiones_ddjj i on l.lote = i.lote
+					declaraciones_juradas.impresiones_ddjj_sirge i on l.lote = i.lote
 				where 
 					id_estado = 1
 					and id_padron = " . $id_padron . "
@@ -148,17 +150,16 @@ abstract class SIRGe {
 					and extract (year from fecha_impresion_ddjj) = " . date('Y') . "
 				group by id_provincia ) p";
 		}
-		$data = $this->_db->Query($sql)->GetResults();
-		return $data[0]['valor'];
+		return $this->_db->Query($sql)->GetRow()['valor'];
 	}
 
 	public function DetalleFuenteDatosDB ($id_padron) {
 		$sql = "
 			select 
-				nombre
+				descripcion as nombre
 				, lote
-				, registros_insertados
-				, registros_rechazados
+				, registros_in
+				, registros_out
 				, case when lote is not null 
 					then '<i class=\"halflings-icon ok\"></i>'
 					else '<i class=\"halflings-icon remove\"></i>'
@@ -168,19 +169,38 @@ abstract class SIRGe {
 					select
 						id_provincia
 						, l.lote
-						, registros_insertados
-						, registros_rechazados
+						, registros_in
+						, registros_out
 					from 
 						sistema.lotes l left join
-						sistema.impresiones_ddjj i on l.lote = i.lote
+						declaraciones_juradas.impresiones_ddjj_sirge i on l.lote = i.lote
 					where
-						id_padron = " . $id_padron[0] . "
+						id_padron = " . $id_padron . "
 						and id_estado = 1
 						and extract (month from fecha_impresion_ddjj) = " . date('m') . "
 						and extract (year from fecha_impresion_ddjj) = " . date('Y') . "
 				) lot on pro.id_provincia = lot.id_provincia
 			order by
 				pro.id_provincia";
+		
+		return $this->JSONDT($this->_db->Query($sql)->GetResults() , true);
+	}
+	
+	public function DetalleVisitasDB () {
+		
+		$sql = "
+			select
+				p.descripcion as nombre
+				, count (*) as cantidad
+			from
+				logs.log_logins l left join
+				sistema.usuarios u on l.id_usuario = u.id_usuario left join
+				sistema.entidades p on u.id_entidad = p.id_entidad
+			where
+				extract (year from fecha_login) = " . date ('Y') . "
+				and extract (month from fecha_login) = " . date ('m') . "
+			group by 1
+			order by 1";
 		
 		return $this->JSONDT($this->_db->Query($sql)->GetResults() , true);
 	}
@@ -198,11 +218,11 @@ abstract class SIRGe {
 		from 
 			puco.grupos_obras_sociales o left join (
 				select * 
-				from sistema.procesos_obras_sociales
+				from puco.procesos_obras_sociales
 				where periodo = (extract (year from localtimestamp) :: text || lpad ((extract (month from localtimestamp) :: text) , 2 , '0')) :: int --". date ('Ym') ." 
 			) a on o.grupo_os = a.codigo_os left join (
 				select * 
-				from sistema.procesos_obras_sociales
+				from puco.procesos_obras_sociales
 				where periodo = (extract (year from (localtimestamp - interval '1 month')) :: text || lpad (extract (month from (localtimestamp - interval '1 month')) :: text , 2 , '0')) :: int
 			) b on a.codigo_os = b.codigo_os";
 		
@@ -211,78 +231,161 @@ abstract class SIRGe {
 	}
 	
 	public function InsertarComentarioDB ($comentario) {
+		
 		$sql = "
 			insert into sistema.comentarios (id_usuario , comentario)
-			values (" . $_SESSION['id_usuario'] . " , '" . $comentario[0] . "')";
-		$this->_db->Query($sql);
+			values (?,?)";
+		
+		$params = array(
+			$_SESSION['id_usuario'] ,
+			$comentario
+		);
+		
+		$this->_db->Query($sql , $params);
 		
 		return $this->ListarComentariosDB(true);
 	}
 	
 	public function DetalleTotalesDB ($id_total) {
-		switch ($id_total[0]) {
+		
+		switch ($id_total) {
 			case 1 : 
 				$sql = "
 					select
-						nombre
-						, to_char (sum (registros_insertados) , '99,999,999') as total
+						descripcion as nombre
+						, to_char (sum (registros_in) , '99,999,999') as total
 					from 
 						sistema.lotes l left join
 						sistema.provincias p on l.id_provincia = p.id_provincia
 					where 
 						id_padron = 1
 						and id_estado = 1
-					group by p.nombre
-					order by p.nombre";
+					group by 1
+					order by 1";
 			break;
 			
 			case 2 :
 				$sql = "
 					select
-						p.nombre
+						p.descripcion as nombre
 						, to_char (count (*)  , '99,999,999') as total
 					from
 						efectores.efectores e left join
 						efectores.datos_geograficos g on e.id_efector = g.id_efector left join
 						sistema.provincias p on g.id_provincia = p.id_provincia
 					where id_estado = 1
-					group by p.nombre
-					order by p.nombre";
+					group by 1
+					order by 1";
 			break;
 			
 			case 3 :
 				$sql = "
 					select
-						nombre
-						, to_char (total , '999,999,999') as total
-					from 
-						(
-						select provincia , sum (precio_unitario) as total from prestaciones.prestaciones where estado = 'L' L' 
-						) a left join
-						sistema.provincias p on p.id_provincia = a.id_provincia";
+						p.descripcion as nombre
+						, to_char (count(*) , '99,999,999') as total
+					from
+						beneficiarios.beneficiarios b left join
+						sistema.provincias p on b.id_provincia_alta = p.id_provincia
+					group by 1
+					order by 1";
 			break;
 			
 			case 4 :
 				$sql = "
 					select
-						nombre
-						, count (*) as total
-					from (
-						select 
-							u.* , coalesce (p.nombre , e.nombre) as nombre
-						from 
-							sistema.usuarios u left join
-							sistema.provincias p on u.id_entidad = p.id_provincia left join
-							sistema.entidades_administrativas e on u.id_entidad = e.id_entidad_administrativa ) a
-					group by nombre
-					order by nombre";
+						e.descripcion
+						, to_char (count (*) , '999,999') as total
+					from
+						sistema.usuarios u left join
+						sistema.entidades e on u.id_entidad = e.id_entidad
+					group by 1
+					order by 1";
 			break;
 		}
 		
 		echo $this->JSONDT($this->_db->Query($sql)->GetResults());
-		
 	}
 	
+	public function CantidadPrestaciones () {
+		
+		$sql = "
+			select 
+				to_char (sum (registros_in) , '99,999,999') as cantidad 
+			from 
+				sistema.lotes 
+			where 
+				id_padron = 1 
+				and id_estado = 1";
+		
+		return $this->_db->Query($sql)->GetRow()['cantidad'];
+	}
+	
+	public function CantidadEfectores () {
+		
+		$sql = "
+			select
+				count (*) as cantidad
+			from
+				efectores.efectores";
+		
+		return $this->_db->Query($sql)->GetRow()['cantidad'];
+	}
+	
+	public function CantidadUsuarios () {
+		
+		$sql = "
+			select
+				count (*) as cantidad
+			from
+				sistema.usuarios";
+		
+		return $this->_db->Query($sql)->GetRow()['cantidad'];
+	}
+	
+	public function CantidadBeneficiarios () {
+		
+		$sql = "
+			select
+				to_char (count (*) , '99,999,999') as cantidad
+			from
+				beneficiarios.beneficiarios";
+		
+		return $this->_db->Query($sql)->GetRow()['cantidad'];
+	}
+	
+	public static function RetornaIdProvincia ($provincia) {
+		
+		$id_provincia;
+		
+		switch ($provincia) {
+			case 'CIUDAD DE BUENOS AIRES' : $id_provincia = '01'; break;
+			case 'BUENOS AIRES' : $id_provincia = '02'; break;
+			case 'CATAMARCA' : $id_provincia = '03'; break;
+			case 'CÓRDOBA' : $id_provincia = '04'; break;
+			case 'CORRIENTES' : $id_provincia = '05'; break;
+			case 'ENTRE RIOS' : $id_provincia = '06'; break;
+			case 'JUJUY' : $id_provincia = '07'; break;
+			case 'LA RIOJA' : $id_provincia = '08'; break;
+			case 'MENDOZA' : $id_provincia = '09'; break;
+			case 'SALTA' : $id_provincia = '10'; break;
+			case 'SAN JUAN' : $id_provincia = '11'; break;
+			case 'SAN LUIS' : $id_provincia = '12'; break;
+			case 'SANTA FE' : $id_provincia = '13'; break;
+			case 'SANTIAGO DEL ESTERO' : $id_provincia = '14'; break;
+			case 'TUCUMÁN' : $id_provincia = '15'; break;
+			case 'CHACO' : $id_provincia = '16'; break;
+			case 'CHUBUT' : $id_provincia = '17'; break;
+			case 'FORMOSA' : $id_provincia = '18'; break;
+			case 'LA PAMPA' : $id_provincia = '19'; break;
+			case 'MISIONES' : $id_provincia = '20'; break;
+			case 'NEUQUÉN' : $id_provincia = '21'; break;
+			case 'RÍO NEGRO' : $id_provincia = '22'; break;
+			case 'SANTA CRUZ' : $id_provincia = '23'; break;
+			case 'TIERRA DEL FUEGO' : $id_provincia = '24'; break;
+		}
+		
+		return $id_provincia;
+	}
 	
 	
 
