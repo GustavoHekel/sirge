@@ -21,8 +21,8 @@ $diccionario = array (
 	'CANTIDAD_VISITAS' 		=> $sirge->VisitasDB(),
 	'COMENTARIOS' 			=> $sirge->ListarComentariosDB(),
 	'PERIODO' 				=> date('Y-m'),
-	'NOTIFICACION_SIRGE'	=> $notif->GritterSIRGe('03'),
-	'NOTIFICACION_DOIU9' 	=> $notif->GritterDOIU9('03')
+	'NOTIFICACION_SIRGE'	=> $notif->GritterSIRGe($_SESSION['grupo']),
+	'NOTIFICACION_DOIU9' 	=> $notif->GritterDOIU9($_SESSION['grupo'])
 );
 
 HTML::Vista($html , $diccionario);

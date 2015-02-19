@@ -1,6 +1,6 @@
 <?php
 
-class Notificaciones {
+class Notificaciones extends SIRGe {
 	
 	private $_db;
 	
@@ -16,12 +16,6 @@ class Notificaciones {
 				sticky 	: true 
 			});";
 		return $js;
-	}
-	
-	private function GetNombrePadron ($id_fuente) {
-		$sql = "select nombre from sistema.padrones where id_padron = ?";
-		$params = array ($id_fuente);
-		return $this->_db->Query($sql , $params)->GetRow()['nombre'];
 	}
 	
 	private function GritterFuenteDatos ($id_provincia , $id_fuente) {

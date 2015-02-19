@@ -1,0 +1,31 @@
+<ul id="tab-fuente-datos" class="nav nav-tabs">
+	<li><a data-target="#carga_archivos" data-toggle="tab" href="app/controladores/padron/{FUENTE_DATOS}/carga_archivo.php">Carga de archivos</a></li>
+	<li><a data-target="#archivos_subidos" data-toggle="tab" href="app/controladores/padron/{FUENTE_DATOS}/subidas.php">Archivos subidos</a></li>
+	<li><a data-target="#lotes_procesados" data-toggle="tab" href="app/controladores/padron/{FUENTE_DATOS}/lotes_procesados.php">Lotes procesados</a></li>
+	<li><a data-target="#impresion_ddjj" data-toggle="tab" href="app/controladores/padron/{FUENTE_DATOS}/impresion_grupal_ddjj.php">Impresi&oacute;n grupal DDJJ</a></li>
+</ul>
+
+<div class="tab-content tab-contenedor">
+	<div class="tab-pane" id="carga_archivos">Cargando...</div>
+	<div class="tab-pane" id="archivos_subidos">Cargando...</div>
+	<div class="tab-pane" id="lotes_procesados">Cargando...</div>
+	<div class="tab-pane" id="impresion_ddjj">Cargando...</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$(function() {
+		$("#tab-fuente-datos").tab();
+		$("#tab-fuente-datos").bind("show", function(e) {    
+			var contentID  = $(e.target).attr("data-target");
+			var contentURL = $(e.target).attr("href");
+			if (typeof(contentURL) != 'undefined')
+				$(contentID).load(contentURL, function(){ $("#tab-fuente-datos").tab(); });
+			else
+				$(contentID).tab('show');
+		});
+		$('#tab-fuente-datos a:first').tab("show");
+	});
+});
+</script>
+

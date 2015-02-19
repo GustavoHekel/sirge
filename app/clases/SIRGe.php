@@ -10,8 +10,6 @@ class SIRGe {
 		$this->_db = BDD::GetInstance();
 	}
 	
-	
-	
 	public function JSONDT ($data = array() , $ajax = false) {
 		
 		$i = 0;
@@ -387,7 +385,23 @@ class SIRGe {
 		return $id_provincia;
 	}
 	
+	public function GetNombrePadron ($id_fuente) {
+		$sql = "select nombre from sistema.padrones where id_padron = ?";
+		$params = array ($id_fuente);
+		return $this->_db->Query($sql , $params)->GetRow()['nombre'];
+	}
 	
+	private function GetIDPadron ($nombre_padron) {
+		$id_padron;
+		switch ($nombre_padron) {
+			case 'prestaciones' : $id_padron = 1; break;
+			case 'comprobantes' : $id_padron = 3; break;
+			case 'fondos' 		: $id_padron = 2; break;
+			case 'osp' 			: $id_padron = 6; break;
+			default				: die ("PADRON NO ENCONTRADO");
+		}
+		return $id_padron;
+	}
 
 }
 

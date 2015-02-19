@@ -44,7 +44,7 @@ class HTML {
 			if (! strlen ($dato['modulo'])) {
 				$this->_menu .= '<a href="#"><i class="' . $dato['icono_metronic'] . '"></i><span class="title">' . $dato['nombre'] . '</span><span class="arrow "></span></a>';
 			} else {
-				$this->_menu .= '<a href="modulos/' . $dato['modulo'] . '">';
+				$this->_menu .= '<a href="app/controladores/' . $dato['modulo'] . '">';
 				$this->_menu .= '<i class="' . $dato['icono_metronic'] . '"></i><span class="title">' . $dato['nombre'] . '</span>';
 				$this->_menu .= $dato['id_modulo'] == 5 ? '<span class="selected"></span></a>' : '</a>' ;
 			}
@@ -56,7 +56,7 @@ class HTML {
 				$this->_menu .= '<ul class="sub-menu">';
 				
 				foreach ($data_sub as $sub) {
-					$this->_menu .= '<li><a href="modulos/' . $sub['modulo'] . '">' . $sub['nombre'] . '</a></li>';
+					$this->_menu .= '<li><a href="app/controladores/' . $sub['modulo'] . '">' . $sub['nombre'] . '</a></li>';
 				}
 				
 				$this->_menu .= '</ul>';

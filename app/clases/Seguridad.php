@@ -1,5 +1,5 @@
 <?php
-abstract class Seguridad {
+class Seguridad {
 	
 	public static function getNavegador () {
 		$n = get_browser (null , true);
@@ -8,5 +8,9 @@ abstract class Seguridad {
 	
 	public static function getSession () {
 		return isset ($_SESSION['id_usuario']) ? true : false ;
+	}
+	
+	public function CerrarSesion () {
+		session_destroy();
 	}
 }
