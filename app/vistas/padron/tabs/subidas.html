@@ -43,125 +43,84 @@ $(document).ready(function(){
 		});
 	}
 	
+	function accion (titulo , mensaje , clase , metodo , id_carga) {
+		
+		$("#dialog-respuesta").html(mensaje).dialog({
+			title 	: titulo ,
+			buttons	: [
+			{
+				text	: "Aceptar" , 
+				class 	: "btn green", 
+				click	: function() {
+					$(this).dialog("close");
+					mostrar_loading () ;
+					$.ajax({
+						type 		: 'post' ,
+						url  		: 'app/parserAjax.php' ,
+						data 		: {
+							c	: clase ,
+							m	: metodo ,
+							p	: 'id_carga=' + id_carga
+						} ,
+						success 	: function(data) {
+							ocultar_loading () ;
+							$("#dialog-respuesta-ajax").html(data);
+							$("#dialog-respuesta-ajax").dialog({
+								title	: 'Confirmación' ,
+								buttons	: [
+								{
+									text 	: 'Ok' ,
+									class 	: 'btn green' ,
+									click 	: function () {
+										$(this).dialog('close');
+										armar_tabla ();
+									}
+								}]
+							});
+						} ,
+						error 		: function (data) {
+							alert (data);
+						}
+					});
+				}
+			} , 
+			{ 
+				text	: "Cancelar", 
+				class 	: "btn red" , 
+				click	: function() { 
+					$(this).dialog("close"); 
+				}
+			}]
+		});
+	}
+	
 	armar_tabla ();
 	estilo_dialog ('{CSS_GLOBAL}');
 	
-	$('#tabla_archivos_subidos').on('click' , '.eliminar' , function(event){
+	$('.subidas').on('click' , '.eliminar' , function(event){
 		
 		var id_carga	= $(this).attr("file");
 		var file 		= $(this).parents("tr").children().html();
 		var mensaje 	= "Est&aacute; por eliminar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
+		var titulo		= 'Eliminar?';
+		var clase		= 'Padron';
+		var metodo		= 'Baja';
 		
-		$("#dialog-respuesta").html(mensaje);
-		$("#dialog-respuesta").dialog({
-			title : 'Eliminar?' ,
-			buttons: [
-			{ 
-				text: "Aceptar" , 
-				class : "btn green", 
-				click: function() {
-					
-					$(this).dialog("close");
-					mostrar_loading () ;
-					
-					$.ajax({
-						type 		: 'post' ,
-						url  		: 'app/parserAjax.php' ,
-						data 		: {
-							c	: 'Padron' ,
-							m	: 'Baja' ,
-							p	: 'id_carga=' + id_carga
-						} ,
-						success 	: function(data) {
-							
-							ocultar_loading () ;
-							$("#dialog-respuesta-ajax").html(data);
-							$("#dialog-respuesta-ajax").dialog({
-								title		: 'Confirmación' ,
-								buttons		: [
-								{
-									text 		: 'Ok' ,
-									class 		: 'btn green' ,
-									click 		: function () {
-										$(this).dialog('close');
-										armar_tabla ();
-									}
-								}]
-							});
-						} ,
-						error 		: function (data) {
-							alert (data);
-						}
-					});
-				}
-			} , 
-			{ 
-				text	: "Cancelar", 
-				class 	: "btn red" , 
-				click	: function() { 
-					$(this).dialog("close"); 
-				}
-			}]
-		});
+		accion (titulo , mensaje , clase , metodo , id_carga);
+		
 	});
 
-	$('#tabla_archivos_subidos').on('click' , '.procesar' , function(event){
+	$('.subidas').on('click' , '.procesar' , function(event){
 		
 		var id_carga	= $(this).attr("file");
 		var file 		= $(this).parents("tr").children().html();
 		var mensaje 	= "Est&aacute; por procesar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
+		var	titulo		= 'Procesar?';
+		var clase		= '{CLASE_PROCESAR}'
+		var metodo		= '{METODO_PROCESAR}'
 		
-		$("#dialog-respuesta").html(mensaje);
-		$("#dialog-respuesta").dialog({
-			title : 'Procesar?' ,
-			buttons: [
-			{
-				text	: "Aceptar" , 
-				class 	: "btn green" , 
-				click 	: function(){
-					
-					$(this).dialog('close');
-					mostrar_loading ();
-					
-					$.ajax({
-						type 		: 'post' ,
-						url  		: 'app/parserAjax.php' ,
-						data 		: {
-								clase 	: '{CLASE_PADRON}' ,
-								metodo	: '{METODO_PROCESAR}' ,
-								p1		: id_carga
-						} ,
-						success 	: function(data) {
-							
-							ocultar_loading () ;
-							$("#dialog-respuesta-ajax").html(data);
-							$("#dialog-respuesta-ajax").dialog({
-								title		: 'Confirmación' ,
-								buttons		: [
-								{
-									text 		: 'Ok' ,
-									class 		: 'btn green' ,
-									click 		: function () {
-										$(this).dialog('close');
-										armar_tabla ();
-									}
-								}]
-							});
-						} ,
-						error 		: function (data) {
-							alert (data);
-						}
-					});
-				}
-			} , 
-			{ 
-				text	: "Cancelar", 
-				class 	: "btn red" , 
-				click	: function() { 
-					$(this).dialog("close"); 
-				}
-			}]
-		});
+		accion (titulo , mensaje , clase , metodo , id_carga);
+		
 	});
 });
 </script>

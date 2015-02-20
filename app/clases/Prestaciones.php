@@ -2,6 +2,11 @@
 
 class Prestaciones extends Padron {
 	
+	private 
+		$_nombre_archivo ,
+		$_ruta_archivo ,
+		$_fp;
+	
 	/**
 	 * 
 	 * METODOS PARA MANEJO DE INGRESO DE REGISTROS A LA BASE DE DATOS
@@ -11,6 +16,24 @@ class Prestaciones extends Padron {
 	protected function ProcesaRegistro ($registro) {}
 	protected function IngresaRegistro ($registro) {}
 	protected function IngresaError ($registro) {}
+	
+	public function ProcesaArchivo ($id_carga) {
+		
+		$this->_nombre_archivo = $this->GetNombreArchivo($id_carga);
+		$this->_ruta_archivo = '../data/upload/prestaciones/' . $this->_nombre_archivo;
+		
+		if ($this->_fp = fopen ($this->_ruta_archivo , 'rb')) {
+			
+			while (! feof ($this->_fp)) {
+				echo fgets ($this->_fp);
+			}
+			
+		} else {
+			
+		}
+		
+		
+	}
 	
 	/**
 	 * 

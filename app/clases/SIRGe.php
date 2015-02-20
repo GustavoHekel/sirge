@@ -388,10 +388,10 @@ class SIRGe {
 	public function GetNombrePadron ($id_fuente) {
 		$sql = "select nombre from sistema.padrones where id_padron = ?";
 		$params = array ($id_fuente);
-		return $this->_db->Query($sql , $params)->GetRow()['nombre'];
+		return BDD::GetInstance()->Query($sql , $params)->GetRow()['nombre'];
 	}
 	
-	private function GetIDPadron ($nombre_padron) {
+	public function GetIDPadron ($nombre_padron) {
 		$id_padron;
 		switch ($nombre_padron) {
 			case 'prestaciones' : $id_padron = 1; break;

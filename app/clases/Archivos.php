@@ -24,18 +24,24 @@ class Archivos extends SIRGe {
 	 *
 	 **/
 	
-	private function MueveArchivo ($nombre_original , $nombre_nuevo) {
+	protected function MueveArchivo ($nombre_original , $nombre_nuevo) {
 		if (move_uploaded_file ($nombre_original , $nombre_nuevo)) return true;
 		else return false;
 	}
 	
-	private function GetIDSubida ($nombre_archivo) {
+	protected function GetIDSubida ($nombre_archivo) {
 		$params = array ($nombre_archivo);
-		$sql = "select id_subida from sistema.subidas where nombre_actual = ?";
+		$sql 	= "select id_subida from sistema.subidas where nombre_actual = ?";
 		return $this->_db->Query($sql , $params)->GetRow()['id_subida'];
 	}
+	
+	protected function GetNombreArchivo ($id_subida) {
+		$params = array ($id_subida);
+		$sql 	= "select nombre_actual from sistema.subidas where id_subida = ?";
+		return $this->_db->Query($sql , $params)->GetRow()['nombre_actual'];
+	}
 	 
-	private function RegistraSubida ($id_usuario , $id_padron , $tamanio , $nombre_original , $nombre_nuevo) {
+	protected function RegistraSubida ($id_usuario , $id_padron , $tamanio , $nombre_original , $nombre_nuevo) {
 		$params = array (
 			$id_usuario
 			, $id_padron
@@ -94,17 +100,16 @@ class Archivos extends SIRGe {
 	
 	public function Baja ($id_subida) {
 		
-		$SIRGe 	= new SIRGe();
-		
 		$params = array ($id_subida);
 		$sql 	= "select * from sistema.subidas where id_subida = ?";
 		$data 	= $this->_db->Query($sql , $params)->GetRow();
 		
 		$nombre = $data['nombre_actual'];
-		$padron = strtolower($SIRGe->GetNombrePadron($data['id_padron']));
+		$padron = strtolower($this->GetNombrePadron($data['id_padron']));
 		
 		if (unlink ('../data/upload/' . $padron . '/' . $nombre . '')) {
 			$this->RegistraBaja($id_subida);
+			echo 'Se ha eliminado el archivo ' . $data['nombre_original'];
 		}
 		
 	}
@@ -136,7 +141,6 @@ class Archivos extends SIRGe {
 			}
 		}
 	}
-	
 	
 	public function ListadoSubidas ($id_fuente) {
 		
