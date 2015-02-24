@@ -203,6 +203,39 @@ class Padron extends Archivos {
 		BDD::GetInstance()->Query($sql , $params);
 	}
 	
+	public function LotesPendientesDDJJ ($id_fuente) {
+		
+		$params = array ($id_fuente , $_SESSION['grupo']);
+		$sql 	= "
+			select 
+				lote 
+				, inicio :: date as fecha
+				, registros_in as insertados 
+				, registros_out as rechazados 
+				, registros_mod as modificados 
+			from 
+				sistema.lotes 
+			where 
+				lote not in (select unnest (lote) from ddjj.sirge) 
+				and id_estado = 1 
+				and id_padron = ?
+				and id_provincia = ?";
+		
+		return $this->JSONDT(BDD::GetInstance()->Query($sql , $params)->GetResults() , true);
+		
+	}
+	
+	public function ImpresionDDJJSIRGe ($lotes = array()) {
+	
+		$params = array ('{' . implode ("," , $lotes) . '}');
+		$sql = "
+			INSERT INTO ddjj.sirge(lote)
+			VALUES (?)";
+		
+		BDD::GetInstance()->Query($sql , $params);
+	
+	}
+	
 }
 
 ?>

@@ -11,7 +11,15 @@ $GLOBALS['configuracion'] = array(
 );
 
 spl_autoload_register(function($clase){
-	require_once 'app/clases/' . $clase . '.php';
+	
+	$ruta = '';
+	
+	switch ($clase) {
+		case 'FPDF' : $ruta = 'app/clases/pdf/' . $clase . '.php'; break;
+		default : $ruta = 'app/clases/' . $clase . '.php';
+	}
+	
+	require_once $ruta;
 });
 
 ?>

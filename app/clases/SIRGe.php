@@ -140,12 +140,12 @@ class SIRGe {
 				select id_provincia
 				from 
 					sistema.lotes l left join
-					declaraciones_juradas.impresiones_ddjj_sirge i on l.lote = i.lote
+					ddjj.sirge i on array[l.lote] = i.lote
 				where 
 					id_estado = 1
 					and id_padron = " . $id_padron . "
-					and extract (month from fecha_impresion_ddjj) = " . date('m') . "
-					and extract (year from fecha_impresion_ddjj) = " . date('Y') . "
+					and extract (month from fecha_impresion) = " . date('m') . "
+					and extract (year from fecha_impresion) = " . date('Y') . "
 				group by id_provincia ) p";
 		}
 		return $this->_db->Query($sql)->GetRow()['valor'];
@@ -171,12 +171,12 @@ class SIRGe {
 						, registros_out
 					from 
 						sistema.lotes l left join
-						declaraciones_juradas.impresiones_ddjj_sirge i on l.lote = i.lote
+						ddjj.sirge i on array[l.lote] = i.lote
 					where
 						id_padron = " . $id_padron . "
 						and id_estado = 1
-						and extract (month from fecha_impresion_ddjj) = " . date('m') . "
-						and extract (year from fecha_impresion_ddjj) = " . date('Y') . "
+						and extract (month from fecha_impresion) = " . date('m') . "
+						and extract (year from fecha_impresion) = " . date('Y') . "
 				) lot on pro.id_provincia = lot.id_provincia
 			order by
 				pro.id_provincia";
