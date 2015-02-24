@@ -22,12 +22,12 @@ $(document).ready(function(){
 		$.ajax({
 			
 			type 		: 'post' ,
-			url  		: 'funciones/metodos_ajax.php' ,
+			url  		: 'app/parserAjax.php' ,
 			dataType	: 'json',
 			data		: {
-				clase		: 'Lotes',
-				metodo		: 'listadoLotesPendientesDDJJ',
-				p1			: '{ID_FUENTE_DATOS}'
+				c	: 'Padron',
+				m	: 'LotesPendientesDDJJ',
+				p	: 'id_fuente={ID_FUENTE_DATOS}'
 			},
 			success 	: function (data) {
 				

@@ -39,11 +39,13 @@ class BDD {
 			if ($this->_query->execute()){
 				$this->_count = $this->_query->rowCount();
 			} else {
-				$this->_results = null;
-				$this->_error = $this->_pdo->errorInfo();
+				$this->_results 	= null;
+				$this->_error 		= true ;
+				$this->_error_info 	= $this->_pdo->errorInfo();
 			}
 		} else {
-			$this->_error = $this->_pdo->errorInfo();
+			$this->_error 		= true ;
+			$this->_error_info 	= $this->_pdo->errorInfo();
 		}
 		return $this;
 	}
@@ -53,7 +55,7 @@ class BDD {
 	}
 	
 	public function GetErrorInfo() {
-		return $this->_error_info;
+		return $this->_error_info[2];
 	}
 	
 	public function GetCount() {

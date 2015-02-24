@@ -11,7 +11,7 @@ $sql = "
 
 	CREATE SCHEMA consultas	AUTHORIZATION postgres;
 	CREATE SCHEMA logs AUTHORIZATION postgres;
-	CREATE SCHEMA declaraciones_juradas	AUTHORIZATION postgres;
+	CREATE SCHEMA ddjj AUTHORIZATION postgres;
 	
 /*
  *
@@ -79,10 +79,36 @@ $sql = "
 	ALTER TABLE sistema.queries_automaticas_destinatarios SET SCHEMA consultas;
 	ALTER TABLE sistema.log_logins SET SCHEMA logs;
 	ALTER TABLE sistema.log_queries_dinamicos SET SCHEMA logs;
-	ALTER TABLE sistema.impresiones_ddjj_backup SET SCHEMA declaraciones_juradas;
-	ALTER TABLE sistema.impresiones_ddjj_sirge SET SCHEMA declaraciones_juradas;
-	ALTER TABLE sistema.impresiones_ddjj_doiu9 SET SCHEMA declaraciones_juradas;
+	ALTER TABLE sistema.impresiones_ddjj_backup SET SCHEMA ddjj;
+	ALTER TABLE sistema.impresiones_ddjj_sirge SET SCHEMA ddjj;
+	ALTER TABLE sistema.impresiones_ddjj_doiu9 SET SCHEMA ddjj;
 	
+	ALTER TABLE ddjj.impresiones_ddjj_backup RENAME TO backup;
+	ALTER TABLE ddjj.impresiones_ddjj_sirge RENAME TO sirge;
+	ALTER TABLE ddjj.impresiones_ddjj_doiu9 RENAME TO backup;
+	
+	CREATE TABLE ddjj.sirge2
+	(
+	  id_impresion integer NOT NULL DEFAULT nextval('ddjj.impresiones_ddjj_sirge2_id_impresion_seq'::regclass),
+	  fecha_impresion timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
+	  lote integer[],
+	  CONSTRAINT impresiones_ddjj_sirge2_pkey PRIMARY KEY (id_impresion)
+	)
+	WITH (
+	  OIDS=FALSE
+	);
+	ALTER TABLE ddjj.sirge2
+	  OWNER TO postgres;
+	  
+	insert into ddjj.sirge2
+	select 
+	row_number() over()
+	,date_trunc ('second' , fecha_impresion_ddjj ) 
+	,array_agg(lote)
+	from ddjj.sirge group by 2;
+	
+	DROP TABLE ddjj.sirge;
+	ALTER TABLE ddjj.sirge2 RENAME TO sirge;
 	
 	DROP TABLE sistema.obras_sociales;
 	DROP TABLE sistema.consultas;

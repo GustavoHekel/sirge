@@ -402,6 +402,12 @@ class SIRGe {
 		}
 		return $id_padron;
 	}
+	
+	public static function RetornaNombreProvincia ($id_provincia) {
+		$params = array ($id_provincia);
+		$sql 	= "select descripcion from sistema.entidades where id_entidad = ?";
+		return BDD::GetInstance()->Query($sql , $params)->GetRow()['descripcion'];
+	}
 
 }
 

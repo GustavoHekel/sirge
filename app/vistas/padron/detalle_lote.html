@@ -1,0 +1,117 @@
+<div class="portlet box">
+	<div class="portlet-body form">
+		<div class="form-horizontal form-view">
+			<h3 class="form-section">Informaci&oacute;n del lote</h3>
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="control-group">
+						<label class="control-label">Lote:</label>
+						<div class="controls">
+							<span class="text bold">{LOTE}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 ">
+					<div class="control-group">
+						<label class="control-label">Provincia:</label>
+						<div class="controls">
+							<span class="text bold">{PROVINCIA}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span12 ">
+					<div class="control-group">
+						<label class="control-label">Archivo:</label>
+						<div class="controls">
+							<span class="text bold">{ARCHIVO}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span4 ">
+					<div class="control-group">
+						<label class="control-label">Insertados:</label>
+						<div class="controls">
+							<span class="text bold">{IN}</span>
+						</div>
+					</div>
+				</div>
+				<div class="span4 ">
+					<div class="control-group">
+						<label class="control-label">Modificados:</label>
+						<div class="controls">
+							<span class="text bold">{MOD}</span>
+						</div>
+					</div>
+				</div>
+				<div class="span4 ">
+					<div class="control-group">
+						<label class="control-label">Rechazados:</label>
+						<div class="controls">
+							<span class="text bold">{OUT}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6 ">
+					<div class="control-group">
+						<label class="control-label">Hs. Inicio:</label>
+						<div class="controls">
+							<span class="text bold">{INICIO}</span>
+						</div>
+					</div>
+				</div>
+				<div class="span6 ">
+					<div class="control-group">
+						<label class="control-label">Hs. Fin:</label>
+						<div class="controls">
+							<span class="text bold">{FIN}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6 ">
+					<div class="control-group">
+						<label class="control-label">Usuario carga:</label>
+						<div class="controls">
+							<span class="text bold">{USUARIO_CARGA}</span>
+						</div>
+					</div>
+				</div>
+				<div class="span6 ">
+					<div class="control-group">
+						<label class="control-label">Usuario cierre:</label>
+						<div class="controls">
+							<span class="text bold">{USUARIO_CIERRE}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<h3 class="form-section">Listado de rechazos</h3>
+			<div class="row-fluid">
+				<div class="span12">
+					<div id="rechazos" style="font-size: 11px; font-family:courier">{RECHAZOS}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+$('#rechazos').slimScroll({
+	height			: '150px' ,
+	alwaysVisible	: true ,
+	railVisible		: true ,
+	color 			: '#0362fd'
+});
+
+</script>

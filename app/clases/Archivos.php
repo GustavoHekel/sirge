@@ -14,7 +14,6 @@ class Archivos extends SIRGe {
 		$_id_padron;
 	
 	public function __construct () {
-		
 		$this->_db = BDD::GetInstance();
 	}
 	
@@ -38,7 +37,7 @@ class Archivos extends SIRGe {
 	protected function GetNombreArchivo ($id_subida) {
 		$params = array ($id_subida);
 		$sql 	= "select nombre_actual from sistema.subidas where id_subida = ?";
-		return $this->_db->Query($sql , $params)->GetRow()['nombre_actual'];
+		return BDD::GetInstance()->Query($sql , $params)->GetRow()['nombre_actual'];
 	}
 	 
 	protected function RegistraSubida ($id_usuario , $id_padron , $tamanio , $nombre_original , $nombre_nuevo) {
@@ -55,59 +54,54 @@ class Archivos extends SIRGe {
 		$this->_db->Query($sql , $params);
 	}
 	
-	protected function RegistraCierre ($nombre_archivo) {
-		$sql = "update sistema.subidas set id_estado = 1 where nombre_actual = '$nombre_archivo'";
-		$this->_db->Query($sql);
-	}
-	
-	protected function RegistraProceso ($nombre_archivo , $id_usuario) {
+	protected function RegistraProceso ($id_subida) {
+		$params_1 = array ($id_subida);
+		$sql_1 = "update sistema.subidas set id_estado = 2 where id_subida = ?";
+		BDD::GetInstance()->Query($sql_1 , $params_1);
 		
-		$id_subida;
-		
-		$params_1 = array (
-			$nombre_archivo
-		);
-		
-		$sql_1 = "
-			update sistema.subidas set id_estado = 2 where nombre_actual = '$nombre_archivo';
-			select id_subida from sistema.subidas where nombre_actual = ?";
-		$id_subida = $this->_db->Query($sql_1 , $params_1)->GetRow();
-		
-		$params_2 = array (
-			$id_subida
-			, $id_usuario
-		);
-		
+		$params_2 = array ($id_subida , $_SESSION['id_usuario']);
 		$sql_2 = "insert into sistema.subidas_aceptadas (id_subida , id_usuario) values (?,?)";
-		$this->_db->Query($sql_2 , $params_2);
-		
+		BDD::GetInstance()->Query($sql_2 , $params_2);
 	}
 	
 	protected function RegistraBaja ($id_subida) {
+		$params_1 = array ($id_subida);
+		$sql_1 = "update sistema.subidas set id_estado = 3 where id_subida = ?";
+		$this->_db->Query($sql_1 , $params_1);
 		
-		$sql_1 = "update sistema.subidas set id_estado = 3 where id_subida = '$id_subida'";
-		$this->_db->Query($sql_1);
-		
-		$params_2 = array (
-			$id_subida
-			, $_SESSION['id_usuario']
-		);
-		
+		$params_2 = array ($id_subida , $_SESSION['id_usuario']);
 		$sql_2 = "insert into sistema.subidas_eliminadas (id_subida , id_usuario) values (?,?)";
 		$this->_db->Query($sql_2 , $params_2);
+	}
 	
+	protected function GetData ($id_subida) {
+		$params = array ($id_subida);
+		$sql 	= "select * from sistema.subidas where id_subida = ?";
+		return BDD::GetInstance()->Query($sql , $params)->GetRow();
+	}
+	
+	public function Cierre ($id_subida) {
+
+		$data 	= $this->GetData($id_subida);
+		$nombre = $data['nombre_actual'];
+		$padron = strtolower($this->GetNombrePadron($data['id_padron']));
+		
+		if (rename('../data/upload/' . $padron . '/' . $nombre , '../data/upload/' . $padron . '/back/' . $nombre)) {
+			$this->RegistraProceso($id_subida);
+		} else {
+			echo '../data/upload/' . $padron . '/' . $nombre;
+			echo '../data/upload/' . $padron . '/back/' . $nombre;
+		}
+		
 	}
 	
 	public function Baja ($id_subida) {
 		
-		$params = array ($id_subida);
-		$sql 	= "select * from sistema.subidas where id_subida = ?";
-		$data 	= $this->_db->Query($sql , $params)->GetRow();
-		
+		$data 	= $this->GetData($id_subida);
 		$nombre = $data['nombre_actual'];
 		$padron = strtolower($this->GetNombrePadron($data['id_padron']));
 		
-		if (unlink ('../data/upload/' . $padron . '/' . $nombre . '')) {
+		if (unlink ('../data/upload/' . $padron . '/' . $nombre )) {
 			$this->RegistraBaja($id_subida);
 			echo 'Se ha eliminado el archivo ' . $data['nombre_original'];
 		}
@@ -175,12 +169,10 @@ class Archivos extends SIRGe {
 	 **/
 	
 	protected function TotalRegistros ($nombre_archivo) {
-		
 		return count (file ($nombre_archivo));
 	}
 	
 	protected function GetLinea ($nombre_archivo) {
-		
 		return explode (";" , trim (fgets ($nombre_archivo) , "\r\n"));
 	}
 	

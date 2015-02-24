@@ -2,8 +2,25 @@
 class Validar {
 		
 	protected 
-		$_errores = array(),
-		$_validado = false;
+		$_errores 	= array(),
+		$_validado 	= false,
+		$_codigos_comunidad;
+	
+	public function __construct () {
+		
+		$sql = "
+			select codigo_prestacion from pss.codigos
+			where 
+				codigo like 'CMI%' or
+				codigo like 'RCM%' or 
+				codigo like 'TAT%' or 
+				codigo like 'ROX001%' or 
+				codigo like 'ROX002%' or 
+				codigo like 'DSY001%'";
+											
+		$this->_codigos_comunidad = BDD::GetInstance()->Query($sql)->GetList();
+		
+	}
 	
 	public function validarFecha ($fecha) {
 		
@@ -12,13 +29,12 @@ class Validar {
 		
 	}
 	
-	public function validarData ($data = array() , $encabezados = array() , $validaciones = array()) {
-		
+	public function ValidarRegistro ($data = array() , $encabezados = array() , $validaciones = array()) {
 		unset ($this->_errores);
+		
 		if (count ($encabezados) == count ($data)) {
 			
 			if (! empty ($encabezados)) {
-				
 				$data = array_combine ($encabezados , $data) ;
 			}
 			
@@ -102,24 +118,16 @@ class Validar {
 							case 'exception' :
 								switch ($valor_regla['grupo']) {
 									case 'comunidad' : 
-										$sql = "
-										select codigo from pss.codigos
-										where 
-											codigo like 'CMI%' or
-											codigo like 'RCM%' or 
-											codigo like 'TAT%' or 
-											codigo like 'ROX001%' or 
-											codigo like 'ROX002%' or 
-											codigo like 'DSY001%'";
+										
+										if ($data[$valor_regla['indice']] == $valor_regla['valor']) {
+											if (! in_array ($data[$valor_regla['campo']] , $this->_codigos_comunidad)) {}
+												$this->addError("{$item} no posee un valor permitido para el campo {$valor_regla['campo']}");
+										}
+										
 										break;
 									default: break;
 								}
 								
-								$codigos = Bdd::getInstance()->query($sql)->getList();
-								
-								if (! in_array ($data[$valor_regla['campo']] , $codigos)) {
-									$this->addError("{$item} no posee un valor permitido para el campo {$valor_regla['campo']}");
-								}
 								break;
 						}
 					}
@@ -127,9 +135,9 @@ class Validar {
 			}
 		} else {
 			
-			$string = implode (';' , $data);
-			$campos_data = count ($data);
-			$campos = count ($encabezados);
+			$string 		= implode (';' , $data);
+			$campos_data 	= count ($data);
+			$campos 		= count ($encabezados);
 			
 			$this->addError("El registro [{$string}] tiene {$campos_data} campos, debe tener {$campos}");
 		}
@@ -148,11 +156,11 @@ class Validar {
 		$this->_errores[] = $error;
 	}
 	
-	public function getError () {
-		return $this->_errores;
+	public function GetError () {
+		return implode (" | " , $this->_errores);
 	}
 	
-	public function getValidar () {
+	public function Resultado () {
 		return $this->_validado;
 	}
 	

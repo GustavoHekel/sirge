@@ -22,9 +22,10 @@ CREATE TABLE sistema.lotes_new
   id_usuario integer,
   id_provincia character(2) NOT NULL,
   id_padron integer,
-  id_estado integer,
+  id_estado integer DEFAULT 0,
   registros_in integer,
   registros_out integer,
+  registros_mod integer,
   inicio timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
   fin timestamp without time zone,
   CONSTRAINT lotes_new_pkey PRIMARY KEY (lote),
@@ -137,6 +138,7 @@ $lotes = array(
 	'id_estado' => '',
 	'registros_in' => '',
 	'registros_out' => '',
+	'registros_mod' => 0,
 	'inicio' => '',
 	'fin' => ''
 	
