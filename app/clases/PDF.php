@@ -14,7 +14,9 @@ class PDF extends FPDF {
 			'modificados'	=> 0 ,
 			'total'			=> 0
 		) ,
-		$_lotes = array();
+		$_lotes = array() ,
+		$_id_impresion ,
+		$_data_sirge;
 	
 	public function Header () {
 		$this->SetFont('Arial','B',11);
@@ -31,7 +33,7 @@ class PDF extends FPDF {
 		$this->Cell(0,10,utf8_decode('Página '.$this->PageNo().'/{nb}'),0,0,'C');
 	}
 	
-	protected function EncabezadoSirge ($id_padron) {
+	protected function EncabezadoSirge () {
 		
 		$this->_texto 			= "Por medio de la presente elevo a Ud. en carácter de Declaración Jurada, los resultados del proceso de validación de la información en el ";
 		$this->_prestaciones 	= "correspondiente a las PRESTACIONES aprobadas desde la última presentación hasta el día de la fecha, detalladas en el siguiente cuadro:";
@@ -39,7 +41,7 @@ class PDF extends FPDF {
 		$this->_fondos		  	= "correspondiente a las APLICACIONES DE FONDOS reportadas por los efectores desde la última presentación hasta el día de la fecha, detalladas en el siguiente cuadro:";
 		
 		$this->Cell(130);
-		$this->Cell(25,8,utf8_decode(SIRGe::RetornaNombreProvincia($_SESSION['grupo'])) . ", " . date("d/m/Y"),0,0,'R');
+		$this->Cell(25,8,utf8_decode(SIRGe::RetornaNombreProvincia($this->_data_sirge[0]['id_provincia'])) . ", " . $this->_data_sirge[0]['fecha_impresion'],0,0,'R');
 		$this->Ln();
 		$this->Cell(0,5,utf8_decode ("SEÑOR"));
 		$this->Ln();
@@ -60,7 +62,7 @@ class PDF extends FPDF {
 		$this->Write(8,$this->_sistema);
 		$this->SetFont('Arial','',11);
 		
-		switch ($id_padron) {
+		switch ($this->_data_sirge[0]['id_padron']) {
 			case 1:
 				$this->Write(8,utf8_decode($this->_prestaciones));
 				$this->SetFont('Arial','BU',11);
@@ -84,26 +86,53 @@ class PDF extends FPDF {
 		$this->Ln(10);
 	}
 	
-	protected function TablaLotes ($id_padron) {
-		
-		$params = array ($id_padron , $_SESSION['grupo']);
-		
+	protected function GetDataImpresion ($id_impresion) {
+		$params = array ($id_impresion);
 		$sql = "
 			select 
-				lote 
-				, inicio :: date as fecha
-				, registros_in as insertados 
-				, registros_out as rechazados 
-				, registros_mod as modificados 
+				l.lote
+				, fecha_impresion :: date
+				, s.id_provincia
+				, id_padron
+				, registros_in
+				, registros_out
+				, registros_mod
 			from 
-				sistema.lotes 
+				ddjj.sirge s left join
+				sistema.lotes l on l.lote = any (s.lote)
 			where 
-				lote not in (select unnest (lote) from ddjj.sirge) 
-				and id_estado = 1 
-				and id_padron = ?
-				and id_provincia = ?";
+				id_impresion = ?";
+		$this->_data_sirge = BDD::GetInstance()->Query($sql , $params)->GetResults();
+	}
+	
+	protected function GetIdImpresion ($id_padron , $id_impresion = null) {
 		
-		$data 		= BDD::GetInstance()->Query($sql , $params)->GetResults();
+		if (! is_null ($id_impresion)) {
+			$padron = new Padron();
+			$params = array ($id_padron , $_SESSION['grupo']);
+			$sql 	= "
+				select 
+					lote 
+					, inicio :: date as fecha
+					, registros_in as insertados 
+					, registros_out as rechazados 
+					, registros_mod as modificados 
+				from 
+					sistema.lotes 
+				where 
+					lote not in (select unnest (lote) from ddjj.sirge) 
+					and id_estado = 1 
+					and id_padron = ?
+					and id_provincia = ?";
+			$this->_lotes 			= BDD::GetInstance()->Query($sql , $params)->GetResults();
+			$this->_id_impresion 	= $padron->RegistraDDJJSIRGe($this->_lotes);
+		} else {
+			$this->_id_impresion	= $id_impresion;
+		}
+	}
+	
+	protected function TablaLotes () {
+
 		$encabezado = array ('LOTE','INSERTADOS','RECHAZADOS','MODIFICADOS');
 		
 		$this->SetFont('Arial','B',8);
@@ -115,17 +144,16 @@ class PDF extends FPDF {
 		$this->Ln();
 		$this->SetFont('Arial','',9);
 
-		foreach ($data as $index => $clave) {
+		foreach ($this->_data_sirge as $index => $clave) {
 			
-			$this->_lotes[] = $clave['lote'];
-			$this->_contador['insertados'] 	+= $clave['insertados'];
-			$this->_contador['rechazados'] 	+= $clave['rechazados'];
-			$this->_contador['modificados']	+= $clave['modificados'];
+			$this->_contador['insertados'] 	+= $clave['registros_in'];
+			$this->_contador['rechazados'] 	+= $clave['registros_out'];
+			$this->_contador['modificados']	+= $clave['registros_mod'];
 			
 			$this->Cell(40,8,$clave['lote'],1,0,'R');
-			$this->Cell(40,8,number_format($clave['insertados'] , 0 , ',' , '.'),1,0,'R');
-			$this->Cell(40,8,number_format($clave['rechazados'] , 0 , ',' , '.'),1,0,'R');
-			$this->Cell(40,8,number_format($clave['modificados'] , 0 , ',' , '.'),1,0,'R');
+			$this->Cell(40,8,number_format($clave['registros_in'] , 0 , ',' , '.'),1,0,'R');
+			$this->Cell(40,8,number_format($clave['registros_out'] , 0 , ',' , '.'),1,0,'R');
+			$this->Cell(40,8,number_format($clave['registros_mod'] , 0 , ',' , '.'),1,0,'R');
 			$this->Ln();
 		}
 		
@@ -146,12 +174,11 @@ class PDF extends FPDF {
 		$this->Cell(80,6,utf8_decode("Firma y sello del Coordinador Ejecutivo"),'T',0,'C');
 	}
 	
-	public function DDJJSIRGe ($id_padron) {
-		$this->EncabezadoSirge($id_padron);
-		$this->TablaLotes($id_padron);
+	public function DDJJSIRGe ($id_impresion) {
+		$this->GetDataImpresion($id_impresion);
+		$this->EncabezadoSirge();
+		$this->TablaLotes();
 		$this->Saludo();
-		
-		return $this->_lotes;
 	}
 	
 }

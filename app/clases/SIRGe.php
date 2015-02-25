@@ -137,7 +137,7 @@ class SIRGe {
 			$sql = "
 				select round (count (*) / 24 :: numeric * 100 , 0) as valor
 				from (
-				select id_provincia
+				select l.id_provincia
 				from 
 					sistema.lotes l left join
 					ddjj.sirge i on array[l.lote] = i.lote
@@ -146,7 +146,7 @@ class SIRGe {
 					and id_padron = " . $id_padron . "
 					and extract (month from fecha_impresion) = " . date('m') . "
 					and extract (year from fecha_impresion) = " . date('Y') . "
-				group by id_provincia ) p";
+				group by l.id_provincia ) p";
 		}
 		return $this->_db->Query($sql)->GetRow()['valor'];
 	}
@@ -165,7 +165,7 @@ class SIRGe {
 			from 
 				sistema.provincias pro left join (
 					select
-						id_provincia
+						l.id_provincia
 						, l.lote
 						, registros_in
 						, registros_out
@@ -408,7 +408,25 @@ class SIRGe {
 		$sql 	= "select descripcion from sistema.entidades where id_entidad = ?";
 		return BDD::GetInstance()->Query($sql , $params)->GetRow()['descripcion'];
 	}
-
+	
+	public static function SelectProvincia ($id_html , $id_provincia = null) {
+		
+		$html = '<select id="' . $id_html . '"><option value="0">Seleccione una entidad</option>';
+		
+		$sql 	= "select * from sistema.provincias";
+		$data 	= BDD::GetInstance()->Query($sql)->GetResults();
+		
+		foreach ($data as $index => $valor) {
+			
+			$html .= '<option value="' . $valor['id_provincia'] . '" ';
+			$html .= $id_provincia != '25' ? ($id_provincia == $valor['id_provincia'] ? 'selected="selected"' : 'disabled="disabled"') : '';
+			$html .= '>' . mb_convert_case ($valor['descripcion'] , MB_CASE_TITLE , 'UTF-8') . '</option>';
+		}
+		$html .= '</select>';
+		
+		return $html;
+	}
+	
 }
 
 ?>

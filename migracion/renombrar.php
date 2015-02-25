@@ -102,10 +102,12 @@ $sql = "
 	  
 	insert into ddjj.sirge2
 	select 
-	row_number() over()
-	,date_trunc ('second' , fecha_impresion_ddjj ) 
-	,array_agg(lote)
-	from ddjj.sirge group by 2;
+		row_number() over()
+		, date_trunc ('second' , fecha_impresion_ddjj ) 
+		, array_agg(lote)
+		, id_provincia
+	from 
+		ddjj.sirge group by 2;
 	
 	DROP TABLE ddjj.sirge;
 	ALTER TABLE ddjj.sirge2 RENAME TO sirge;

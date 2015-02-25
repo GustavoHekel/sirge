@@ -96,7 +96,6 @@ class Archivos extends SIRGe {
 	}
 	
 	public function Baja ($id_subida) {
-		
 		$data 	= $this->GetData($id_subida);
 		$nombre = $data['nombre_actual'];
 		$padron = strtolower($this->GetNombrePadron($data['id_padron']));
@@ -105,7 +104,6 @@ class Archivos extends SIRGe {
 			$this->RegistraBaja($id_subida);
 			echo 'Se ha eliminado el archivo ' . $data['nombre_original'];
 		}
-		
 	}
 	
 	public function Sube ($nombre_padron_array , $archivos) {
@@ -118,7 +116,7 @@ class Archivos extends SIRGe {
 		foreach ($archivos['archivo']['name'] as $orden => $nombre) {
 			
 			$this->_size					= round (($archivos['archivo']['size'][$orden] / 1024),2);
-			$this->_uniqueid				= date("YmdHis");
+			$this->_uniqueid				= uniqid();
 			$this->_nombre_archivo_original = $archivos['archivo']['name'][$orden];
 			$this->_nombre_archivo_nuevo 	= $this->_uniqueid . '.txt';
 			$this->_ruta_archivo_original 	= $archivos['archivo']['tmp_name'][$orden];

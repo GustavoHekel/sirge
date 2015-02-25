@@ -1,6 +1,6 @@
 <?php
 
-require '../../../../init.php';
+require_once '../../../../init.php';
 
 $html = array (
 	'../../../vistas/padron/tabs/subidas.html'
@@ -11,7 +11,7 @@ $diccionario = array (
 	'FUENTE_DATOS'		=> 'Aplicaci&oacute;n de Fondos',
 	'ID_FUENTE_DATOS'	=> 2,
 	'CLASE_PROCESAR'	=> 'Fondos',
-	'METODO_PROCESAR'	=> ''
+	'METODO_PROCESAR'	=> 'ProcesaArchivo'
 );
 
 HTML::Vista($html , $diccionario);

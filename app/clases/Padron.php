@@ -83,7 +83,7 @@ class Padron extends Archivos {
 						when e.id_estado = 2 then '<span class=\"label label-warning\">'|| e.descripcion ||'</span>' 
 						when e.id_estado = 1 then '<span class=\"label label-success\">'|| e.descripcion ||'</span>'
 					end as estado
-					, case when exists (select 1 from declaraciones_juradas.impresiones_ddjj_sirge i where i.lote = l.lote) 
+					, case when exists (select 1 from ddjj.sirge i where i.lote @> array[l.lote]) 
 						then '<span class=\"label label-success\">IMPRESA</span>'
 						else
 							case when e.id_estado = 3 
@@ -151,7 +151,9 @@ class Padron extends Archivos {
 	
 	public function CerrarLote ($lote) {
 		
-		$params = array (
+		$params_1 = array ($lote);
+		
+		$params_2 = array (
 			$lote
 			, $_SESSION['id_usuario']
 		);
@@ -159,9 +161,9 @@ class Padron extends Archivos {
 		$sql_1 = "update sistema.lotes set id_estado = 1 where lote = ?";
 		$sql_2 = "insert into sistema.lotes_aceptados (lote , id_usuario) values (?,?)";
 		
-		BDD::GetInstance()->Query($sql_1 , $params);
-		BDD::GetInstance()->Query($sql_2 , $params);
-		
+		BDD::GetInstance()->Query($sql_1 , $params_1);
+		BDD::GetInstance()->Query($sql_2 , $params_2);
+
 		echo 'Se ha cerrado el lote ' . $lote;
 		
 	}
@@ -203,7 +205,7 @@ class Padron extends Archivos {
 		BDD::GetInstance()->Query($sql , $params);
 	}
 	
-	public function LotesPendientesDDJJ ($id_fuente) {
+	public function LotesPendientesDDJJ ($id_fuente , $aux = false) {
 		
 		$params = array ($id_fuente , $_SESSION['grupo']);
 		$sql 	= "
@@ -220,20 +222,49 @@ class Padron extends Archivos {
 				and id_estado = 1 
 				and id_padron = ?
 				and id_provincia = ?";
+		if (! $aux) {
+			return $this->JSONDT(BDD::GetInstance()->Query($sql , $params)->GetResults() , true);
+		} else {
+			return $this->RegistraDDJJSIRGe(BDD::GetInstance()->Query($sql , $params)->GetList());
+		}
+	}
+	
+	protected function RegistraDDJJSIRGe ($lotes = array()) {
+		
+		$params = array ('{' . implode ("," , $lotes) . '}' , $_SESSION['grupo']);
+		$sql = "
+			INSERT INTO ddjj.sirge(lote , id_provincia)
+			VALUES (?,?)";
+		
+		BDD::GetInstance()->Query($sql , $params);
+		
+		$sql = "select currval ('ddjj.impresiones_ddjj_sirge2_id_impresion_seq')";
+		return BDD::GetInstance()->Query($sql)->GetRow()['currval'];
+	}
+	
+	
+	public function ListadoDDJJ ($id_padron) {
+		
+		$params = array ($_SESSION['grupo'] , $id_padron);
+		$sql = "
+			select
+				id_impresion
+				, fecha_impresion
+				, s.lote as \"Lote(s)\"
+				, '<a class=\"imprimir\" id_impresion=\"' || id_impresion || '\"><i class=\"halflings-icon print\"></i></a>' as reimprimir
+			from 
+				ddjj.sirge s left join
+				sistema.lotes l on l.lote = any (s.lote)
+			where 
+				s.id_provincia = ?
+				and id_padron = ?
+				and id_estado = 1
+			group by 1,2,3
+			order by 1 desc ,2,3";
 		
 		return $this->JSONDT(BDD::GetInstance()->Query($sql , $params)->GetResults() , true);
 		
-	}
-	
-	public function ImpresionDDJJSIRGe ($lotes = array()) {
-	
-		$params = array ('{' . implode ("," , $lotes) . '}');
-		$sql = "
-			INSERT INTO ddjj.sirge(lote)
-			VALUES (?)";
 		
-		BDD::GetInstance()->Query($sql , $params);
-	
 	}
 	
 }
