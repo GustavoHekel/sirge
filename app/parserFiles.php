@@ -9,11 +9,13 @@ if (isset ($_FILES) && count ($_REQUEST)) {
 	$url_params = [];
 	$clase 		= array_shift ($_REQUEST);
 	$metodo 	= array_shift ($_REQUEST);
-
-	if (isset ($_REQUEST[0])) {
-		parse_str($_REQUEST[0], $url_params);
+	
+	$size = count ($_REQUEST);
+	
+	if ($size) {
+		parse_str(implode ('&' , $_REQUEST), $url_params);
 	}
-
+	
 	$params = array (
 		$url_params
 		, $_FILES

@@ -11,7 +11,9 @@ class Archivos extends SIRGe {
 		$_uniqueid ,
 		$_subidas = array() ,
 		$_size ,
-		$_id_padron;
+		$_id_padron ,
+		$_id_subida ,
+		$_osp = null;
 	
 	public function __construct () {
 		$this->_db = BDD::GetInstance();
@@ -39,6 +41,21 @@ class Archivos extends SIRGe {
 		$sql 	= "select nombre_actual from sistema.subidas where id_subida = ?";
 		return BDD::GetInstance()->Query($sql , $params)->GetRow()['nombre_actual'];
 	}
+	
+	protected function RegistraSubidaOSP () {
+		$this->_id_subida = BDD::GetInstance()->Query("select currval ('sistema.subidas_id_subida_seq')")->GetRow()['currval'];
+		$params = array (
+			$this->_id_subida ,
+			$this->_osp ,
+			1 ,
+			$this->_nombre_archivo_nuevo
+		);
+		$sql = "
+		INSERT INTO sistema.subidas_osp(
+				id_subida, codigo_osp, id_archivo, nombre_backup)
+		VALUES (?, ?, ?, ?);";
+		BDD::GetInstance()->Query($sql , $params);
+	}
 	 
 	protected function RegistraSubida ($id_usuario , $id_padron , $tamanio , $nombre_original , $nombre_nuevo) {
 		$params = array (
@@ -52,6 +69,11 @@ class Archivos extends SIRGe {
 			insert into sistema.subidas (id_usuario , id_padron , size , nombre_original , nombre_actual)
 			values (?,?,?,?,?) ";
 		$this->_db->Query($sql , $params);
+		
+		if (! is_null ($this->_osp)) {
+			$this->RegistraSubidaOSP();			
+		}
+		
 	}
 	
 	protected function RegistraProceso ($id_subida) {
@@ -122,6 +144,10 @@ class Archivos extends SIRGe {
 			$this->_ruta_archivo_original 	= $archivos['archivo']['tmp_name'][$orden];
 			$this->_ruta_archivo_nuevo 		= '../data/upload/' . $nombre_padron . '/' . $this->_nombre_archivo_nuevo;
 			$this->_id_padron				= $nombre_padron_array[0];
+			
+			if ($this->_id_padron == 6) {
+				$this->_osp 				= $nombre_padron_array[1];
+			}
 			
 			if (
 				$archivos['archivo']['error'][$orden] == 0 &&

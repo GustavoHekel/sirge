@@ -8,7 +8,7 @@ $html = array (
 
 $diccionario = array (
 	'CSS_GLOBAL' 		=> 'purple',
-	'SELECT_PROVINCIA' 	=> SIRGe::SelectProvincia('id_entidad' , $_SESSION['grupo']),
+	'SELECT_PROVINCIA' 	=> PUCO::SelectOSP('id_entidad' , $_SESSION['grupo']),
 	'ID_FUENTE_DATOS' 	=> 6
 );
 
