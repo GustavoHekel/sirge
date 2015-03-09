@@ -2,14 +2,18 @@
 
 class PUCO extends Padron {
 	
+	private $_db;
+	
+	public function __construct () {
+		$this->_db = BDD::GetInstance();
+	}
+	
 	public function ListadoSubidas () {
 		$sql = "
 			select
-				nombre_grupo as osp
-				, nombre_original as nombre
-				, id_archivo
-				, fecha_subida :: date as fecha_carga
-				, round ((size / 1024) :: numeric , 2) || ' MB' as tamanio
+				nombre_grupo as nombre_obra_social
+				, id_archivo as id
+				, fecha_subida :: date as fecha
 				, '<a nombre=\"'|| nombre_original ||'\" file=\"' || cao.id_subida || '\" href=\"#\" class=\"procesar\"><i class=\"halflings-icon hdd\"></i></a>' as procesar
 				, '<a nombre=\"'|| nombre_original ||'\" file=\"' || cao.id_subida || '\" href=\"#\" class=\"eliminar\"><i class=\"halflings-icon trash\"></a></i>' as eliminar
 			from
@@ -47,7 +51,7 @@ class PUCO extends Padron {
 	}
 		
 	public function ProcesaOSP ($id_carga) {
-		BDD::GetInstance()->Get('sistema.subidas_osp' , 'codigo_osp' , array ('id_subida' , '=' , $id_carga));
+		$this->_db->Get('sistema.subidas_osp' , 'codigo_osp' , array ('id_subida' , '=' , $id_carga));
 	}
 }
 
