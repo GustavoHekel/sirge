@@ -13,6 +13,7 @@ class Archivos extends SIRGe {
 		$_size ,
 		$_id_padron ,
 		$_id_subida ,
+		$_id_archivo ,
 		$_osp = null;
 	
 	public function __construct () {
@@ -47,7 +48,7 @@ class Archivos extends SIRGe {
 		$params = array (
 			$this->_id_subida ,
 			$this->_osp ,
-			1 ,
+			$this->_id_archivo ,
 			$this->_nombre_archivo_nuevo
 		);
 		$sql = "
@@ -128,6 +129,20 @@ class Archivos extends SIRGe {
 		}
 	}
 	
+	protected function InicializarDatosOSP ($data = array()) {
+		
+		$this->_id_padron = $data[0];
+		
+		if ($this->_id_padron == 6) {
+			$this->_osp	= $data[1];
+			if (isset ($data[2])) {
+				$this->_id_archivo = $data[2];
+			} else {
+				$this->_id_archivo = 1;
+			}
+		}
+	}
+	
 	public function Sube ($nombre_padron_array , $archivos) {
 		
 		$SIRGe = new SIRGe();
@@ -143,11 +158,7 @@ class Archivos extends SIRGe {
 			$this->_nombre_archivo_nuevo 	= $this->_uniqueid . '.txt';
 			$this->_ruta_archivo_original 	= $archivos['archivo']['tmp_name'][$orden];
 			$this->_ruta_archivo_nuevo 		= '../data/upload/' . $nombre_padron . '/' . $this->_nombre_archivo_nuevo;
-			$this->_id_padron				= $nombre_padron_array[0];
-			
-			if ($this->_id_padron == 6) {
-				$this->_osp 				= $nombre_padron_array[1];
-			}
+			$this->InicializarDatosOSP($nombre_padron_array);
 			
 			if (
 				$archivos['archivo']['error'][$orden] == 0 &&

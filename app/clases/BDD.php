@@ -74,5 +74,29 @@ class BDD {
 		return $this->_query->fetchAll(PDO::FETCH_COLUMN);
 	}
 	
+	private function Accion ($accion , $tabla , $where = array()) {
+		if (count ($where)) {
+			
+			$operadores = array ('=' , '<' , '>' , '<=' , '>=');
+			$campo 		= $where[0];
+			$operador 	= $where[1];
+			$valor 		= $where[2];
+			
+			if (in_array ($operador , $operadores)) {
+				$sql = "{$accion} from {$tabla} where {$campo} {$operador} ?";
+				
+				if (!$this->Query($sql , array ($valor))->GetError()) {
+					return $this;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public function Get ($tabla , $campo = '*' , $where = array()) {
+		return $this->Accion("select {$campo}" , $tabla , $where)->GetRow()[$campo];
+	}
+	
+	public function Delete ($tabla , $where) {}
 }
 

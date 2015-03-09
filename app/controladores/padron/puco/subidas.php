@@ -9,7 +9,9 @@ $html = array (
 $diccionario = array (
 	'CSS_GLOBAL' 		=> 'purple',
 	'SELECT_PROVINCIA' 	=> PUCO::SelectOSP('id_entidad' , $_SESSION['grupo']),
-	'ID_FUENTE_DATOS' 	=> 6
+	'ID_FUENTE_DATOS' 	=> 6 ,
+	'CLASE_PROCESAR'	=> 'PUCO',
+	'METODO_PROCESAR'	=> 'ProcesaOSP'
 );
 
 HTML::Vista($html , $diccionario);

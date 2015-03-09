@@ -1,0 +1,133 @@
+<div class="portlet box {CSS_GLOBAL} form-up-data">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Ruta de archivo - Super Intendencia de Servicios de Salud
+		</div>
+	</div>
+	<div class="portlet-body">
+		<form method="post" enctype="multipart/form-data">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<select id="id_archivo_sss" name="id_archivo_sss">
+								<option value="0">Seleccione archivo a cargar</option>
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+						</td>
+						<td><input type="file" name="padron" id="padron_sss"/></td>
+						<td><input class="btn {CSS_GLOBAL}" type="submit" id="submit_sss" value="Enviar" /></td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div id="subidas-sss"></div>
+							<div class="progress">
+								<div class="bar" id="progeso_sss"></div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>
+<p class="error"></p>
+<p class="alert">Seleccione la ruta al archivo de obra social dentro de su ordenador. Recuerde respetar la estructura de datos.</p>
+
+<script>
+$(document).ready(function(){
+	
+	$(".error").hide();
+	$("#submit_sss").click(function(event){
+		
+		event.preventDefault();
+		event.stopPropagation();
+		$(".error").hide();
+		
+		var id_sss = $('#id_archivo_sss').val();
+		var maxInputSize = 25;
+		var fileInput = $("#padron_sss")[0];
+		var data = new FormData();
+		
+		for (var i = 0 ; i < fileInput.files.length ; i++ ) {
+			
+			data.append("archivo[]" , fileInput.files[i]);
+			
+			if (fileInput.files[i].type == "text/plain") {
+				if (fileInput.files[i].size / (1024 * 1024) < maxInputSize) {
+					var validacion_archivo = 1;
+				} else {
+					var validacion_archivo = 2;
+				}
+			} else {
+				var validacion_archivo = 0;
+			}
+		}
+		
+		switch (validacion_archivo) {
+			
+			case 0 : $(".error").fadeIn().html("Tipo de archivo no permitido, solo se admiten archivos .txt"); break;
+			
+			case 1 :
+				var request = new XMLHttpRequest();
+				
+				request.upload.addEventListener("progress" , function (event){
+					if (event.lengthComputable) {
+						var percent = event.loaded / event.total;
+
+						$(function(){
+							$('#progreso').css( 'width' , function (index){
+								return ((percent * 100) + '%');
+							});
+						});
+					}
+				});
+			
+				request.upload.addEventListener("load" , function (event){
+					var percent = 0;
+					document.getElementById("progreso").style.display = "none";
+				});
+				
+				request.upload.addEventListener("error" , function (event){
+					alert ("Fallo la carga");
+				});
+				
+				request.addEventListener("readystatechange" , function (event){
+					if (this.readyState == 4) {
+						if (this.status == 200) {
+							
+							var links = document.getElementById("subidas-sss");
+							var subidas = eval(this.response);
+							var div, a;
+							
+							for (var i = 0 ; i < subidas.length ; i ++ ) {
+								div = document.createElement("div");
+
+								div.appendChild(document.createTextNode('Se ha cargado el archivo ' + subidas[i]));
+								links.appendChild(div);
+								
+							}
+							
+						} else {
+							console.log ("El servidor respondio con " + this.status);
+						}
+					}
+				});
+				
+				request.open("POST" , "app/parserFiles.php?c=Padron&m=Sube&id_fuente=id_fuente={ID_FUENTE_DATOS}&id_entidad=id_entidad=998001&id_sss=id_sss=" + id_sss);
+				request.setRequestHeader("Cache-Control" , "no-cache");
+				document.getElementById("progreso").style.display = "block";
+				request.send(data);
+				
+			break;
+			
+			case 2 : $(".error").fadeIn().html("Tama&ntilde;o m&aacute;ximo exedido: " + maxInputSize + "MB"); break;
+			
+			default: break;
+		}
+	});
+});
+</script>

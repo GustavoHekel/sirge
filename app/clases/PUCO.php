@@ -3,22 +3,21 @@
 class PUCO extends Padron {
 	
 	public function ListadoSubidas () {
-		
 		$sql = "
 			select
-				nombre_grupo as nombre
-				, id_entidad
-				, grupo_os as codigo_os
+				nombre_grupo as osp
+				, nombre_original as nombre
 				, id_archivo
 				, fecha_subida :: date as fecha_carga
-				, nombre_original
-				, nombre_actual
 				, round ((size / 1024) :: numeric , 2) || ' MB' as tamanio
-				, '<a file=\"' || nombre_actual || '\" href=\"#\" class=\"procesar\"><i class=\"halflings-icon hdd\"></i></a>' as procesar
-				, '<a file=\"' || nombre_actual || '\" href=\"#\" class=\"eliminar\"><i class=\"halflings-icon trash\"></a></i>' as eliminar
+				, '<a nombre=\"'|| nombre_original ||'\" file=\"' || cao.id_subida || '\" href=\"#\" class=\"procesar\"><i class=\"halflings-icon hdd\"></i></a>' as procesar
+				, '<a nombre=\"'|| nombre_original ||'\" file=\"' || cao.id_subida || '\" href=\"#\" class=\"eliminar\"><i class=\"halflings-icon trash\"></a></i>' as eliminar
 			from
 				puco.grupos_obras_sociales gru left join (
-					select *
+					select
+						car.*
+						, osp.codigo_osp
+						, osp.id_archivo
 					from 
 						sistema.subidas car left join
 						sistema.subidas_osp osp on car.id_subida = osp.id_subida
@@ -27,7 +26,6 @@ class PUCO extends Padron {
 						and id_padron = 6
 				) cao on gru.grupo_os = cao.codigo_osp";
 		return $this->JSONDT(BDD::GetInstance()->Query($sql)->GetResults(), true);
-		
 	}
 	
 	public static function SelectOSP ($id_html , $id_provincia = null) {
@@ -47,7 +45,10 @@ class PUCO extends Padron {
 		
 		return $html;
 	}
-	
+		
+	public function ProcesaOSP ($id_carga) {
+		BDD::GetInstance()->Get('sistema.subidas_osp' , 'codigo_osp' , array ('id_subida' , '=' , $id_carga));
+	}
 }
 
 ?>

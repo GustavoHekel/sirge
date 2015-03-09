@@ -1,3 +1,0 @@
-operacion;estado;numero_comprobante;codigo_prestacion;subcodigo_prestacion;precio_unitario;fecha_prestacion;clave_beneficiario;tipo_documento;clase_documento;numero_documento;id_dato_reportable_1;dato_reportable_1;id_dato_reportable_2;dato_reportable_2;id_dato_reportable_3;dato_reportable_3;id_dato_reportable_4;dato_reportable_4;orden;efector
-M;D;SC02657000022;CTC001A97;;30;2014-11-25;0199900992010464;DNI;P;51399414;;;;;;;;;1;C02657
-M;D;SC02657000022;CTC001A97;;30;2014-11-25;0199909991008144;DNI;P;50803892;;;;;;;;;1;C02657
