@@ -23,14 +23,13 @@ $(document).ready(function(){
 		mostrar_loading();
 		$(".ddjj").empty();
 		$(".ddjj").append('<table id="tabla_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>');
-		
+
 		$.ajax({
-			
 			type 		: 'post' ,
 			url  		: 'app/parserAjax.php' ,
 			data 		: {
-				c	: 'Padron' ,
-				m	: 'ListadoDDJJ' ,
+				c	: 'Lote' ,
+				m	: 'listarImpresionesDdjj' ,
 				p	: 'id_padron={ID_FUENTE_DATOS}'
 			} ,
 			dataType 	: 'json' ,
@@ -51,12 +50,9 @@ $(document).ready(function(){
 	
 	armar_tabla ();
 	
-	
 	$('.ddjj').on('click' , '.imprimir' , function (){
-		
 		var id_impresion = $(this).attr('id_impresion');
 		window.location.href = 'app/funciones/ddjj_grupal.php?id_padron={ID_FUENTE_DATOS}&id_impresion=' + id_impresion;
-		
 	});
 	
 });

@@ -12,7 +12,7 @@ $diccionario = array (
 	'ID_FUENTE_DATOS'	=> 2
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>
 

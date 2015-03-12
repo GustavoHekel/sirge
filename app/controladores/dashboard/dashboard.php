@@ -2,29 +2,29 @@
 
 require_once '../../../init.php';
 
-$sirge = new SIRGe();
-$notif = new Notificaciones();
+$dash = new Dashboard();
+$noti = new Notificaciones();
 
 $html = array (
 	'../../vistas/dashboard/dashboard.html'
 );
 
 $diccionario = array (
-	'TOTAL_PRESTACIONES' 	=> $sirge->CantidadPrestaciones(),
-	'TOTAL_EFECTORES' 		=> $sirge->CantidadEfectores(),
-	'TOTAL_BENEFICIARIOS'	=> $sirge->CantidadBeneficiarios(),
-	'TOTAL_USUARIOS' 		=> $sirge->CantidadUsuarios(),
-	'ESTADO_PRESTACIONES' 	=> $sirge->PorcentajeDB(1),
-	'ESTADO_COMPROBANTES' 	=> $sirge->PorcentajeDB(3),
-	'ESTADO_FONDOS' 		=> $sirge->PorcentajeDB(2),
-	'ESTADO_PUCO' 			=> $sirge->PorcentajeDB(4),
-	'CANTIDAD_VISITAS' 		=> $sirge->VisitasDB(),
-	'COMENTARIOS' 			=> $sirge->ListarComentariosDB(),
+	'TOTAL_PRESTACIONES' 	=> $dash->cantidadPrestaciones(),
+	'TOTAL_EFECTORES' 		=> $dash->cantidadEfectores(),
+	'TOTAL_BENEFICIARIOS'	=> $dash->cantidadBeneficiarios(),
+	'TOTAL_USUARIOS' 		=> $dash->cantidadUsuarios(),
+	'ESTADO_PRESTACIONES' 	=> $dash->porcentaje(1),
+	'ESTADO_COMPROBANTES' 	=> $dash->porcentaje(3),
+	'ESTADO_FONDOS' 		=> $dash->porcentaje(2),
+	'ESTADO_PUCO' 			=> $dash->porcentaje(4),
+	'CANTIDAD_VISITAS' 		=> $dash->visitas(),
+	'COMENTARIOS' 			=> $dash->listadoComentarios(),
 	'PERIODO' 				=> date('Y-m'),
-	'NOTIFICACION_SIRGE'	=> $notif->GritterSIRGe($_SESSION['grupo']),
-	'NOTIFICACION_DOIU9' 	=> $notif->GritterDOIU9($_SESSION['grupo'])
+	'NOTIFICACION_SIRGE'	=> $noti->gritterSIRGe($_SESSION['grupo']),
+	'NOTIFICACION_DOIU9' 	=> $noti->gritterDOIU9($_SESSION['grupo'])
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>

@@ -11,7 +11,7 @@ $diccionario = array (
 	'FUENTE_DATOS'		=> 'Prestaciones',
 	'ID_FUENTE_DATOS'	=> 1,
 	'CLASE_PROCESAR'	=> 'Prestaciones',
-	'METODO_PROCESAR'	=> 'ProcesaArchivo'
+	'METODO_PROCESAR'	=> 'procesaPadron'
 );
 
 HTML::Vista($html , $diccionario);

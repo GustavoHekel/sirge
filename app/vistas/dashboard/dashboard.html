@@ -10,7 +10,7 @@
 						<div class="number">{TOTAL_PRESTACIONES}</div>
 						<div class="desc">Prestaciones reportadas</div>
 					</div>
-					<a class="more" indicador="1" method="DetalleTotalesDB" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+					<a class="more" indicador="1" method="detalleTotales" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
 				</div>
 			</div>
 			<div class="responsive span3" data-tablet="span6" data-desktop="span3">
@@ -22,7 +22,7 @@
 						<div class="number">{TOTAL_EFECTORES}</div>
 						<div class="desc">Efectores</div>
 					</div>
-					<a class="more" indicador="2" method="DetalleTotalesDB" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+					<a class="more" indicador="2" method="detalleTotales" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
 				</div>
 			</div>
 			
@@ -35,7 +35,7 @@
 						<div class="number">{TOTAL_BENEFICIARIOS}</div>
 						<div class="desc">Beneficiarios</div>
 					</div>
-					<a class="more" indicador="3" method="DetalleTotalesDB" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+					<a class="more" indicador="3" method="detalleTotales" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
 				</div>
 			</div>
 			
@@ -48,7 +48,7 @@
 						<div class="number">{TOTAL_USUARIOS}</div>
 						<div class="desc">Usuarios</div>
 					</div>
-					<a class="more" indicador="4" method="DetalleTotalesDB" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+					<a class="more" indicador="4" method="detalleTotales" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
 				</div>
 			</div>
 		</div>
@@ -63,19 +63,19 @@
 							<div class="span4">
 								<div class="easy-pie-chart">
 									<div class="number easyPieChart porcentaje-prestaciones" data-percent="{ESTADO_PRESTACIONES}" style="width: 75px; height: 75px; line-height: 75px;"><span>{ESTADO_PRESTACIONES}</span>%<canvas width="75" height="75"></canvas></div>
-									<a class="title" indicador="1" method="DetalleFuenteDatosDB" href="#">Prestaciones <i class="m-icon-swapright"></i></a>
+									<a class="title" indicador="1" method="detallePadron" href="#">Prestaciones <i class="m-icon-swapright"></i></a>
 								</div>
 							</div>
 							<div class="span4">
 								<div class="easy-pie-chart">
 									<div class="number easyPieChart porcentaje-comprobantes" data-percent="{ESTADO_COMPROBANTES}" style="width: 75px; height: 75px; line-height: 75px;"><span>{ESTADO_COMPROBANTES}</span>%<canvas width="75" height="75"></canvas></div>
-									<a class="title" indicador="3" method="DetalleFuenteDatosDB" href="#">Comprobantes <i class="m-icon-swapright"></i></a>
+									<a class="title" indicador="3" method="detallePadron" href="#">Comprobantes <i class="m-icon-swapright"></i></a>
 								</div>
 							</div>
 							<div class="span4">
 								<div class="easy-pie-chart">
 									<div class="number easyPieChart porcentaje-fondos" data-percent="{ESTADO_FONDOS}" style="width: 75px; height: 75px; line-height: 75px;"><span>{ESTADO_FONDOS}</span>%<canvas width="75" height="75"></canvas></div>
-									<a class="title" indicador="2" method="DetalleFuenteDatosDB" href="#">Uso de Fondos <i class="m-icon-swapright"></i></a>
+									<a class="title" indicador="2" method="detallePadron" href="#">Uso de Fondos <i class="m-icon-swapright"></i></a>
 								</div>
 							</div>
 						</div>
@@ -93,7 +93,7 @@
 							<div class="span6">
 								<div class="easy-pie-chart">
 									<div class="number easyPieChart" data-percent="{ESTADO_PUCO}" style="width: 75px; height: 75px; line-height: 75px;"><span>{ESTADO_PUCO}</span>%<canvas width="75" height="75"></canvas></div>
-									<a class="title" indicador="1" method="DetallePUCODB" href="#">Info <i class="m-icon-swapright"></i></a>
+									<a class="title" indicador="1" method="detallePUCO" href="#">Info <i class="m-icon-swapright"></i></a>
 								</div>
 							</div>
 							<div class="span3"></div>
@@ -112,7 +112,7 @@
 							<div class="span6">
 								<div class="sparkline-chart">
 									<div class="number" id="sparkline_bar" style="heigth: 50px;">{CANTIDAD_VISITAS}</div>
-									<a class="title" indicador="1" method="DetalleVisitasDB" href="#">Visitas <i class="m-icon-swapright"></i></a>
+									<a class="title" indicador="1" method="detalleVisitas" href="#">Visitas <i class="m-icon-swapright"></i></a>
 								</div>
 							</div>
 							<div class="span2"></div>
@@ -235,7 +235,7 @@ $(document).ready(function(){
 		url  		: 'app/parserAjax.php',
 		data 		: {
 			c 	: 'Geo',
-			m 	: 'DashboardMap'
+			m 	: 'dashboardMap'
 		},
 		dataType 	: 'json',
 		success 	: function (geo) {
@@ -285,7 +285,7 @@ $(document).ready(function(){
 			type 		: 'post' ,
 			url  		: 'app/parserAjax.php' ,
 			data 		: {
-				c : 'SIRGe' ,
+				c : 'Dashboard' ,
 				m : metodo ,
 				p : 'id_fuente=' + id_indicador
 			} ,
@@ -329,8 +329,8 @@ $(document).ready(function(){
 			type 	: 'post' ,
 			url  	: 'app/parserAjax.php' ,
 			data 	: {
-				c : 'SIRGe' ,
-				m : 'InsertarComentarioDB' ,
+				c : 'Dashboard' ,
+				m : 'insertarComentario' ,
 				p : $('form').serialize()
 			} ,
 			success : function (data) {

@@ -107,7 +107,7 @@ $(document).ready(function(){
 					}
 				});
 				
-				request.open("POST" , "app/parserFiles.php?c=Padron&m=Sube&id_fuente=id_fuente={ID_FUENTE_DATOS}&id_entidad=id_entidad=997001");
+				request.open("POST" , "app/parserFiles.php?c=Archivo&m=Sube&id_fuente=id_fuente={ID_FUENTE_DATOS}&id_entidad=id_entidad=997001");
 				request.setRequestHeader("Cache-Control" , "no-cache");
 				document.getElementById("progreso").style.display = "block";
 				request.send(data);

@@ -1,7 +1,7 @@
 <?php
 class Configuracion {
 	
-	public static function Get ($ruta = null) {
+	public static function get ($ruta = null) {
 		if ($ruta) {
 			$configuracion = $GLOBALS['configuracion'];
 			$ruta = explode ('/' , $ruta);

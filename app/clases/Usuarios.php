@@ -2,7 +2,7 @@
 
 class Usuarios {
 	
-	public function Login ($usuario , $clave) {
+	public function login ($usuario , $clave) {
 		
 		$params = array(
 			$usuario ,
@@ -18,9 +18,9 @@ class Usuarios {
 				usuario = ?
 				and password = ?";
 			
-		if (BDD::GetInstance()->Query($sql , $params)->GetCount()) {
+		if (Bdd::GetInstance()->Query($sql , $params)->GetCount()) {
 			
-			$usuario = BDD::GetInstance()->Query($sql , $params)->GetRow();
+			$usuario = Bdd::GetInstance()->Query($sql , $params)->GetRow();
 			
 			$_SESSION['grupo'] 			= $usuario['id_entidad'];
 			$_SESSION['id_menu']		= $usuario['id_menu'];
@@ -38,7 +38,7 @@ class Usuarios {
 				, $_SERVER['REMOTE_ADDR']
 			);
 			
-			BDD::GetInstance()->Query($sql , $params);
+			Bdd::GetInstance()->Query($sql , $params);
 			
 			echo json_encode(true);
 		} else {

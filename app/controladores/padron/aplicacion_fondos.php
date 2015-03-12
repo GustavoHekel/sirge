@@ -10,6 +10,6 @@ $diccionario = array (
 	'FUENTE_DATOS' => 'aplicacion_fondos'
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>

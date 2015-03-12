@@ -11,7 +11,7 @@ $diccionario = array (
 	'SELECT_PROVINCIA' 	=> PUCO::SelectOSP('id_entidad' , $_SESSION['grupo']),
 	'ID_FUENTE_DATOS' 	=> 6 ,
 	'CLASE_PROCESAR'	=> 'PUCO',
-	'METODO_PROCESAR'	=> 'ProcesaOSP'
+	'METODO_PROCESAR'	=> 'ProcesaPadron'
 );
 
 HTML::Vista($html , $diccionario);

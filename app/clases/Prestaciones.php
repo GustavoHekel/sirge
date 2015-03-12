@@ -1,105 +1,101 @@
 <?php
 
-class Prestaciones extends Padron {
+class Prestaciones {
 	
-	private 
-		$_validator ,
-		$_nombre_archivo ,
-		$_ruta_archivo ,
-		$_fp ,
-		$_primer_linea ,
-		$_prestacion ,
-		$_prestacion_ori ,
-		$_lote ,
+	private
+		$_db,
+		$_validator,
+		$_sql_error = "INSERT INTO prestaciones.rechazados (id_provincia, registro_rechazado, lote, motivos) VALUES (?, ?, ?, ?, ?);",
+		$_sql_in	= "INSERT INTO prestaciones.p_01 (estado, efector, numero_comprobante, codigo_prestacion, subcodigo_prestacion, precio_unitario, fecha_prestacion, clave_beneficiario, tipo_documento, clase_documento, numero_documento, orden, lote) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
 		$_encabezados = array(
-				'operacion',
-				'estado',
-				'numero_comprobante',
-				'codigo_prestacion',
-				'subcodigo_prestacion',
-				'importe',
-				'fecha_prestacion',
-				'clave_beneficiario',
-				'tipo_documento',
-				'clase_documento',
-				'numero_documento',
-				'id_dr_1',
-				'val_dr_1',
-				'id_dr_2',
-				'val_dr_2',
-				'id_dr_3',
-				'val_dr_3',
-				'id_dr_4',
-				'val_dr_4',
-				'orden',
-				'cuie',
-				'lote'
-			),
+			'operacion',
+			'estado',
+			'numero_comprobante',
+			'codigo_prestacion',
+			'subcodigo_prestacion',
+			'importe',
+			'fecha_prestacion',
+			'clave_beneficiario',
+			'tipo_documento',
+			'clase_documento',
+			'numero_documento',
+			'id_dr_1',
+			'val_dr_1',
+			'id_dr_2',
+			'val_dr_2',
+			'id_dr_3',
+			'val_dr_3',
+			'id_dr_4',
+			'val_dr_4',
+			'orden',
+			'cuie',
+			'lote'
+		),
 		$_reglas = array(
-				'operacion' => array(
-					'required' => true,
-					'max' => 1,
-					'in' => array(
-						'A',
-						'M'
-					)
-				),
-				'estado' => array(
-					'required' => true,
-					'max' => 1,
-					'in' => array(
-						'L',
-						'D'
-					)
-				),
-				'numero_comprobante' => array(
-					'required' => true,
-					'min' => 1,
-					'max' => 50
-				),
-				'codigo_prestacion'	=> array(
-					'required' => true,
-					'min' => 5,
-					'max' => 11
-				),
-				'importe' => array(
-					'min' => 1,
-					'numeric' => true,
-					'zero' => false
-				),
-				'fecha_prestacion' => array(
-					'required' => true,
-					'date' => true
-				),
-				'clave_beneficiario' => array(
-					'required' => true,
-					'min' => 16,
-					'max' => 16,
-					'numeric' => true,
-					'exception' => array(
-						'indice'=> 'clave_beneficiario',
-						'valor' => 9999999999999999,
-						'campo' => 'codigo_prestacion',
-						'grupo' => 'comunidad'
-					)
-				),
-				'tipo_documento' => array(
-					'max' => 3
-				),
-				'clase_documento' => array(
-					'max' => 1
-				),
-				'numero_documento' => array(
-					'max' => 14
-				),
-				'orden' => array(
-					'numeric' => true
-				),
-				'cuie' => array(
-					'max' => 6,
-					'min' => 6
+			'operacion' => array(
+				'required' => true,
+				'max' => 1,
+				'in' => array(
+					'A',
+					'M'
 				)
 			),
+			'estado' => array(
+				'required' => true,
+				'max' => 1,
+				'in' => array(
+					'L',
+					'D'
+				)
+			),
+			'numero_comprobante' => array(
+				'required' => true,
+				'min' => 1,
+				'max' => 50
+			),
+			'codigo_prestacion'	=> array(
+				'required' => true,
+				'min' => 5,
+				'max' => 11
+			),
+			'importe' => array(
+				'min' => 1,
+				'numeric' => true,
+				'zero' => false
+			),
+			'fecha_prestacion' => array(
+				'required' => true,
+				'date' => true
+			),
+			'clave_beneficiario' => array(
+				'required' => true,
+				'min' => 16,
+				'max' => 16,
+				'numeric' => true,
+				'exception' => array(
+					'indice'=> 'clave_beneficiario',
+					'valor' => 9999999999999999,
+					'campo' => 'codigo_prestacion',
+					'grupo' => 'comunidad'
+				)
+			),
+			'tipo_documento' => array(
+				'max' => 3
+			),
+			'clase_documento' => array(
+				'max' => 1
+			),
+			'numero_documento' => array(
+				'max' => 14
+			),
+			'orden' => array(
+				'numeric' => true
+			),
+			'cuie' => array(
+				'max' => 6,
+				'min' => 6
+			)
+		),
 		$_prestacion_data = array(
 			'estado'				=> '',
 			'cuie'					=> '',
@@ -114,7 +110,38 @@ class Prestaciones extends Padron {
 			'numero_documento'		=> '',
 			'orden'					=> '',
 			'lote'					=> ''
-		),
+		);
+	
+	public function __construct() {
+		$this->_db = Bdd::getInstance();
+	}
+	
+	public function cantidadPrestacionesProvincia($id_provincia) {
+		$sql = "select to_char (sum (registros_in) , '999,999,999') as r from sistema.lotes l left join sistema.subidas s on l.id_subida = s.id_subida where id_provincia = '$id_provincia' and id_padron = 1 and l.id_estado = 1";
+		return $this->_db->query($sql)->getRow()['r'];
+	}
+	
+	public function procesaRegistro($id_subida , $lote) {
+		$data = $this->_db->select('sistema.subidas' , array ('id_subida' , '=' , $id_subida));
+		$ruta = $this->devolverRutaArchivo($data['id_padron']);
+		
+		echo $ruta;
+		
+	}
+	
+	/*
+	private 
+		$_validator ,
+		$_nombre_archivo ,
+		$_ruta_archivo ,
+		$_fp ,
+		$_primer_linea ,
+		$_prestacion ,
+		$_prestacion_ori ,
+		$_lote ,
+		
+		
+		
 		$_prestacion_repo = array(
 		
 		),
@@ -124,14 +151,8 @@ class Prestaciones extends Padron {
 			'modificados' 	=> 0
 		);
 
-	/**
-	 * 
-	 * METODOS PARA MANEJO DE INGRESO DE REGISTROS A LA BASE DE DATOS
-	 * 
-	 **/
-	
 	public function __construct () {
-		$this->_validator = new Validar();
+		$this->_validator = new Validar(true);
 	}
 	
 	protected function IngresaError ($error) {
@@ -144,7 +165,7 @@ class Prestaciones extends Padron {
 		);
 		
 		$sql = "insert into prestaciones.rechazados (id_provincia , motivos , registro_rechazado , lote) values (?,?,?,?)";
-		BDD::GetInstance()->Query($sql , $params);
+		Bdd::GetInstance()->Query($sql , $params);
 	}
 	
 	protected function ArmarArrayRegistro () {
@@ -162,8 +183,8 @@ class Prestaciones extends Padron {
 				tipo_documento , clase_documento , numero_documento , orden , lote)
 			values (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 		
-		if (BDD::GetInstance()->Query($sql , $this->_prestacion_data)->GetError()) {
-			$this->IngresaError(BDD::GetInstance()->GetErrorInfo());
+		if (Bdd::GetInstance()->Query($sql , $this->_prestacion_data)->GetError()) {
+			$this->IngresaError(Bdd::GetInstance()->GetErrorInfo());
 			$this->_contador['rechazados'] ++;
 		} else {
 			$this->_contador['insertados'] ++;
@@ -193,7 +214,7 @@ class Prestaciones extends Padron {
 				and clave_beneficiario = ?
 				and orden = ?";
 		
-		return BDD::GetInstance()->Query($sql , $params)->GetCount();
+		return Bdd::GetInstance()->Query($sql , $params)->GetCount();
 	}
 	
 	protected function ModificaEstado () {
@@ -220,7 +241,7 @@ class Prestaciones extends Padron {
 				and clave_beneficiario = ?
 				and orden = ?";
 			
-		BDD::GetInstance()->Query($sql , $params);		
+		Bdd::GetInstance()->Query($sql , $params);		
 		$this->_contador['modificados'] ++;
 	}
 	
@@ -281,27 +302,9 @@ class Prestaciones extends Padron {
 		}
 	}
 	
-	/**
-	 * 
-	 * METODOS VARIOS
-	 * 
-	 **/
 	
-	public function CantidadPrestacionesProvincia ($id_provincia) {
-		
-		$sql = "
-			select
-				to_char (sum (registros_in) , '999,999,999') as r
-			from
-				sistema.lotes
-			where
-				id_provincia = '$id_provincia'
-				and id_padron = 1
-				and id_estado = 1";
-		
-		return BDD::GetInstance()->Query($sql)->GetRow()['r'];
-		
-	}
+	
+	*/
 }
 
 ?>

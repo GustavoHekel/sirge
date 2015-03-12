@@ -5,10 +5,10 @@ class Notificaciones extends SIRGe {
 	private $_db;
 	
 	public function __construct () {
-		$this->_db = BDD::GetInstance();
+		$this->_db = Bdd::getInstance();
 	}
 	
-	private function ArmaNotificacion ($texto) {
+	private function armaNotificacion ($texto) {
 		$js = "
 			$.gritter.add({
 				title 	: 'ATENCIÓN' ,
@@ -18,7 +18,7 @@ class Notificaciones extends SIRGe {
 		return $js;
 	}
 	
-	private function GritterFuenteDatos ($id_provincia , $id_fuente) {
+	private function gritterFuenteDatos ($id_provincia , $id_fuente) {
 		
 		$params = array(
 			$id_provincia ,
@@ -35,27 +35,27 @@ class Notificaciones extends SIRGe {
 				id_provincia = ?
 				and id_padron = ?";
 		
-		$dias = $this->_db->Query($sql , $params)->GetRow()['dias'];
+		$dias = $this->_db->query($sql , $params)->getRow()['dias'];
 		
 		if ($dias > 30) {
-			return $this->ArmaNotificacion('No se han presentado ' . $this->GetNombrePadron($id_fuente) .' por ' . $dias . ' dias');	
+			return $this->armaNotificacion('No se han presentado ' . $this->getNombrePadron($id_fuente) .' por ' . $dias . ' dias');
 		}
 	}
 	
-	public function GritterSIRGe ($id_provincia) {
+	public function gritterSIRGe ($id_provincia) {
 
 		$gr = '';
 		
 		if ($id_provincia < '25') {
 			$f = array (1 ,	2 ,	3);
 			foreach ($f as $id) {
-				$gr .= $this->GritterFuenteDatos ($id_provincia , $id);
+				$gr .= $this->gritterFuenteDatos ($id_provincia , $id);
 			}
 		}
 		return $gr;
 	}
 	
-	public function GritterDOIU9 ($id_provincia) {
+	public function gritterDOIU9 ($id_provincia) {
 		
 		$gr = '';
 		
@@ -72,10 +72,10 @@ class Notificaciones extends SIRGe {
 					and id_provincia = ?
 				group by id_provincia";
 				
-			$dias = $this->_db->Query($sql , $params)->GetRow()['dias'];
+			$dias = $this->_db->query($sql , $params)->getRow()['dias'];
 			
 			if ($dias > 30) {
-				$gr = $this->ArmaNotificacion('RECUERDE GENERAR LA DDJJ DE INFORMACIÓN PRIORIZADA');	
+				$gr = $this->armaNotificacion('RECUERDE GENERAR LA DDJJ DE INFORMACIÓN PRIORIZADA');	
 			}
 		}
 		

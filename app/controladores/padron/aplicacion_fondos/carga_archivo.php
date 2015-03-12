@@ -15,6 +15,6 @@ $diccionario = array (
 	'TEXTO_ALERTA' 		=> 'Seleccione la ruta al archivo de aplicaci&oacute;n de fondos dentro de su ordenador. Recuerde respetar la estructura de datos.'
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>

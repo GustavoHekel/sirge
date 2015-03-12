@@ -1,7 +1,7 @@
 <?php
 require_once 'init.php';
 
-$menu = new HTML();
+$html5 = new Html();
 
 if (Seguridad::getNavegador()) {
 	
@@ -9,7 +9,7 @@ if (Seguridad::getNavegador()) {
 		
 		$diccionario = array (
 			'NOMBRE_USUARIO' => $_SESSION['descripcion'] ,
-			'MENU_IZQUIERDO' => $menu->armarMenu($_SESSION['id_menu'])
+			'MENU_IZQUIERDO' => $html5->armarMenu($_SESSION['id_menu'])
 		);
 		
 		$html = array (
@@ -19,7 +19,7 @@ if (Seguridad::getNavegador()) {
 			'app/vistas/index/footer.html'
 		);
 		
-		HTML::Vista($html , $diccionario);
+		Html::Vista($html , $diccionario);
 		
 	} else {
 		require_once 'app/vistas/index/header.html';

@@ -6,20 +6,21 @@ class Validar {
 		$_validado 	= false,
 		$_codigos_comunidad;
 	
-	public function __construct () {
-		
-		$sql = "
-			select codigo_prestacion from pss.codigos
-			where 
-				codigo like 'CMI%' or
-				codigo like 'RCM%' or 
-				codigo like 'TAT%' or 
-				codigo like 'ROX001%' or 
-				codigo like 'ROX002%' or 
-				codigo like 'DSY001%'";
-											
-		$this->_codigos_comunidad = BDD::GetInstance()->Query($sql)->GetList();
-		
+	public function __construct ($prestaciones = false) {
+
+		if ($prestaciones) {
+			$sql = "
+				select codigo_prestacion from pss.codigos
+				where 
+					codigo like 'CMI%' or
+					codigo like 'RCM%' or 
+					codigo like 'TAT%' or 
+					codigo like 'ROX001%' or 
+					codigo like 'ROX002%' or 
+					codigo like 'DSY001%'";
+												
+			$this->_codigos_comunidad = BDD::GetInstance()->Query($sql)->GetList();
+		}
 	}
 	
 	public function validarFecha ($fecha) {
@@ -127,8 +128,19 @@ class Validar {
 										break;
 									default: break;
 								}
-								
 								break;
+							
+							case 'maxPeriodoSSS' :
+								
+								$periodo_max = Tiempo::MaxPeriodoSSS();
+							
+								if ($valor < $periodo_max) {
+									if ((int)$valor != 0 && $data['codigo_os'] != 500807) {
+										$this->addError("{$item} fuera de rango");
+									}
+								}
+								break;
+								
 						}
 					}
 				}

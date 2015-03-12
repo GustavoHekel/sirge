@@ -21,7 +21,6 @@ CREATE TABLE sistema.lotes_new
   id_subida integer,
   id_usuario integer,
   id_provincia character(2) NOT NULL,
-  id_padron integer,
   id_estado integer DEFAULT 0,
   registros_in integer,
   registros_out integer,
@@ -59,15 +58,6 @@ CREATE INDEX fki_fkey_lotes_id_estado
   ON sistema.lotes_new
   USING btree
   (id_estado);
-
--- Index: sistema.fki_fkey_lotes_id_padron
-
--- DROP INDEX sistema.fki_fkey_lotes_id_padron;
-
-CREATE INDEX fki_fkey_lotes_id_padron
-  ON sistema.lotes_new
-  USING btree
-  (id_padron);
 
 -- Index: sistema.fki_fkey_lotes_id_subida
 
@@ -134,7 +124,6 @@ $lotes = array(
 	'id_subida' => '',
 	'id_usuario' => '',
 	'id_provincia' => '',
-	'id_padron' => '',
 	'id_estado' => '',
 	'registros_in' => '',
 	'registros_out' => '',
@@ -165,7 +154,6 @@ while ($reg = pg_fetch_assoc ($res)) {
 	$lotes['id_subida'] = GetIDSubida ($reg['lote']);
 	$lotes['id_usuario'] = $reg['id_usuario_proceso'];
 	$lotes['id_provincia'] = strlen ($reg['id_provincia']) == 2 ? $reg['id_provincia'] : '0' . $reg['id_provincia'];
-	$lotes['id_padron'] = $reg['id_padron'];
 	$lotes['id_estado'] = $reg['id_estado'];
 	$lotes['registros_in'] = $reg['registros_insertados'];
 	$lotes['registros_out'] = $reg['registros_rechazados'];

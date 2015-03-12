@@ -4,7 +4,7 @@ class Beneficiarios {
 	
 	private function GetUltimoPeriodo () {
 		$sql = 'select max (periodo) as p from beneficiarios.beneficiarios_periodos';
-		return BDD::GetInstance()->Query($sql)->GetRow()['p'];
+		return Bdd::GetInstance()->Query($sql)->GetRow()['p'];
 	}
 	
 	public function INDECHabitantes ($id_provincia) {
@@ -17,7 +17,7 @@ class Beneficiarios {
 			where
 				id_provincia = '$id_provincia'";
 
-		return BDD::GetInstance()->Query($sql)->GetRow()['h'];
+		return Bdd::GetInstance()->Query($sql)->GetRow()['h'];
 	}
 	
 	public function ResumenBeneficiarios ($id_provincia , $campo) {
@@ -33,7 +33,7 @@ class Beneficiarios {
 				id_provincia = '$id_provincia'
 				and periodo = $periodo";
 		
-		return BDD::GetInstance()->Query($sql)->GetRow()['c'];	
+		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];	
 	}
 	
 	public function Matrix ($clave_beneficiario) {
@@ -64,7 +64,7 @@ class Beneficiarios {
 				) a on s.periodo = a.periodo
 			order by 1";
 		
-		$data 		= BDD::GetInstance()->Query($sql , $params)->GetResults();
+		$data 		= Bdd::GetInstance()->Query($sql , $params)->GetResults();
 		$periodos 	= array();
 		$info 		= array();
 		

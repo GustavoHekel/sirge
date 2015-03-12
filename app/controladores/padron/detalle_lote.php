@@ -11,7 +11,7 @@ $sql 	= "
 		sistema.subidas s on l.id_subida = s.id_subida left join
 		sistema.usuarios u on l.id_usuario = u.id_usuario
 	where lote = ?";
-$data 	= BDD::GetInstance()->Query($sql , $params)->GetRow();
+$data 	= Bdd::GetInstance()->Query($sql , $params)->GetRow();
 
 $html = array (
 	'../../vistas/padron/detalle_lote.html'
@@ -19,7 +19,7 @@ $html = array (
 
 $diccionario = array (
 	'LOTE' 				=> $data['lote'],
-	'PROVINCIA' 		=> SIRGe::RetornaNombreProvincia ($data['id_provincia']),
+	'PROVINCIA' 		=> Sirge::getNombreProvincia ($data['id_provincia']),
 	'ARCHIVO' 			=> $data['nombre_original'],
 	'IN' 				=> $data['registros_in'],
 	'OUT' 				=> $data['registros_out'],
@@ -27,11 +27,11 @@ $diccionario = array (
 	'INICIO' 			=> $data['inicio'],
 	'FIN' 				=> $data['fin'],
 	'USUARIO_CARGA' 	=> $data['usuario'],
-	'USUARIO_CIERRE' 	=> Padron::GetUsuarioCierre($data['lote']),
-	'RECHAZOS'			=> Padron::GetRechazos($data['lote'])
+	'USUARIO_CIERRE' 	=> Padron::getUsuarioCierre($data['lote']),
+	'RECHAZOS'			=> Padron::getRechazos($data['lote'])
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 
 ?>

@@ -10,6 +10,6 @@ $diccionario = array (
 	'FUENTE_DATOS' => 'comprobantes'
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>

@@ -14,7 +14,7 @@ class Efectores {
 			where
 				id_provincia = '$id_provincia'";
 			
-		return BDD::GetInstance()->Query($sql)->GetRow()['c'];
+		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];
 		
 	}
 	
@@ -32,7 +32,7 @@ class Efectores {
 				and integrante = 'S'
 				and compromiso_gestion = 'S'";
 			
-		return BDD::GetInstance()->Query($sql)->GetRow()['c'];
+		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];
 		
 	}
 	
@@ -69,7 +69,7 @@ class Efectores {
 			where
 				e.id_provincia = '$id_provincia'";
 		
-		return BDD::GetInstance()->Query($sql)->GetRow()['d'];
+		return Bdd::GetInstance()->Query($sql)->GetRow()['d'];
 	}
 	
 }

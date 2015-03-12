@@ -8,7 +8,7 @@ $html = array (
 
 $diccionario = array (
 	'CSS_GLOBAL' 		=> 'purple',
-	'ID_FUENTE_DATOS' 	=> 6
+	'ID_FUENTE_DATOS' 	=> 4
 );
 
 HTML::Vista($html , $diccionario);

@@ -14,6 +14,6 @@ $diccionario = array (
 	'METODO_PROCESAR'	=> 'ProcesaArchivo'
 );
 
-HTML::Vista($html , $diccionario);
+Html::Vista($html , $diccionario);
 
 ?>

@@ -10,7 +10,7 @@ class Seguridad {
 		return isset ($_SESSION['id_usuario']) ? true : false ;
 	}
 	
-	public function CerrarSesion () {
+	public function cerrarSesion () {
 		session_destroy();
 	}
 }
