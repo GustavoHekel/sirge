@@ -1,6 +1,6 @@
 <?php
 
-class Padron extends Archivos {
+class Padron extends Archivo {
 	
 	private 
 		$_db ,
@@ -10,7 +10,7 @@ class Padron extends Archivos {
 		$this->_db = Bdd::getInstance();
 	}
 	
-	protected function comparaCampos ($encabezados , $data) {
+	public function comparar ($encabezados , $data) {
 		return count ($encabezados) != count ($data) ? false : true;
 	}
 	
@@ -79,50 +79,29 @@ class Padron extends Archivos {
 		return $id_padron;
 	}
 	
-	public function ListadoDDJJ ($id_padron) {
-		
-		$params = array ($_SESSION['grupo'] , $id_padron);
-		$sql = "
-			select
-				id_impresion
-				, fecha_impresion
-				, s.lote as \"Lote(s)\"
-				, '<a class=\"imprimir\" id_impresion=\"' || id_impresion || '\"><i class=\"halflings-icon print\"></i></a>' as reimprimir
-			from 
-				ddjj.sirge s left join
-				sistema.lotes l on l.lote = any (s.lote)
-			where 
-				s.id_provincia = ?
-				and id_padron = ?
-				and id_estado = 1
-			group by 1,2,3
-			order by 1 desc ,2,3";
-		
-		return $this->JSONDT($this->_db->Query($sql , $params)->GetResults() , true);
-		
-		
-	}
-	
 	protected function _IngresaError ($sql , $params , $error) {
 			
 		$this->_db->query($sql , $params);
 	}
 	
-	
-	private function devolverRutaArchivo ($id_padron , $nombre) {
-		return '../data/upload/' . $this->getNombrePadron($id_padron) . '/' . $nombre;
-	}
-	
-	private function analizaPadron($id_padron , $id_subida , $lote) {
-		$clase 		= $this->getNombrePadron($id_padron);
-		$instancia 	= new $clase;
-		$instancia->procesaRegistro($id_subida , $lote);
-	}
-	
-	public function procesaPadron ($id_subida) {
-		$data 			= $this->_db->select('sistema.subidas' , array ('id_subida' , '=' , $id_subida));
-		$this->_lote	= $this->NuevoLote($_SESSION['grupo'] , $_SESSION['id_usuario'] , $data['id_padron'] , $id_subida);
-		$this->analizaPadron($data['id_padron'] , $id_subida , $this->_lote);
+	public function analizar($id_subida){
+		
+		$archivo 	= new Archivo();
+		$lote 		= new Lote();
+		
+		$id_padron 	= $this->_db->getField('sistema.subidas' , 'id_padron' , array('id_subida','=',$id_subida));
+		$file 		= $this->_db->getField('sistema.subidas' , 'nombre_actual' , array('id_subida','=',$id_subida));
+		$clase 		= $archivo->getTipoArchivo($id_padron);
+		$ruta 		= $archivo->getRutaArchivo($id_padron , $file);
+		$lote 		= $lote->crear($_SESSION['grupo'] , $_SESSION['id_usuario'] , $id_subida);
+		
+		if ($fp = fopen ($ruta , 'rb') {
+			$instancia = new $clase;
+			if ($instancia->procesar($fp , $lote)){
+				$archivo->cerrar($id_subida);
+			}
+		}
+		
 	}
 	
 }

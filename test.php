@@ -2,11 +2,8 @@
 
 require_once 'init.php';
 
+$_db = Bdd::getInstance();
 
-$t = new Lote();
-
-echo $t->crear(25,1,5000);
-
-
+$_db->insert(array('sigla','descripcion') , 'sistema.sexos' , array('P','PUTOS'));
 
 ?>

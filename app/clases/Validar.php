@@ -30,7 +30,7 @@ class Validar {
 		
 	}
 	
-	public function ValidarRegistro ($data = array() , $encabezados = array() , $validaciones = array()) {
+	public function validarRegistro ($data = array() , $encabezados = array() , $validaciones = array()) {
 		unset ($this->_errores);
 		
 		if (count ($encabezados) == count ($data)) {
@@ -168,11 +168,11 @@ class Validar {
 		$this->_errores[] = $error;
 	}
 	
-	public function GetError () {
+	public function getError () {
 		return implode (" | " , $this->_errores);
 	}
 	
-	public function Resultado () {
+	public function resultado () {
 		return $this->_validado;
 	}
 	

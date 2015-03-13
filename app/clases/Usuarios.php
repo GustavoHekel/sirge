@@ -2,43 +2,25 @@
 
 class Usuarios {
 	
+	private
+		$_db;
+	
+	public function __construct(){
+		$this->_db = Bdd::getInstance();
+	}
+	
 	public function login ($usuario , $clave) {
-		
-		$params = array(
-			$usuario ,
-			md5 ($clave)
-		);
-		
-		$sql = "
-			select 
-				* 
-			from
-				sistema.usuarios
-			where
-				usuario = ?
-				and password = ?";
-			
-		if (Bdd::GetInstance()->Query($sql , $params)->GetCount()) {
-			
-			$usuario = Bdd::GetInstance()->Query($sql , $params)->GetRow();
-			
+		$params = array($usuario , md5 ($clave));
+		$usuario = $this->_db->findAll('sistema.usuarios' , array('usuario = ? and password = ?', $params));
+		if ($this->_db->getCount()) {
 			$_SESSION['grupo'] 			= $usuario['id_entidad'];
 			$_SESSION['id_menu']		= $usuario['id_menu'];
 			$_SESSION['descripcion'] 	= $usuario['descripcion'];
 			$_SESSION['id_usuario'] 	= $usuario['id_usuario'];
 			
-			$sql = "
-				insert 
-					into logs.log_logins (id_usuario , ip)
-				values 
-					(?,?)";
-					
-			$params = array (
-				$_SESSION['id_usuario'] 
-				, $_SERVER['REMOTE_ADDR']
-			);
-			
-			Bdd::GetInstance()->Query($sql , $params);
+			$params = array ($_SESSION['id_usuario'] , $_SERVER['REMOTE_ADDR']);
+			$sql = "insert into logs.log_logins (id_usuario , ip) values (?,?)";
+			$this->_db->query($sql , $params);
 			
 			echo json_encode(true);
 		} else {

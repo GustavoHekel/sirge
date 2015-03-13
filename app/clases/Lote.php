@@ -32,10 +32,12 @@ class Lote
 		);
 		$sql = "
 			with upd1 as (
-				update sistema.lotes set id_estado = 1 where lote = 5159
+				update sistema.lotes 
+				set id_estado = 1 
+				where lote = ?
 				returning lote
 			) insert into sistema.lotes_aceptados (lote , id_usuario) 
-			values ((select * from upd1) , 1)";
+			values ((select * from upd1) , ?)";
 		if (! $this->_db->query($sql , $params)->getError()){
 			echo 'Se ha cerrado el lote ' . $lote;
 		}
@@ -51,7 +53,7 @@ class Lote
 				update sistema.lotes set id_estado = 1 where lote = 5159
 				returning lote
 			) insert into sistema.lotes_eliminados (lote , id_usuario) 
-			values ((select * from upd1) , 1)";
+			values ((select * from upd1) , ?)";
 		if (! $this->_db->query($sql , $params)->getError()){
 			echo 'Se ha eliminado el lote ' . $lote;
 		}
@@ -76,7 +78,7 @@ class Lote
 		$this->_db->query($sql , $params);
 	}
 	
-	public function mostrarPendientes($id_fuente , $aux = false){
+	public function mostrarPendientesDdjj($id_fuente , $aux = false){
 		$params = array ($id_fuente , $_SESSION['grupo']);
 		$sql = "
 			select 

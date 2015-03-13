@@ -26,7 +26,6 @@ class Bdd {
 	
 	public function query ($sql , $params = array()) {
 		$this->_error = false;
-		
 		if ($this->_query = $this->_pdo->prepare($sql)){
 			$i = 1;
 			if (count($params)) {
@@ -35,7 +34,6 @@ class Bdd {
 					$i++;
 				}
 			}
-			
 			if ($this->_query->execute()){
 				$this->_count = $this->_query->rowCount();
 			} else {
@@ -54,16 +52,12 @@ class Bdd {
 		return $this->_error;
 	}
 	
-	public function GetErrorInfo() {
+	public function getErrorInfo() {
 		return $this->_error_info[2];
 	}
 	
-	public function GetCount() {
+	public function getCount() {
 		return $this->_count;
-	}
-	
-	public function GetRow() {
-		return $this->_query->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	public function GetResults() {
@@ -74,30 +68,46 @@ class Bdd {
 		return $this->_query->fetchAll(PDO::FETCH_COLUMN);
 	}
 	
-	private function Accion ($accion , $tabla , $where = array()) {
+	private function accion ($accion , $tabla , $where = array()) {
 		if (count ($where)) {
-			
-			$operadores = array ('=' , '<' , '>' , '<=' , '>=');
-			$campo 		= $where[0];
-			$operador 	= $where[1];
-			$valor 		= $where[2];
-			
-			if (in_array ($operador , $operadores)) {
-				$sql = "{$accion} from {$tabla} where {$campo} {$operador} ?";
-				
-				if (!$this->query($sql , array ($valor))->GetError()) {
-					return $this;
-				}
+			$campo = $where[0];
+			$params	= $where[1];
+			$sql = "{$accion} from {$tabla} where {$campo}";
+			if (!$this->query($sql , $params)->getError()) {
+				return $this;
+			} else {
+				return $this->_query;
 			}
 		}
-		return false;
 	}
 	
-	public function select ($tabla , $where = array()) {
-		return $this->Accion("select * " , $tabla , $where)->GetRow();
+	public function get(){
+		return $this->_query->fetch(PDO::FETCH_ASSOC);
 	}
 	
-	public function Delete ($tabla , $where) {}
+	public function findAll($tabla , $where = array()) {
+		return $this->accion("select * " , $tabla , $where)->_query->fetch(PDO::FETCH_ASSOC);
+	}
+	
+	public function find($campo , $tabla , $where = array()){
+		return $this->accion("select {$campo}" , $tabla , $where)->_query->fetch(PDO::FETCH_ASSOC)[$campo];
+	}
+	
+	
+	
+	public function insert($campos , $tabla , $data){
+		$placeholder = '(' . implode (',' , array_fill (0 , count($campos) , '?')) . ')';
+		$sql = "insert into {$tabla} (" . implode (',', $campos) . ") values {$placeholder}";
+		if (! $this->query($sql , $data)->getError()){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public function delete ($tabla , $where) {
+		
+	}
 	
 	public function lastId ($sequencia) {
 		return $this->_pdo->lastInsertId($sequencia);

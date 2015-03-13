@@ -5,31 +5,31 @@ class Dashboard
 	
 	private 
 		$_db,
-		$_Sirge;
+		$_sirge;
 	
 	public function __construct() {
 		$this->_db = Bdd::getInstance();
-		$this->_Sirge = new Sirge();
+		$this->_sirge = new Sirge();
 	}
 	
 	public function cantidadPrestaciones() {
 		$sql = "select to_char (sum (registros_in) , '99,999,999') as cantidad from sistema.lotes l left join sistema.subidas s on l.id_subida = s.id_subida where id_padron = 1 and l.id_estado = 1";
-		return $this->_db->query($sql)->getRow()['cantidad'];
+		$this->_db->query($sql)->get()['cantidad'];
 	}
 	
 	public function cantidadEfectores() {
 		$sql = "select count (*) as cantidad from efectores.efectores";
-		return $this->_db->query($sql)->getRow()['cantidad'];
+		return $this->_db->query($sql)->get()['cantidad'];
 	}
 	
 	public function cantidadUsuarios() {
 		$sql = "select count (*) as cantidad from sistema.usuarios";
-		return $this->_db->query($sql)->getRow()['cantidad'];
+		return $this->_db->query($sql)->get()['cantidad'];
 	}
 	
 	public function cantidadBeneficiarios() {
 		$sql = "select to_char (count (*) , '99,999,999') as cantidad from beneficiarios.beneficiarios";
-		return $this->_db->query($sql)->getRow()['cantidad'];
+		return $this->_db->query($sql)->get()['cantidad'];
 	}
 	
 	public function detalleTotales($id_total) {
@@ -85,7 +85,7 @@ class Dashboard
 					order by 1";
 			break;
 		}
-		return $this->_Sirge->jsonDT($this->_db->query($sql)->getResults() , true);
+		return $this->_sirge->jsonDT($this->_db->query($sql)->getResults() , true);
 	}
 	
 	public function detallePUCO () {
@@ -108,7 +108,7 @@ class Dashboard
 					from puco.procesos_obras_sociales
 					where periodo = (extract (year from (localtimestamp - interval '1 month')) :: text || lpad (extract (month from (localtimestamp - interval '1 month')) :: text , 2 , '0')) :: int
 				) b on a.codigo_os = b.codigo_os";
-		return $this->_Sirge->jsonDT($this->_db->query($sql)->getResults() , true);
+		return $this->_sirge->jsonDT($this->_db->query($sql)->getResults() , true);
 	}
 	
 	public function insertarComentario ($comentario) {
@@ -132,7 +132,7 @@ class Dashboard
 				and extract (month from fecha_login) = " . date ('m') . "
 			group by 1
 			order by 1";
-		return $this->_Sirge->jsonDT($this->_db->query($sql)->getResults() , true);
+		return $this->_sirge->jsonDT($this->_db->query($sql)->getResults() , true);
 	}
 	
 	public function detallePadron ($id_padron) {
@@ -165,7 +165,7 @@ class Dashboard
 				) lot on pro.id_provincia = lot.id_provincia
 			order by
 				pro.id_provincia";
-		return $this->_Sirge->jsonDT($this->_db->query($sql)->getResults() , true);
+		return $this->_sirge->jsonDT($this->_db->query($sql)->getResults() , true);
 	}
 	
 	public function porcentaje ($id_padron) {
@@ -190,7 +190,7 @@ class Dashboard
 					and extract (year from fecha_impresion) = " . date('Y') . "
 				group by l.id_provincia ) p";
 		}
-		return $this->_db->query($sql)->getRow()['valor'];
+		return $this->_db->query($sql)->get()['valor'];
 	}
 	
 	public function visitas () {

@@ -53,7 +53,7 @@ class Archivo {
 			$this->setIds($nombre_padron_array);
 			if (
 				$archivos['archivo']['error'][$orden] == 0 &&
-				$this->mover ($this->_ruta_archivo_original , $this->_ruta_archivo_nuevo)
+				$this->moverSubida ($this->_ruta_archivo_original , $this->_ruta_archivo_nuevo)
 			) {
 				$this->_subidas[] = $nombre;
 				$this->registrarSubida ($_SESSION['id_usuario'] , $this->_id_padron , $this->_size , $this->_nombre_archivo_original , $this->_nombre_archivo_nuevo);
@@ -62,7 +62,7 @@ class Archivo {
 		}
 	}
 	
-	protected function mover($nombre_original , $nombre_nuevo){
+	protected function moverSubida($nombre_original , $nombre_nuevo){
 		if (move_uploaded_file ($nombre_original , $nombre_nuevo)) return true;
 		else return false;
 	}
@@ -111,31 +111,20 @@ class Archivo {
 		}
 	}
 	
-	protected function registraProceso ($id_subida) {
-		$params_1 = array ($id_subida);
-		$sql_1 = "update sistema.subidas set id_estado = 2 where id_subida = ?";
-		Bdd::GetInstance()->Query($sql_1 , $params_1);
-		
-		$params_2 = array ($id_subida , $_SESSION['id_usuario']);
-		$sql_2 = "insert into sistema.subidas_aceptadas (id_subida , id_usuario) values (?,?)";
-		Bdd::GetInstance()->Query($sql_2 , $params_2);
+	protected function registrarProceso ($id_subida) {
+		$params = array ($id_subida , $_SESSION['id_usuario']);
+		$sql = "
+			with upd1 as (
+				update sistema.subidas
+				set id_estado = 2
+				where id_subida = ?
+				returning id_subida
+			) insert into sistema.subidas_aceptadas (id_subida , id_usuario)
+			values ((select * from upd1),?)";
+		$this->_db->query($sql_2 , $params_2);
 	}
 	
-	protected function registraBaja ($id_subida) {
-		$params_1 = array ($id_subida);
-		$sql_1 = "update sistema.subidas set id_estado = 3 where id_subida = ?";
-		$this->_db->Query($sql_1 , $params_1);
-		
-		$params_2 = array ($id_subida , $_SESSION['id_usuario']);
-		$sql_2 = "insert into sistema.subidas_eliminadas (id_subida , id_usuario) values (?,?)";
-		$this->_db->Query($sql_2 , $params_2);
-	}
-	
-	protected function getDataArchivo ($id_subida) {
-		$params = array ($id_subida);
-		$sql 	= "select * from sistema.subidas where id_subida = ?";
-		return Bdd::GetInstance()->Query($sql , $params)->GetRow();
-	}
+
 	
 	protected function setIds ($data = array()) {
 		$this->_id_padron = $data[0];
@@ -149,38 +138,47 @@ class Archivo {
 		}
 	}
 	
-	public function cierre ($id_subida) {
-
-		$data 	= $this->getDataArchivo($id_subida);
-		$nombre = $data['nombre_actual'];
+	public function cerrar ($id_subida) {
+		$data	= $this->_db->getRow('sistema.subidas' , array ('id_subida' , = , $id_subida));
 		$padron = strtolower($this->getNombrePadron($data['id_padron']));
-		
-		if (rename('../data/upload/' . $padron . '/' . $nombre , '../data/upload/' . $padron . '/back/' . $nombre)) {
-			$this->RegistraProceso($id_subida);
-		} else {
-			echo '../data/upload/' . $padron . '/' . $nombre;
-			echo '../data/upload/' . $padron . '/back/' . $nombre;
+		if (rename($this->getRutaArchivo($data['id_padron'] , $data['nombre_actual']) ,  '../data/upload/' . $padron . '/back/' . $data['nombre_actual'])){
+			$this->registrarProceso($id_subida);
 		}
-		
 	}
 	
-	public function baja ($id_subida) {
+	protected function getTipoArchivo ($id_fuente) {
+		return $this->_db->getField('sistema.padrones' , 'nombre' , array ('id_padron' , '=' , $id_fuente));
+	}
+	
+	public function borrar ($id_subida) {
 		$data 	= $this->getDataArchivo($id_subida);
 		$nombre = $data['nombre_actual'];
-		$padron = strtolower($this->GetNombrePadron($data['id_padron']));
+		$padron = strtolower($this->getTipoArchivo($data['id_padron']));
 		
 		if (unlink ('../data/upload/' . $padron . '/' . $nombre )) {
-			$this->RegistraBaja($id_subida);
+			$this->registraBaja($id_subida);
 			echo 'Se ha eliminado el archivo ' . $data['nombre_original'];
 		}
 	}
 	
-	public function getTipoArchivo ($id_fuente) {
-		$sql = "select nombre from sistema.padrones where id_padron = ?";
-		$params = array ($id_fuente);
-		return $this->_db->query($sql , $params)->getRow()['nombre'];
+	protected function registraBaja ($id_subida) {
+		$params = array ($id_subida , $_SESSION['id_usuario']);
+		$sql = "
+			with upd1 as (
+				update sistema.subidas set id_estado = 3 where id_subida = ?
+				returning id_subida
+			) insert into sistema.subidas_eliminadas (id_subida , id_usuario)
+			values ((select * from upd1) , ?)";
+		if (! $this->_db->Query($sql , $params)->getError()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
+	public function getRutaArchivo ($id_padron , $nombre) {
+		return '../data/upload/' . $this->getNombrePadron($id_padron) . '/' . $nombre;
+	}
 	
 	
 	
