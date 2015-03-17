@@ -109,8 +109,8 @@ $(document).ready(function(){
 		var file 		= $(this).parents("tr").children().html();
 		var mensaje 	= "Est&aacute; por procesar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
 		var	titulo		= 'Procesar?';
-		var clase		= 'Archivo'
-		var metodo		= 'analizar'
+		var clase		= '{CLASE_PROCESAR}'
+		var metodo		= '{METODO_PROCESAR}'
 		accion (titulo , mensaje , clase , metodo , id_carga);
 	});
 });

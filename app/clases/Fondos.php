@@ -5,6 +5,7 @@ class Fondos implements Facturacion {
 	private
 		$_validacion,
 		$_db,
+                $_lote,
 		$_fondo,
 		$_encabezados = array(
 			'efector',
@@ -60,9 +61,8 @@ class Fondos implements Facturacion {
 		);
 		
 	public function __construct(){
-		$this->_db = Bdd::getInstance();
-		$this->_validacion = new Validar();
-		$this->_lote = new Lote();
+            $this->_db = Bdd::getInstance();
+            $this->_validacion = new Validar();
 	}
 	
 	public function ingresarError($registro , $lote , $error){

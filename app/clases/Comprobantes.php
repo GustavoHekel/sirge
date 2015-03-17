@@ -1,17 +1,12 @@
 <?php
 
-class Comprobantes extends Padron {
-	
-	private 
-		$_validator ,
-		$_nombre_archivo ,
-		$_ruta_archivo ,
-		$_fp ,
-		$_primer_linea ,
-		$_comprobante ,
-		$_comprobante_ori ,
-		$_lote ,
-		$_encabezados = array(
+class Comprobantes implements Facturacion {
+    private
+            $_db,
+            $_validacion,
+            $_comprobante,
+            $_lote,
+            $_encabezados = array(
 				'efector',
 				'numero_comprobante',
 				'tipo_comprobante',
@@ -27,76 +22,106 @@ class Comprobantes extends Padron {
 				'lote'
 			),
 		$_reglas = array(
-				'efector' => array (
-					'required' => true
-				),
-				'numero_comprobante' => array (
-					'required' => true,
-					'max' => 50
-				),
-				'tipo_comprobante' => array (
-					'required' => true,
-					'in' => array (
-						'FC',
-						'NC',
-						'ND'
-					)
-				),
-				'fecha_comprobante' => array (
-					'required' => true,
-					'date' => true
-				),
-				'fecha_recepcion' => array (
-					'required' => true,
-					'date' => true
-				),
-				'fecha_notificacion' => array (
-					'required' => true,
-					'date' => true
-				),
-				'fecha_liquidacion' => array (
-					'required' => true,
-					'date' => true
-				),
-				'fecha_debito_bancario' => array (
-					'required' => true,
-					'date' => true
-				),
-				'importe' => array (
-					'required' => true,
-					'numeric' => true
-				),
-				'importe_pagado' => array (
-					'required' => true,
-					'numeric' => true
-				)
-			),
+                        'efector' => array (
+                                'required' => true
+                        ),
+                        'numero_comprobante' => array (
+                                'required' => true,
+                                'max' => 50
+                        ),
+                        'tipo_comprobante' => array (
+                                'required' => true,
+                                'in' => array (
+                                        'FC',
+                                        'NC',
+                                        'ND'
+                                )
+                        ),
+                        'fecha_comprobante' => array (
+                                'required' => true,
+                                'date' => true
+                        ),
+                        'fecha_recepcion' => array (
+                                'required' => true,
+                                'date' => true
+                        ),
+                        'fecha_notificacion' => array (
+                                'required' => true,
+                                'date' => true
+                        ),
+                        'fecha_liquidacion' => array (
+                                'required' => true,
+                                'date' => true
+                        ),
+                        'fecha_debito_bancario' => array (
+                                'required' => true,
+                                'date' => true
+                        ),
+                        'importe' => array (
+                                'required' => true,
+                                'numeric' => true
+                        ),
+                        'importe_pagado' => array (
+                                'required' => true,
+                                'numeric' => true
+                        )
+		),
 		$_comprobante_data = array(
-			'efector'				=> '',
-			'numero_comprobante'	=> '',
-			'tipo_comprobante'		=> '',
-			'fecha_comprobante'		=> '',
-			'fecha_recepcion'		=> '',
-			'fecha_notificacion'	=> '',
-			'fecha_liquidacion'		=> '',
-			'fecha_debito_bancario'	=> '',
-			'importe'				=> '',
-			'importe_pagado'		=> '',
-			'factura_debitada'		=> '',
-			'concepto'				=> '',
-			'lote'					=> ''
+                    'efector' => '',
+                    'numero_comprobante' => '',
+                    'tipo_comprobante' => '',
+                    'fecha_comprobante'	=> '',
+                    'fecha_recepcion' => '',
+                    'fecha_notificacion' => '',
+                    'fecha_liquidacion'	=> '',
+                    'fecha_debito_bancario' => '',
+                    'importe' => '',
+                    'importe_pagado' => '',
+                    'factura_debitada' => '',
+                    'concepto' => '',
+                    'lote' => ''
 		),
 		$_contador = array(
-			'insertados' 	=> 0 ,
-			'rechazados' 	=> 0 ,
-			'modificados' 	=> 0
+                    'insertados' 	=> 0 ,
+                    'rechazados' 	=> 0 ,
+                    'modificados' 	=> 0
 		);
+   
+    public function __construct() {
+        $this->_db = Bdd::getInstance();
+        $this->_validacion = new Validar();
+    }
+    
+    public function procesar($lote , $file_pointer){}
+    
+    public function ingresarRegistro($registro){}
+    public function armarArray(){
+        foreach ($this->_comprobante_data as $campo => $valor) {
+            $this->_comprobante_data[$campo] = $this->_comprobante[$campo];
+        }
+    }
+    
+    public function ingresarError($registro , $lote , $error){
+        $campos = array ('id_provincia','motivos','registro_rechazado','lote');
+        $data = array($_SESSION['grupo'] , $error , implode (';',$registro) , $lote);
+        $this->_db->insert($campos , 'comprobantes.rechazados' , $data);
+    }
+    
+}
+/*
+class Comprobantes extends Padron {
 	
-	/**
-	 * 
-	 * METODOS PARA MANEJO DE INGRESO DE REGISTROS A LA BASE DE DATOS
-	 * 
-	 **/	
+	private 
+		$_validator ,
+		$_nombre_archivo ,
+		$_ruta_archivo ,
+		$_fp ,
+		$_primer_linea ,
+		$_comprobante ,
+		$_comprobante_ori ,
+		$_lote ,
+		
+	
 	
 	public function __construct () {
 		$this->_validator = new Validar();
@@ -180,5 +205,5 @@ class Comprobantes extends Padron {
 	}
 	
 }
-
+*/
 ?>

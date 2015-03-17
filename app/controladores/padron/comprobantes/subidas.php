@@ -10,10 +10,10 @@ $diccionario = array (
 	'CSS_GLOBAL' 		=> 'yellow',
 	'FUENTE_DATOS'		=> 'Comprobantes',
 	'ID_FUENTE_DATOS'	=> 3,
-	'CLASE_PROCESAR'	=> 'Comprobantes',
-	'METODO_PROCESAR'	=> 'ProcesaArchivo'
+	'CLASE_PROCESAR'	=> 'Archivo',
+	'METODO_PROCESAR'	=> 'analizar'
 );
 
-HTML::Vista($html , $diccionario);
+Html::vista($html , $diccionario);
 
 ?>

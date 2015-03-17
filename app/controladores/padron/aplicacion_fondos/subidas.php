@@ -10,8 +10,8 @@ $diccionario = array (
 	'CSS_GLOBAL' 		=> 'blue' ,
 	'FUENTE_DATOS'		=> 'Aplicaci&oacute;n de Fondos',
 	'ID_FUENTE_DATOS'	=> 2,
-	'CLASE_PROCESAR'	=> 'Fondos',
-	'METODO_PROCESAR'	=> 'ProcesaArchivo'
+	'CLASE_PROCESAR'	=> 'Archivo',
+	'METODO_PROCESAR'	=> 'analizar'
 );
 
 Html::Vista($html , $diccionario);

@@ -35,7 +35,7 @@ class Efectores {
 				and id_estado = 1
 				and integrante = 'S'
 				and compromiso_gestion = 'S'";
-		return $this->_db->query($sql)->get()['c'];
+		return $this->_db->query($sql , $params)->get()['c'];
 		
 	}
 	
