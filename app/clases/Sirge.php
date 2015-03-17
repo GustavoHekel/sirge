@@ -98,7 +98,7 @@ class SIRGe {
 	public static function getNombreProvincia ($id_provincia) {
 		$params = array ($id_provincia);
 		$sql 	= "select descripcion from sistema.entidades where id_entidad = ?";
-		return Bdd::getInstance()->query($sql , $params)->getRow()['descripcion'];
+		return Bdd::getInstance()->query($sql , $params)->get()['descripcion'];
 	}
 	
 	public static function selectProvincia ($id_html , $id_provincia = null) {

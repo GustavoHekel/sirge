@@ -72,8 +72,8 @@ $(document).ready(function(){
 								type 	: 'post',
 								url  	: 'app/parserAjax.php',
 								data 	: {
-									c : 'Padron',
-									m : 'EliminarLote',
+									c : 'Lote',
+									m : 'eliminar',
 									p : 'lote=' + lote
 								} ,
 								success : function (data) {
@@ -103,8 +103,8 @@ $(document).ready(function(){
 								type 	: 'post',
 								url  	: 'app/parserAjax.php',
 								data 	: {
-									c : 'Padron',
-									m : 'CerrarLote',
+									c : 'Lote',
+									m : 'cerrar',
 									p : 'lote=' + lote
 								} ,
 								success : function (data) {

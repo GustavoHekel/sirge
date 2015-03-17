@@ -20,9 +20,9 @@ class Lote
 			with ins1 as (
 				insert into sistema.lotes (id_subida , id_usuario , id_provincia)
 				values (? , ? , ?)
-				returning lote , id_usuario
-			) select * from ins2";
-		return $this->_db->query($sql , $params)->getRow()['lote'];
+				returning lote
+			) select * from ins1";
+		return $this->_db->query($sql , $params)->get()['lote'];
 	}
 	
 	public function cerrar($lote){
@@ -50,10 +50,16 @@ class Lote
 		);
 		$sql = "
 			with upd1 as (
-				update sistema.lotes set id_estado = 1 where lote = 5159
+				update sistema.lotes 
+				set id_estado = 3 
+				where lote = ?
 				returning lote
-			) insert into sistema.lotes_eliminados (lote , id_usuario) 
-			values ((select * from upd1) , ?)";
+			), ins1 as (
+				insert into sistema.lotes_eliminados (lote , id_usuario)
+				values ((select * from upd1) , ?)
+				returning lote
+			) delete from aplicacion_fondos.rechazados where lote = (select * from ins1)
+			";
 		if (! $this->_db->query($sql , $params)->getError()){
 			echo 'Se ha eliminado el lote ' . $lote;
 		}
@@ -78,70 +84,12 @@ class Lote
 		$this->_db->query($sql , $params);
 	}
 	
-	public function mostrarPendientesDdjj($id_fuente , $aux = false){
-		$params = array ($id_fuente , $_SESSION['grupo']);
-		$sql = "
-			select 
-				lote 
-				, inicio :: date as fecha
-				, registros_in as insertados 
-				, registros_out as rechazados 
-				, registros_mod as modificados 
-			from 
-				sistema.lotes l left join
-				sistema.subidas s on l.id_subida = s.id_subida
-			where 
-				lote not in (select unnest (lote) from ddjj.sirge) 
-				and id_estado = 1 
-				and id_padron = ?
-				and id_provincia = ?";
-		if (! $aux) {
-			$sirge = new Sirge();
-			return $sirge->jsonDT($this->_db->query($sql , $params)->getResults() , true);
-		} else {
-			return $this->registrarDdjj($this->_db->query($sql , $params)->getList());
-		}
-	}
-	
-	private function registrarDdjj($lotes = array()){
-		$params = array ('{' . implode ("," , $lotes) . '}' , $_SESSION['grupo']);
-		$sql = "
-			with ins1 as (
-				insert into ddjj.sirge(lote , id_provincia)
-				values (?,?)
-				returning id_impresion
-			) select * from ins1";
-		return $this->_db->query($sql , $params)->getRow()['id_impresion'];
-	}
-	
-	public function listarImpresionesDdjj ($id_padron) {
-		$sirge = new Sirge();
-		$params = array ($_SESSION['grupo'] , $id_padron);
-		$sql = "
-			select
-				id_impresion
-				, fecha_impresion
-				, s.lote as \"Lote(s)\"
-				, '<a class=\"imprimir\" id_impresion=\"' || id_impresion || '\"><i class=\"halflings-icon print\"></i></a>' as reimprimir
-			from 
-				ddjj.sirge s left join
-				sistema.lotes l on l.lote = any (s.lote) left join
-				sistema.subidas su on l.id_subida = su.id_subida
-			where 
-				s.id_provincia = ?
-				and id_padron = ?
-				and l.id_estado = 1
-			group by 1,2,3
-			order by 1 desc ,2,3";
-		return $sirge->jsonDT($this->_db->query($sql , $params)->getResults() , true);
-	}
-	
 	public function listar($id_padron){
 		$sirge = new Sirge();
 		$params = array ($id_padron);
 		$sql = "
 			select 
-				'<span class=\"row-details row-details-close\"></span>' as _
+				'<span lote=\"'|| lote ||'\" id_estado=\"'|| l.id_estado ||'\" class=\"row-details row-details-close\"></span>' as _
 				, lote
 				, inicio :: date as fecha
 				, case
@@ -169,6 +117,49 @@ class Lote
 		return $sirge->jsonDT($this->_db->query($sql , $params)->getResults() , true);
 	}
 	
+	public static function getUsuarioCierre ($lote) {
+		$estado = Bdd::getInstance()->find('id_estado' , 'sistema.lotes' , array($lote));
+		switch ($estado) {
+			case '1' :
+				$sql = "
+					select	
+						usuario
+					from
+						sistema.lotes_aceptados l left join
+						sistema.usuarios u on l.id_usuario = u.id_usuario
+					where
+						lote = ?";
+			break;
+			case '3' : 
+				$sql = "
+					select	
+						usuario
+					from
+						sistema.lotes_eliminados l left join
+						sistema.usuarios u on l.id_usuario = u.id_usuario
+					where
+						lote = ?";
+			break;
+			default : return 'PENDIENTE'; break;
+		}
+		return Bdd::getInstance()->query($sql , $params)->get()['usuario'];
+	}
+	
+	public static function getRechazos ($lote) {
+		$params = array ($lote);
+		$sql 	= "select id_padron from sistema.lotes l left join sistema.subidas s on l.id_subida = s.id_subida where lote = ?";
+		$padron	= Bdd::getInstance()->query($sql , $params)->get()['id_padron'];
+		switch ($padron) {
+			case 1 : $nombre_esquema = 'prestaciones'; break;
+			case 2 : $nombre_esquema = 'aplicacion_fondos'; break;
+			case 3 : $nombre_esquema = 'comprobantes'; break;
+			case 4 : $nombre_esquema = 'sss'; break;
+			case 5 : $nombre_esquema = 'profe'; break;
+			case 6 : $nombre_esquema = 'osp'; break;
+		}
+		$sql = "select row_number() over() || ' - Motivo(s)-> ' || motivos || ' <br /> Registro-> ' || registro_rechazado as r from {$nombre_esquema}.rechazados where lote = ?";
+		return implode ("<br />" , Bdd::getInstance()->query($sql , $params)->getList());
+	}
 }
 
 ?>

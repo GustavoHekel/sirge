@@ -1,39 +1,44 @@
 <?php
 
-class Beneficiarios {
+class Beneficiarios 
+{
 	
-	private function GetUltimoPeriodo () {
-		$sql = 'select max (periodo) as p from beneficiarios.beneficiarios_periodos';
-		return Bdd::GetInstance()->Query($sql)->GetRow()['p'];
+	private
+		$_db;
+	
+	public function __construct(){
+		$this->_db = Bdd::getInstance();
 	}
 	
-	public function INDECHabitantes ($id_provincia) {
-		
+	private function getUltimoPeriodo () {
+		$sql = 'select max (periodo) as p from beneficiarios.beneficiarios_periodos';
+		return $this->_db->query($sql)->get()['p'];
+	}
+	
+	public function habitantes ($id_provincia) {
+		$params = array ($id_provincia);
 		$sql = "
 			select
 				to_char (habitantes , '999,999,999') as h
 			from
 				geo.poblacion g
 			where
-				id_provincia = '$id_provincia'";
-
-		return Bdd::GetInstance()->Query($sql)->GetRow()['h'];
+				id_provincia = ?";
+		return $this->_db->query($sql , $params)->get()['h'];
 	}
 	
-	public function ResumenBeneficiarios ($id_provincia , $campo) {
-		
-		$periodo = $this->GetUltimoPeriodo();
-		
+	public function resumen ($id_provincia , $campo) {
+		$periodo = $this->getUltimoPeriodo();
+		$params = array($id_provincia , $periodo);
 		$sql = "
 			select
-				to_char ($campo , '99,999,999') as c
+				to_char ({$campo} , '99,999,999') as c
 			from
 				beneficiarios.resumen_beneficiarios
 			where
-				id_provincia = '$id_provincia'
-				and periodo = $periodo";
-		
-		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];	
+				id_provincia = ?
+				and periodo = ?";
+		return $this->_db->query($sql , $params)->get()['c'];	
 	}
 	
 	public function Matrix ($clave_beneficiario) {

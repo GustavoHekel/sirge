@@ -64,7 +64,7 @@ class Bdd {
 		return $this->_query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
-	public function GetList() {
+	public function getList() {
 		return $this->_query->fetchAll(PDO::FETCH_COLUMN);
 	}
 	
@@ -73,10 +73,11 @@ class Bdd {
 			$campo = $where[0];
 			$params	= $where[1];
 			$sql = "{$accion} from {$tabla} where {$campo}";
+			
 			if (!$this->query($sql , $params)->getError()) {
 				return $this;
 			} else {
-				return $this->_query;
+				print_r ($this->getErrorInfo());
 			}
 		}
 	}

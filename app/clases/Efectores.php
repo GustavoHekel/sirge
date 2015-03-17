@@ -1,25 +1,16 @@
 <?php
 
 class Efectores {
-	
-	
-	public function CantidadEfectoresProvincia ($id_provincia) {
 		
-		$sql = "
-			select
-				to_char (count (*) , '999,999') as c
-			from	
-				efectores.efectores e left join
-				efectores.datos_geograficos d on e.id_efector = d.id_efector
-			where
-				id_provincia = '$id_provincia'";
-			
-		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];
-		
+	private
+		$_db;
+	
+	public function __construct(){
+		$this->_db = Bdd::getInstance();
 	}
 	
-	public function CantidadEfectoresCompromisoProvincia ($id_provincia) {
-		
+	public function getEfectoresProvincia ($id_provincia) {
+		$params = array ($id_provincia);
 		$sql = "
 			select
 				to_char (count (*) , '999,999') as c
@@ -27,17 +18,28 @@ class Efectores {
 				efectores.efectores e left join
 				efectores.datos_geograficos d on e.id_efector = d.id_efector
 			where
-				id_provincia = '$id_provincia'
+				id_provincia = ?";
+		return $this->_db->query($sql , $params)->get()['c'];
+	}
+	
+	public function getEfectoresCompromisoProvincia ($id_provincia) {
+		$params = array ($id_provincia);
+		$sql = "
+			select
+				to_char (count (*) , '999,999') as c
+			from	
+				efectores.efectores e left join
+				efectores.datos_geograficos d on e.id_efector = d.id_efector
+			where
+				id_provincia = ?
 				and id_estado = 1
 				and integrante = 'S'
 				and compromiso_gestion = 'S'";
-			
-		return Bdd::GetInstance()->Query($sql)->GetRow()['c'];
+		return $this->_db->query($sql)->get()['c'];
 		
 	}
 	
-	public function PorcentajeDescentralizacion ($id_provincia) {
-		
+	public function descentralizacion ($id_provincia) {
 		$sql = "
 			select
 				coalesce (round (( efectores_decentralizados ::numeric / cantidad_efectores) * 100 , 2) , 0) :: text || '%' as d
@@ -68,8 +70,7 @@ class Efectores {
 					id_provincia) d on e.id_provincia = d.id_provincia
 			where
 				e.id_provincia = '$id_provincia'";
-		
-		return Bdd::GetInstance()->Query($sql)->GetRow()['d'];
+		return $this->_db->query($sql)->get()['d'];
 	}
 	
 }

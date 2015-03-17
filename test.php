@@ -2,8 +2,8 @@
 
 require_once 'init.php';
 
-$_db = Bdd::getInstance();
+$n = new Fondos();
 
-$_db->insert(array('sigla','descripcion') , 'sistema.sexos' , array('P','PUTOS'));
+
 
 ?>

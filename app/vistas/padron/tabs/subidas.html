@@ -100,7 +100,7 @@ $(document).ready(function(){
 		var mensaje 	= "Est&aacute; por eliminar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
 		var titulo		= 'Eliminar?';
 		var clase		= 'Archivo';
-		var metodo		= 'baja';
+		var metodo		= 'borrar';
 		accion (titulo , mensaje , clase , metodo , id_carga);
 	});
 
@@ -109,8 +109,8 @@ $(document).ready(function(){
 		var file 		= $(this).parents("tr").children().html();
 		var mensaje 	= "Est&aacute; por procesar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
 		var	titulo		= 'Procesar?';
-		var clase		= 'Padron'
-		var metodo		= 'procesaPadron'
+		var clase		= 'Archivo'
+		var metodo		= 'analizar'
 		accion (titulo , mensaje , clase , metodo , id_carga);
 	});
 });

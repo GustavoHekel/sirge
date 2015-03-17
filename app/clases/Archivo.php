@@ -68,19 +68,15 @@ class Archivo {
 	}
 	
 	protected function getIdSubida($nombre_archivo){
-		$params = array ($nombre_archivo);
-		$sql 	= "select id_subida from sistema.subidas where nombre_actual = ?";
-		return $this->_db->query($sql , $params)->getRow()['id_subida'];
+		return $this->_db->find('id_subida' , 'sistema.subidas' , array('nombre_actual = ?' , array ($nombre_archivo)));
 	}
 	
-	protected function getNombre($id_subida){
-		$params = array ($id_subida);
-		$sql 	= "select nombre_actual from sistema.subidas where id_subida = ?";
-		return Bdd::GetInstance()->Query($sql , $params)->GetRow()['nombre_actual'];
+	protected function getNombreArchivo($id_subida){
+		return $this->_db->find('nombre_actual' , 'sistema.subidas' , array('id_subida = ?' , array ($nombre_archivo)));
 	}
 	
 	protected function registrarSubidaOsp(){
-		$this->_id_subida = Bdd::GetInstance()->Query("select currval ('sistema.subidas_id_subida_seq')")->GetRow()['currval'];
+		$this->_id_subida = $this->_db->lastId('sistema.subidas_id_subida_seq');
 		$params = array (
 			$this->_id_subida ,
 			$this->_osp ,
@@ -90,7 +86,7 @@ class Archivo {
 		INSERT INTO sistema.subidas_osp(
 				id_subida, codigo_osp, id_archivo)
 		VALUES (?, ?, ?);";
-		Bdd::GetInstance()->Query($sql , $params);
+		$this->_db->query($sql , $params);
 	}
 	 
 	protected function registrarSubida($id_usuario , $id_padron , $tamanio , $nombre_original , $nombre_nuevo){
@@ -104,7 +100,7 @@ class Archivo {
 		$sql = "
 			insert into sistema.subidas (id_usuario , id_padron , size , nombre_original , nombre_actual)
 			values (?,?,?,?,?) ";
-		$this->_db->Query($sql , $params);
+		$this->_db->query($sql , $params);
 		
 		if (! is_null ($this->_osp)) {
 			$this->registrarSubidaOsp();			
@@ -121,10 +117,8 @@ class Archivo {
 				returning id_subida
 			) insert into sistema.subidas_aceptadas (id_subida , id_usuario)
 			values ((select * from upd1),?)";
-		$this->_db->query($sql_2 , $params_2);
+		$this->_db->query($sql , $params);
 	}
-	
-
 	
 	protected function setIds ($data = array()) {
 		$this->_id_padron = $data[0];
@@ -139,21 +133,25 @@ class Archivo {
 	}
 	
 	public function cerrar ($id_subida) {
-		$data	= $this->_db->getRow('sistema.subidas' , array ('id_subida' , = , $id_subida));
-		$padron = strtolower($this->getNombrePadron($data['id_padron']));
+		$data	= $this->_db->findAll('sistema.subidas' , array ('id_subida = ?' , array($id_subida)));
+		$padron = $this->getTipoArchivo($data['id_padron']);
 		if (rename($this->getRutaArchivo($data['id_padron'] , $data['nombre_actual']) ,  '../data/upload/' . $padron . '/back/' . $data['nombre_actual'])){
 			$this->registrarProceso($id_subida);
 		}
 	}
 	
 	protected function getTipoArchivo ($id_fuente) {
-		return $this->_db->getField('sistema.padrones' , 'nombre' , array ('id_padron' , '=' , $id_fuente));
+		return strtolower ($this->_db->find('nombre' , 'sistema.padrones' , array ('id_padron = ?' , array($id_fuente))));
+	}
+	
+	public function getIdArchivo($tipo_archivo){
+		return $this->_db->find('id_padron' , 'sistema.padrones' , array('descripcion = ?' , array($tipo_archivo)));
 	}
 	
 	public function borrar ($id_subida) {
-		$data 	= $this->getDataArchivo($id_subida);
+		$data	= $this->_db->findAll('sistema.subidas' , array ('id_subida = ?' , array($id_subida)));
 		$nombre = $data['nombre_actual'];
-		$padron = strtolower($this->getTipoArchivo($data['id_padron']));
+		$padron = $this->getTipoArchivo($data['id_padron']);
 		
 		if (unlink ('../data/upload/' . $padron . '/' . $nombre )) {
 			$this->registraBaja($id_subida);
@@ -169,7 +167,7 @@ class Archivo {
 				returning id_subida
 			) insert into sistema.subidas_eliminadas (id_subida , id_usuario)
 			values ((select * from upd1) , ?)";
-		if (! $this->_db->Query($sql , $params)->getError()) {
+		if (! $this->_db->query($sql , $params)->getError()) {
 			return true;
 		} else {
 			return false;
@@ -177,13 +175,34 @@ class Archivo {
 	}
 	
 	public function getRutaArchivo ($id_padron , $nombre) {
-		return '../data/upload/' . $this->getNombrePadron($id_padron) . '/' . $nombre;
+		return '../data/upload/' . $this->getTipoArchivo($id_padron) . '/' . $nombre;
 	}
 	
+	public function analizar($id_subida){
+		
+		$iLote 		= new Lote();
+		
+		$id_padron 	= $this->_db->find('id_padron' , 'sistema.subidas' , array('id_subida = ?',array ($id_subida)));
+		$file	 	= $this->_db->find('nombre_actual' , 'sistema.subidas' , array('id_subida = ?',array ($id_subida)));
+		$clase 		= ucwords($this->getTipoArchivo($id_padron));
+		$ruta 		= $this->getRutaArchivo($id_padron , $file);
+		$lote 		= $iLote->crear($_SESSION['grupo'] , $_SESSION['id_usuario'] , $id_subida);
+
+		if ($fp = fopen ($ruta , 'rb')) {
+			
+			$instancia = new $clase;
+			$resultados = $instancia->procesar($fp , $lote);
+			
+			if (isset ($resultados)) {
+				echo '<pre>' , print_r ($resultados) , '</pre>';
+				$this->cerrar($id_subida);
+			}
+		}
+	}
 	
-	
-	
-	
+	public static function comparar ($encabezados , $data) {
+		return count ($encabezados) != count ($data) ? false : true;
+	}
 }
 
 ?>
