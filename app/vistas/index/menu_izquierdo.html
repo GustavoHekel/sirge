@@ -1,0 +1,33 @@
+<div class="page-sidebar nav-collapse collapse">
+	<ul class="page-sidebar-menu">
+		<li>
+			<div class="sidebar-toggler hidden-phone"></div>
+		</li>
+		{MENU_IZQUIERDO}
+</div>
+<div class="page-content">
+<script>
+$(document).ready(function(){
+	mostrar_loading();
+	$('.page-content').load('app/controladores/dashboard/dashboard.php', function () {ocultar_loading()});
+	
+	$('.page-sidebar-menu a').click(function(event){
+		event.preventDefault();
+		
+		var href = $(this).attr('href');
+		
+		switch (href) {
+			case '#' : break;
+			default:
+				mostrar_loading();
+				$('.page-content').empty();
+				$('.page-content').hide().load(href , function () { ocultar_loading(); }).fadeIn();
+				$('li').removeClass('active');
+				$('.selected').remove();
+				$(this).parents('li').addClass('active');
+				$(this).parents('li').find('a').append('<span class="selected"></span>');
+			break;
+		}
+	});
+});
+</script>

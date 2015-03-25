@@ -1,0 +1,44 @@
+<body class="page-header-fixed">
+<div class="header navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<a class="brand" href="index.php"><img src="public/img/logo_sirge.png" /></a>
+			<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+				<img src="public/img/menu-toggler.png" alt="">
+			</a>
+			<ul class="nav pull-right">
+				<li class="dropdown user">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<img style="" src="public/img/sumar-1.png" />
+						<span class="username">{NOMBRE_USUARIO}</span>
+						<i class="icon-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a id="session" href="#"><i class="icon-key"></i> Cerrar Sesi&oacute;n</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	
+	$('#session').click(function(){	
+		$.ajax({
+			type : 'post' ,
+			url  : 'app/parserAjax.php' ,
+			data : {
+				c : 'Seguridad' ,
+				m : 'CerrarSesion'
+			} ,
+			success : function () {
+				location.reload();
+			}
+		});	
+	});
+});
+</script>
+
+<div class="page-container row-fluid">

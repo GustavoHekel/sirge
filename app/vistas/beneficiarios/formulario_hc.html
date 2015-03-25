@@ -1,0 +1,33 @@
+<div class="portlet box yellow listado-simple">
+	<div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>Hist&oacute;ria Cl&iacute;nica</div>
+	</div>
+	<div class="portlet-body">
+		<form id="paciente" style="text-align: center">
+			<div>Ingrese el DNI del paciente
+				<input id="dni_paciente" name="dni_paciente" class="span2 m-wrap" type="text" data-provide="typeahead" autocomplete="off">
+				<input class="btn yellow" type="submit" value="Buscar">
+			</div>
+		</form>
+	</div>
+</div>
+<div id="historia_clinica"></div>
+
+<script>
+    $(document).ready(function(){
+        $('#paciente').submit(function(event){
+            event.preventDefault();
+            mostrar_loading();
+            $.ajax({
+                type : 'post',
+                url  : 'app/controladores/beneficiarios/historia_clinica.php',
+                data : $(this).serialize(),
+                success : function (data) {
+                    $('#historia_clinica').html(data);
+                    ocultar_loading();
+                }
+                
+            });
+        });
+    });
+</script>
