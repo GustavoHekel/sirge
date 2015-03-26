@@ -41,56 +41,22 @@ class Beneficiarios
 		return $this->_db->query($sql , $params)->get()['c'];	
 	}
 	
-	public function matrix ($dni) {
-		
-		$sql 	= "
-			select
-				s.periodo
-				, coalesce (a.cantidad , 0) as cantidad
-			from (
-				select (extract (year from generate_series) ::text || lpad (extract (month from generate_series) :: text , 2 , '0')) :: int as periodo
-				from generate_series ('2004-01-01' :: timestamp , (extract (year from localtimestamp) :: text || '-12-31') ::timestamp , '1 month')) s left join (
-					select
-						p.periodo
-						, cantidad
-					from 
-						(
-							select * 
-                            from 
-                                beneficiarios.beneficiarios b 
-                                left join beneficiarios.beneficiarios_periodos p on b.clave_beneficiario = p.clave_beneficiario
-                            where numero_documento = ?
-						) p left join (
-							select 
-								clave_beneficiario
-								, extract (year from fecha_prestacion) ::text || lpad (extract (month from fecha_prestacion) :: text , 2 , '0') as periodo
-								, count (*) as cantidad
-							from prestaciones.prestaciones 
-							where clave_beneficiario = ?
-							group by 1,2
-						) b on p.clave_beneficiario || p.periodo = b.clave_beneficiario || b.periodo
-				) a on s.periodo = a.periodo
-			order by 1";
-		
-		$data 		= Bdd::GetInstance()->Query($sql , $params)->getResults();
+	public function matriz ($dni) {
+		$data 		= $this->_db->fquery('matriz', [$dni , $dni] , false)->getResults();
 		$periodos 	= array();
 		$info 		= array();
-		
-		
 		foreach ($data as $clave => $valor) {
 			$periodos[$valor['periodo']] = $valor['cantidad'];
 		}
-		
 		for ($i = 1 ; $i <= 12 ; $i ++) {
-			
 			for ($j = 2004 ; $j <= date('Y') ; $j ++) {
-				$info[][] = ($i-1) . ',' . ($j-2004) . ',' . $periodos[($j . str_pad($i , 2 , '0' , STR_PAD_LEFT))];
-				//$info .= '[' . ($i-1) . ',' . ($j-2004) . ',' . $periodos[($j . str_pad($i , 2 , '0' , STR_PAD_LEFT))] .'] , ';
+				$info[] = ($i-1) . ',' . ($j-2004) . ',' . $periodos[($j . str_pad($i , 2 , '0' , STR_PAD_LEFT))];
 			}
 		}
-		
-		print_r ($info);
+		return '[' . implode('],[' ,$info) . ']';
 	}
+    
+    public function getDataBeneficiarioDNI ($dni){
+        return $this->_db->fquery('getDataBeneficiarioDNI' , [$dni] , false)->getResults()[0];
+    }
 }
-
-?>

@@ -1,3 +1,4 @@
-select * , extract (year from age (localtimestamp , fecha_nacimiento)) as edad
-from beneficiarios.beneficiarios
-where numero_documento = ?
+SELECT *
+	,extract(year FROM age(localtimestamp, fecha_nacimiento)) AS edad
+FROM beneficiarios.beneficiarios
+WHERE numero_documento = ?

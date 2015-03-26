@@ -23,7 +23,7 @@ $diccionario = [
     'LOCALIDAD' => '',
     'CALLE' => '',
     'CODIGO_POSTAL' => '',
-//    'MATRIZ' => $benef->matriz($_POST['dni_paciente'])
+    'MATRIZ' => $benef->matriz($_POST['dni_paciente'])
 ];
 
 Html::vista($Html , $diccionario);
