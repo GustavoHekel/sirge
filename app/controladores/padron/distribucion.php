@@ -57,7 +57,7 @@ if (isset ($_GET['grafica'])) {
 		$i = 0;
 		while ($reg = pg_fetch_assoc ($res)) {
 			for ($j = 0 ; $j < pg_num_fields ($res) ; $j ++) {
-				$data[pg_field_name($res , $j)][$i] = html_entity_decode ($reg[pg_field_name($res , $j)]);
+				$data[pg_field_name($res , $j)][$i] = Html_entity_decode ($reg[pg_field_name($res , $j)]);
 			}
 			$i++;
 		}

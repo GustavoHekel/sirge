@@ -19,7 +19,7 @@ $(document).ready(function(){
 	
 	function armar_tabla () {
 		$(".subidas").empty();
-		$(".subidas").append('<table id="tabla_archivos_subidos" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>');
+		$(".subidas").append('<table id="tabla_archivos_subidos" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-condensed"></table>');
 		$.ajax({
 			type 		: 'post' ,
 			url  		: 'app/parserAjax.php' ,
@@ -76,7 +76,8 @@ $(document).ready(function(){
 							});
 						} ,
 						error 		: function (data) {
-							alert (data);
+							console.log (data);
+                                                        ocultar_loading();
 						}
 					});
 				}
@@ -105,12 +106,12 @@ $(document).ready(function(){
 	});
 
 	$('.subidas').on('click' , '.procesar' , function(event){
-		var id_carga	= $(this).attr("file");
-		var file 		= $(this).parents("tr").children().html();
-		var mensaje 	= "Est&aacute; por procesar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
-		var	titulo		= 'Procesar?';
-		var clase		= '{CLASE_PROCESAR}'
-		var metodo		= '{METODO_PROCESAR}'
+		var id_carga = $(this).attr("file");
+		var file = $(this).parents("tr").children().html();
+		var mensaje = "Est&aacute; por procesar el archivo <span style='font-weight: bold;'>" + file + "</span>, confirma la operaci&oacute;n ?"
+		var titulo = 'Procesar?';
+		var clase = '{CLASE_PROCESAR}';
+		var metodo = '{METODO_PROCESAR}';
 		accion (titulo , mensaje , clase , metodo , id_carga);
 	});
 });

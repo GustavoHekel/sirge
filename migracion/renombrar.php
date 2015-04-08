@@ -12,10 +12,13 @@ $sql = "
 	CREATE SCHEMA consultas	AUTHORIZATION postgres;
 	CREATE SCHEMA logs AUTHORIZATION postgres;
 	CREATE SCHEMA ddjj AUTHORIZATION postgres;
+    CREATE SCHEMA osp AUTHORIZATION postgres;
+    CREATE SCHEMA profe AUTHORIZATION postgres;
+    CREATE SCHEMA sss AUTHORIZATION postgres;
 	
 /*
  *
- * CREAMOS LA VISTA PROVINCIAS
+ * CREAMOS LA vista PROVINCIAS
  *
  */
 	
@@ -118,5 +121,78 @@ $sql = "
 	DROP TABLE sistema.entidades_administrativas;
 	DROP TABLE sistema.entidades_sanitarias;
 	DROP TABLE sistema.nomenclador_unico CASCADE;
+    
+    alter table puco.osp_01 set schema osp;
+    alter table puco.osp_02 set schema osp;
+    alter table puco.osp_03 set schema osp;
+    alter table puco.osp_04 set schema osp;
+    alter table puco.osp_05 set schema osp;
+    alter table puco.osp_06 set schema osp;
+    alter table puco.osp_07 set schema osp;
+    alter table puco.osp_08 set schema osp;
+    alter table puco.osp_09 set schema osp;
+    alter table puco.osp_10 set schema osp;
+    alter table puco.osp_11 set schema osp;
+    alter table puco.osp_12 set schema osp;
+    alter table puco.osp_13 set schema osp;
+    alter table puco.osp_14 set schema osp;
+    alter table puco.osp_15 set schema osp;
+    alter table puco.osp_16 set schema osp;
+    alter table puco.osp_17 set schema osp;
+    alter table puco.osp_18 set schema osp;
+    alter table puco.osp_19 set schema osp;
+    alter table puco.osp_20 set schema osp;
+    alter table puco.osp_21 set schema osp;
+    alter table puco.osp_22 set schema osp;
+    alter table puco.osp_23 set schema osp;
+    alter table puco.osp_24 set schema osp;
+    
 
+CREATE TABLE osp.rechazados
+(
+  id_provincia character(2),
+  fecha_rechazo timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
+  motivos character varying(300),
+  registro_rechazado character varying(300),
+  lote integer
+);
+
+CREATE TABLE profe.rechazados
+(
+  id_provincia character(2),
+  fecha_rechazo timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
+  motivos character varying(300),
+  registro_rechazado character varying(300),
+  lote integer
+);
+
+CREATE TABLE sss.rechazados
+(
+  id_provincia character(2),
+  fecha_rechazo timestamp without time zone DEFAULT ('now'::text)::timestamp without time zone,
+  motivos character varying(300),
+  registro_rechazado character varying(300),
+  lote integer
+);
+
+CREATE TABLE profe.beneficiarios
+(
+  tipo_documento character(3),
+  numero_documento bigint,
+  nombre_apellido character varying(60),
+  sexo character(1),
+  fecha_nacimiento date,
+  fecha_alta date,
+  id_beneficiario_profe bigint,
+  id_parentezco smallint,
+  ley_aplicada character(2),
+  fecha_desde date,
+  fecha_hasta date,
+  id_provincia character(2),
+  codigo_os integer DEFAULT 997001,
+  lote integer
+);
+  
 ";
+
+

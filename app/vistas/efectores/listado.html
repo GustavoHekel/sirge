@@ -1,0 +1,89 @@
+<div class="portlet box {CSS_GLOBAL} listado-simple" style="width: 1000px">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Listado completo de efectores
+		</div>
+	</div>
+	<div class="portlet-body">
+    <div class="table-toolbar">
+      <div class="btn-group">
+        <button id="descargar_tabla" class="btn green">
+        Descargar tabla de efectores <i class="icon-download"></i>
+        </button>
+      </div>
+    </div>
+		<div class="container efectores" style="width: 950px;">
+      <table id="tabla_efectores" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+        <thead>
+          <tr>
+            <th>+</th>
+            <th>CUIE</th>
+            <th>SIISA</th>
+            <th>Nombre</th>
+            <th>Sumar</th>
+            <th>Priorizado</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+      </table>
+		</div>
+	</div>
+</div>
+
+<div style="display:none">
+	<div id="dialog-efector"></div>
+	<div id="map_canvas"></div>
+	<div id="respuesta_ajax"></div>
+</div>
+
+<script>
+$(document).ready(function(){
+  mostrar_loading();
+  estilo_dialog ('{CSS_GLOBAL}');
+
+  $('#tabla_efectores').dataTable({
+    "serverSide": true,
+    "processing": true,
+    dom	: 'frt<"bottom"lp><"clear">' ,
+    info : true,
+    filter : true,
+    bDestroy : true,
+    pageLength : 30,
+    "ajax" : {
+      "url"  : 'app/controladores/efectores/listado_json.php',
+      "type" : 'post'
+    },
+    "columns": [
+      { "data": "d" },
+      { "data": "cuie" },
+      { "data": "codigo_siisa" },
+      { "data": "nombre_efector" },
+      { "data": "sumar" },
+      { "data": "priorizado" },
+      { "data": "estado" }
+    ]
+  });
+
+  $('.efectores').on('click' , '#tabla_efectores .row-details' , function(){
+    mostrar_loading();
+    $.ajax({
+      type : 'post',
+      url  : 'app/controladores/efectores/detalle_efector.php',
+      data : 'id_efector=' + $(this).attr('id_efector'),
+      success : function (data) {
+        ocultar_loading();
+        $('#respuesta_ajax').html(data).dialog({
+          width : '1000px',
+          buttons : [{
+              text : 'Aceptar',
+              class : 'btn green',
+              click : function (){
+                $(this).dialog('close');
+              }
+          }]
+        });
+      }
+    });
+  });
+});
+</script>

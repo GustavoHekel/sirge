@@ -1,11 +1,9 @@
 <?php
-class Prestaciones implements Facturacion
+class Prestaciones extends Padron
 {
-    private
+    protected 
         $_db,
         $_validacion,
-        $_prestacion,
-        $_prestacion_ori,
         $_encabezados = array(
             'operacion',
             'estado',
@@ -95,7 +93,7 @@ class Prestaciones implements Facturacion
                 'min' => 6
             )
         ),
-        $_prestacion_data = array(
+        $_registro_data = array(
             'estado' => '',
             'cuie' => '',
             'numero_comprobante' => '',
@@ -117,74 +115,39 @@ class Prestaciones implements Facturacion
 			'insertados' => 0 ,
 			'rechazados' => 0 ,
 			'modificados' => 0
-		);
-   
-    public function __construct() {
-        $this->_db = Bdd::getInstance();
-        $this->_validacion = new Validar(true);
-    }
-    
-    public function armarArray() {
-        foreach ($this->_prestacion_data as $campo => $valor) {
-			$this->_prestacion_data[$campo] = $this->_prestacion[$campo];
-		}
-    }
-
-    public function ingresar() {
-        $this->_prestacion = array_combine ($this->_encabezados , $this->_prestacion);
-        if ($this->_validacion->validarRegistro($this->_prestacion , $this->_encabezados , $this->_reglas)->resultado()) {
-            $operacion = array_shift ($this->_prestacion);
-			switch ($operacion) {
-				case 'A':
-					$this->ingresarRegistro();
-					break;
-				case 'M':
-					$this->modificarRegistro();
-					break;
-			}
-        } else {
-            $this->ingresarError($this->_prestacion_ori , $this->_lote , $this->_validacion->getError());
-        }
-    }
-
-    public function ingresarError($registro, $lote, $error) {
-        $campos = array ('id_provincia','motivos','registro_rechazado','lote');
-        $data = array($_SESSION['grupo'] , $error , implode (';',$registro) , $lote);
-        $this->_db->insert($campos , 'prestaciones.rechazados' , $data);
-        $this->_contador['rechazados']++;
-    }
-
-    public function ingresarRegistro() {
-        $this->armarArray();
-        $sql = "
+		),
+        $_sql = "
             INSERT INTO prestaciones.p_01 (
                 estado, efector, numero_comprobante, codigo_prestacion, subcodigo_prestacion, 
                 precio_unitario, fecha_prestacion, clave_beneficiario, tipo_documento, 
                 clase_documento, numero_documento, orden, lote) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        if ($this->_db->query($sql , $this->_prestacion_data)->getError()){
-            $this->ingresarError($this->_prestacion_ori , $this->_lote , $this->_db->getErrorInfo());
+   
+    public function ingresar($registro) {
+        if (Archivo::comparar($this->_encabezados , $registro)) {
+            $registro = array_combine ($this->_encabezados , $registro);
+            if ($this->_validacion->validarRegistro($registro , $this->_encabezados , $this->_reglas)->resultado()) {
+                $this->verOperacion($registro);
+            } else {
+                $lote = array_pop($registro);
+                $this->ingresarError($registro , $lote , $this->_validacion->getError());
+            }
         } else {
-            $this->_contador['insertados']++;
+            $lote = array_pop($registro);
+            $this->ingresarError($registro , $lote , 'EL NUMERO DE CAMPOS INFORMADOS NO ES CORRECTO');
         }
     }
-
-    public function procesar($lote, $file_pointer) {
-        $iLote = new Lote();
-        fgets ($file_pointer);
-        $this->_lote = $lote;
-        while (!feof($file_pointer)) {
-            $this->_prestacion 	= explode(";" , trim(fgets($file_pointer)));
-            $this->_prestacion_ori 	= $this->_prestacion;
-            $this->_prestacion[] 	= $this->_lote;
-            if (Archivo::comparar($this->_encabezados , $this->_prestacion)) {
-                $this->ingresar();
-            } else {
-                $this->ingresarError($this->_prestacion_ori , $this->_lote , 'EL NUMERO DE CAMPOS INFORMADOS NO ES CORRECTO');
-            }
+    
+    private function verOperacion ($registro){
+        $operacion = array_shift ($registro);
+        switch ($operacion) {
+            case 'A':
+                $this->ingresarRegistro($registro);
+                break;
+            case 'M':
+                $this->modificarRegistro($registro);
+                break;
         }
-        $iLote->completar($this->_lote , $this->_contador['insertados'] , $this->_contador['rechazados'] , $this->_contador['modificados']);
-        return $this->_contador;
     }
     
     public function getPrestacionesProvincia($id_provincia) {
@@ -192,40 +155,31 @@ class Prestaciones implements Facturacion
 		return $this->_db->query($sql)->get()['r'];
 	}
     
-    
-    
-    private function buscarPrestacion () {
-		$params = array(
-			$this->_prestacion_data['numero_comprobante'],
-			$this->_prestacion_data['codigo_prestacion'],
-			$this->_prestacion_data['subcodigo_prestacion'],
-			$this->_prestacion_data['fecha_prestacion'],
-			$this->_prestacion_data['clave_beneficiario'],
-			$this->_prestacion_data['orden']
+    private function armarParams($registro){
+        $params = array(
+			$registro['numero_comprobante'],
+			$registro['codigo_prestacion'],
+			$registro['subcodigo_prestacion'],
+			$registro['fecha_prestacion'],
+			$registro['clave_beneficiario'],
+			$registro['orden']
 		);
-		$sql = "
-			select *
-			from
-				prestaciones.p_01
-			where
-				numero_comprobante = ?
-				and codigo_prestacion = ?
-				and subcodigo_prestacion = ?
-				and fecha_prestacion = ?
-				and clave_beneficiario = ?
-				and orden = ?";
-		return $this->_db->query($sql , $params)->getCount();
+        return $params;
+    }
+    
+    private function buscarPrestacion ($registro) {
+        $params = $this->armarParams($registro);
+        return $this->_db->findCount('prestaciones.prestaciones' , [ 
+            'numero_comprobante = ? 
+            and codigo_prestacion = ?
+            and subcodigo_prestacion = ?
+            and fecha_prestacion = ?
+            and clave_beneficiario = ?
+            and orden = ?' , $params]);
 	}
     
-    private function modificarEstado () {
-		$params = array(
-			$this->_prestacion_data['numero_comprobante'],
-			$this->_prestacion_data['codigo_prestacion'],
-			$this->_prestacion_data['subcodigo_prestacion'],
-			$this->_prestacion_data['fecha_prestacion'],
-			$this->_prestacion_data['clave_beneficiario'],
-			$this->_prestacion_data['orden']
-		);
+    private function modificarEstado ($registro) {
+        $params = $this->armarParams($registro);
 		$sql = "
 			update
 				prestaciones.p_01
@@ -242,11 +196,12 @@ class Prestaciones implements Facturacion
 		$this->_contador['modificados'] ++;
 	}
     
-    private function modificarRegistro(){
-        if ($this->buscarPrestacion()) {
-			$this->modificaEstado();
+    private function modificarRegistro($registro){
+        if ($this->buscarPrestacion($registro)) {
+			$this->modificarEstado($registro);
 		} else {
-			$this->ingresarError($this->_prestacion_ori , $this->_lote , 'LA PRESTACIÓN QUE SE INTENTA MODIFICAR NO EXISTE');
+            $lote = array_pop($registro);
+			$this->ingresarError($registro , $lote , 'LA PRESTACIÓN QUE SE INTENTA MODIFICAR NO EXISTE');
 		}
     }
 }

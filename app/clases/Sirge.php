@@ -101,17 +101,17 @@ class SIRGe {
 		return Bdd::getInstance()->query($sql , $params)->get()['descripcion'];
 	}
 	
-	public static function selectProvincia ($id_html , $id_provincia = null) {
-		$html = '<select id="' . $id_html . '"><option value="0">Seleccione una entidad</option>';
+	public static function selectProvincia ($id_Html , $id_provincia = null) {
+		$Html = '<select id="' . $id_Html . '"><option value="0">Seleccione una entidad</option>';
 		$sql 	= "select * from sistema.provincias";
 		$data 	= Bdd::getInstance()->query($sql)->getResults();
 		foreach ($data as $index => $valor) {
-			$html .= '<option value="' . $valor['id_provincia'] . '" ';
-			$html .= $id_provincia != '25' ? ($id_provincia == $valor['id_provincia'] ? 'selected="selected"' : 'disabled="disabled"') : '';
-			$html .= '>' . mb_convert_case ($valor['descripcion'] , MB_CASE_TITLE , 'UTF-8') . '</option>';
+			$Html .= '<option value="' . $valor['id_provincia'] . '" ';
+			$Html .= $id_provincia != '25' ? ($id_provincia == $valor['id_provincia'] ? 'selected="selected"' : 'disabled="disabled"') : '';
+			$Html .= '>' . mb_convert_case ($valor['descripcion'] , MB_CASE_TITLE , 'UTF-8') . '</option>';
 		}
-		$html .= '</select>';
-		return $html;
+		$Html .= '</select>';
+		return $Html;
 	}
 	
 }

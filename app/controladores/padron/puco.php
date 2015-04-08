@@ -2,7 +2,7 @@
 
 require_once '../../../init.php';
 
-$html = array (
+$Html = array (
 	'../../vistas/padron/puco.html'
 );
 
@@ -10,6 +10,6 @@ $diccionario = array (
 	'FUENTE_DATOS' => 'prestaciones'
 );
 
-HTML::Vista($html , $diccionario);
+Html::vista($Html , $diccionario);
 
 ?>

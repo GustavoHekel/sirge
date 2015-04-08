@@ -5,7 +5,7 @@ require_once '../../../init.php';
 $dash = new Dashboard();
 $noti = new Notificaciones();
 
-$html = array (
+$Html = array (
 	'../../vistas/dashboard/dashboard.html'
 );
 
@@ -25,6 +25,6 @@ $diccionario = array (
 	'NOTIFICACION_DOIU9' 	=> $noti->gritterDOIU9($_SESSION['grupo'])
 );
 
-Html::Vista($html , $diccionario);
+Html::vista($Html , $diccionario);
 
 ?>

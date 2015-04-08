@@ -1,6 +1,6 @@
 <?php
 
-class PUCO extends Padron {
+class PUCO {
 	
 	private 
 		$_db ,
@@ -8,82 +8,11 @@ class PUCO extends Padron {
 		$_id_subida,
 		$_id_archivo,
 		$_linea,
-		$_validator,
-		$_encabezados_osp = array (
-			'tipo_documento',
-			'numero_documento',
-			'nombre_apellido',
-			'sexo',
-			'codigo_os',
-			'codigo_postal',
-			'tipo_afiliado'
-		),
-		$_encabezados_profe = array (
-			'tipo_documento',
-			'numero_documento',
-			'nombre_apellido',
-			'sexo',
-			'fecha_nacimiento',
-			'fecha_alta',
-			'id_beneficiario_profe',
-			'id_parentezco',
-			'ley_aplicada',
-			'fecha_desde',
-			'fecha_hasta',
-			'id_provincia',
-			'codigo_os',
-		),
-		$_reglas_osp = array (
-			'tipo_documento' => array (
-				'required' => true,
-				'max' => 3
-			),
-			'numero_documento' => array (
-				'required' => true,
-				'numeric' => true,
-				'min' => 5,
-				'max' => 8
-			),
-			'nombre_apellido' => array (
-				'required' => true,
-				'max' => 50
-			),
-			'sexo' => array (
-				'in' => array (
-					'M',
-					'F'
-				)
-			),
-			'tipo_afiliado' => array (
-				'required' => true,
-				'in' => array (
-					'A',
-					'T'
-				)
-			)
-		),
-		$_reglas_profe = array (
-			'tipo_documento' => array (
-				'required' => true,
-				'max' => 3
-			),
-			'numero_documento' => array (
-				'required' => true,
-				'numeric' => true,
-				'min' => 5,
-				'max' => 8
-			),
-			'nombre_apellido' => array (
-				'required' => true,
-				'max' => 50
-			),
-			'sexo' => array (
-				'in' => array (
-					'M',
-					'F'
-				)
-			)
-		);
+		$_validator;
+		
+		
+		
+		
 	
 	public function __construct () {
 		$this->_db = BDD::GetInstance();
@@ -111,25 +40,25 @@ class PUCO extends Padron {
 						id_estado = 0
 						and id_padron = 6
 				) cao on gru.grupo_os = cao.codigo_osp";
-		return $this->JSONDT(BDD::GetInstance()->Query($sql)->GetResults(), true);
+		return $this->JSONDT(BDD::GetInstance()->Query($sql)->getResults(), true);
 	}
 	
-	public static function SelectOSP ($id_html , $id_provincia = null) {
+	public static function SelectOSP ($id_Html , $id_provincia = null) {
 		
-		$html = '<select id="' . $id_html . '"><option value="0">Seleccione una entidad</option>';
+		$Html = '<select id="' . $id_Html . '"><option value="0">Seleccione una entidad</option>';
 		
 		$sql 	= "select * from puco.grupos_obras_sociales where id_entidad <= '24'";
-		$data 	= BDD::GetInstance()->Query($sql)->GetResults();
+		$data 	= Bdd::getInstance()->query($sql)->getResults();
 		
 		foreach ($data as $index => $valor) {
 			
-			$html .= '<option value="' . $valor['grupo_os'] . '" ';
-			$html .= $id_provincia != '25' ? ($id_provincia == $valor['id_entidad'] ? 'selected="selected"' : 'disabled="disabled"') : '';
-			$html .= '>' . mb_convert_case ($valor['nombre_grupo'] , MB_CASE_TITLE , 'UTF-8') . '</option>';
+			$Html .= '<option value="' . $valor['grupo_os'] . '" ';
+			$Html .= $id_provincia != '25' ? ($id_provincia == $valor['id_entidad'] ? 'selected="selected"' : 'disabled="disabled"') : '';
+			$Html .= '>' . mb_convert_case ($valor['nombre_grupo'] , MB_CASE_TITLE , 'UTF-8') . '</option>';
 		}
-		$html .= '</select>';
+		$Html .= '</select>';
 		
-		return $html;
+		return $Html;
 	}
 	
 	

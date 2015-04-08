@@ -1,0 +1,47 @@
+<div class="portlet box yellow listado-simple">
+	<div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>Indicadores de control</div>
+	</div>
+	<div class="portlet-body">
+		<form id="indicadores_provincia" style="text-align: center">
+			<div>Seleccione una Provincia
+				{provincias}
+				<input id="meses_periodo" name="fecha" placeholder="Seleccione Mes y Año"  type="text" />
+				<input class="btn yellow" type="submit" value="Buscar">
+			</div>
+		</form>
+	</div>
+</div>
+<div id="cuadros_indicadores"></div>
+
+
+<script>
+$(document).ready(function(){
+
+    	$('#meses_periodo').monthpicker({
+    		ShowIcon: false,
+			dateFormat: 'yy-mm',
+			buttonImage: '../../../public/javascript/plugins/jquery-ui/images',
+			monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+			minDate: new Date(2014, 0,1), maxDate: new Date(2020, 12,31)
+		});
+    
+
+		$("#provincias").attr('name', 'id_provincia');
+    
+    $('#indicadores_provincia').submit(function(event){
+        event.preventDefault();
+        mostrar_loading();
+        $.ajax({
+            type : 'post',
+            url  : 'app/controladores/indicadores/resultados_medica.php',
+            data : $(this).serialize(),
+            success : function (data) {
+                //console.log (data);
+                $('#cuadros_indicadores').html(data);
+                ocultar_loading();
+            }
+        });
+    });
+});
+</script>

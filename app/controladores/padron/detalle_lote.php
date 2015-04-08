@@ -13,7 +13,7 @@ $sql 	= "
 	where lote = ?";
 $data 	= Bdd::getInstance()->query($sql , $params)->get();
 
-$html = array (
+$Html = array (
 	'../../vistas/padron/detalle_lote.html'
 );
 
@@ -31,7 +31,4 @@ $diccionario = array (
 	'RECHAZOS'			=> Lote::getRechazos($data['lote'])
 );
 
-Html::Vista($html , $diccionario);
-
-
-?>
+Html::vista($Html , $diccionario);

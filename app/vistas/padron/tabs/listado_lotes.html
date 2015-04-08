@@ -22,10 +22,9 @@ $(document).ready(function(){
 	function armar_tabla () {
 		mostrar_loading();
 		$(".lote").empty();
-		$(".lote").append('<table id="tabla_lotes" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>');
+		$(".lote").append('<table id="tabla_lotes" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-condensed"></table>');
 		
 		$.ajax({
-			
 			type 		: 'post' ,
 			url  		: 'app/parserAjax.php' ,
 			data 		: {
@@ -37,10 +36,12 @@ $(document).ready(function(){
 			success 	: function (data) {
 				$("#tabla_lotes").empty();
 				$('#tabla_lotes').dataTable({
-					sDom		: 'rt<"bottom"flp><"clear">' ,
-					bDestroy	: true ,
-					aaData		: data['data'] ,
-					aoColumns	: data['aoColumns']
+					dom : 'frt<"bottom"lp><"clear">' ,
+          filter : true ,
+          pageLength : 20,
+					bDestroy : true ,
+					aaData : data['data'] ,
+					aoColumns : data['aoColumns']
 				});
 			} ,
 			complete : function () {
@@ -62,7 +63,7 @@ $(document).ready(function(){
 			url  	: 'app/controladores/padron/detalle_lote.php' ,
 			data 	: 'lote=' + lote ,
 			success : function (data) {
-				if (estado == 2) {
+				if (estado === 2) {
 					botones[0] = {
 						text : 'Eliminar lote',
 						class : 'btn blue',
@@ -139,7 +140,7 @@ $(document).ready(function(){
 						click : function () {
 							$(this).dialog('close');
 						}
-					}
+					};
 				}
 				
 				$('#dialog-respuesta').html(data).dialog({

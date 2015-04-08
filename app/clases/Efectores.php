@@ -2,77 +2,126 @@
 
 class Efectores {
 		
-	private
-		$_db;
+	private $_db;
 	
 	public function __construct(){
 		$this->_db = Bdd::getInstance();
 	}
 	
 	public function getEfectoresProvincia ($id_provincia) {
-		$params = array ($id_provincia);
-		$sql = "
-			select
-				to_char (count (*) , '999,999') as c
-			from	
-				efectores.efectores e left join
-				efectores.datos_geograficos d on e.id_efector = d.id_efector
-			where
-				id_provincia = ?";
-		return $this->_db->query($sql , $params)->get()['c'];
+      return $this->_db->fquery('getEfectoresProvincia' , [$id_provincia] , FALSE)->get()['c'];
 	}
 	
 	public function getEfectoresCompromisoProvincia ($id_provincia) {
-		$params = array ($id_provincia);
-		$sql = "
-			select
-				to_char (count (*) , '999,999') as c
-			from	
-				efectores.efectores e left join
-				efectores.datos_geograficos d on e.id_efector = d.id_efector
-			where
-				id_provincia = ?
-				and id_estado = 1
-				and integrante = 'S'
-				and compromiso_gestion = 'S'";
-		return $this->_db->query($sql , $params)->get()['c'];
-		
+      return $this->_db->fquery('getEfectoresCompromisoProvincia' , [$id_provincia] , FALSE)->get()['c'];
 	}
 	
-	public function descentralizacion ($id_provincia) {
-		$sql = "
-			select
-				coalesce (round (( efectores_decentralizados ::numeric / cantidad_efectores) * 100 , 2) , 0) :: text || '%' as d
-			from (
-				select 
-					id_provincia 
-					, count (*) as cantidad_efectores
-				from 
-					efectores.efectores e left join
-					efectores.datos_geograficos g on e.id_efector = g.id_efector
-				where
-					integrante = 'S'
-					and compromiso_gestion = 'S'
-				group by
-					id_provincia) e left join (
-				select 
-					id_provincia 
-					, count (*) as efectores_decentralizados
-				from 
-					efectores.descentralizacion e left join
-					efectores.datos_geograficos g on e.id_efector = g.id_efector left join
-					efectores.efectores ef on e.id_efector = ef.id_efector
-				where
-					factura_descentralizada = 'S'
-					and integrante = 'S'
-					and compromiso_gestion = 'S'
-				group by
-					id_provincia) d on e.id_provincia = d.id_provincia
-			where
-				e.id_provincia = '$id_provincia'";
-		return $this->_db->query($sql)->get()['d'];
+	public function getDescentralizacion ($id_provincia) {
+      return $this->_db->fquery('getDescentralizacion' , [$id_provincia] , FALSE)->get()['d'];
 	}
 	
-}
+    public function listar ($post) {
+      
+      if (strlen ($post['search']['value'])){
+        $sql = 'listar_filtrado';
+        $params = [
+          '%' . $post['search']['value'] . '%',
+          '%' . $post['search']['value'] . '%',
+          '%' . $post['search']['value'] . '%',
+          $post['length'],
+          $post['start'],
+        ];
+      } else {
+        $sql = 'listar';
+        $params = [
+          $post['length'],
+          $post['start'],
+        ];
+      }
+      
+      $data = $this->_db->fquery($sql , $params , FALSE)->getResults();
+      
+      foreach ($data as $key => $value) {
+        $json['data'][$key] = $value;
+      }
+      
+      $json['recordsFiltered'] = $this->_db->findCount('efectores.efectores' , ['id_estado in (?,?)' , [1,4]]);
+      $json['recordsTotal'] = $this->_db->findCount('efectores.efectores' , ['id_estado in (?,?)' , [1,4]]);
+      $json['draw'] = $post['draw']++;
 
-?>
+      return (json_encode ($json));
+    }
+      
+    public function getEfector ($id_efector) {
+      return $this->_db->fquery('getEfector' , [$id_efector] , FALSE)->getResults()[0];
+    }
+    
+    public function getEfectorGeo ($id_efector) {
+      return $this->_db->fquery('getEfectorGeo' , [$id_efector] , FALSE)->getResults()[0];
+    }
+    
+    public function getEfectorCompromiso ($id_efector) {
+      $data = $this->_db->findAll('efectores.compromiso_gestion' , ['id_efector = ?' , [$id_efector]]);
+      if (! $this->_db->getCount()) {
+        $data['numero_compromiso'] = '-';
+        $data['firmante'] = '-';
+        $data['pago_indirecto'] = '-';
+        $data['fecha_suscripcion'] = '-';
+        $data['fecha_inicio'] = '-';
+        $data['fecha_fin'] = '-';
+      }
+      return $data;
+    }
+    
+    public function getEfectorConvenio ($id_efector){
+      $data = $this->_db->findAll('efectores.convenio_administrativo' , ['id_efector = ?' , [$id_efector]]);
+      if (! $this->_db->getCount()) {
+        $data['numero_compromiso'] = '-';
+        $data['firmante'] = '-';
+        $data['nombre_tercer_administrador'] = '-';
+        $data['codigo_tercer_administrador'] = '-';
+        $data['fecha_suscripcion'] = '-';
+        $data['fecha_inicio'] = '-';
+        $data['fecha_fin'] = '-';
+      }
+      return $data;
+    }
+    
+    public function getEfectorReferente ($id_efector){
+      return $this->_db->find('nombre' , 'efectores.referentes' , ['id_efector = ?',[$id_efector]]);
+    }
+    
+    public function getEfectorDescentralizacion ($id_efector) {
+      return $this->_db->findAll('efectores.descentralizacion' , ['id_efector = ?' , [$id_efector]]);
+    }
+    
+    public function getPrestaciones ($id_efector) {
+      return $this->_db->findCount('prestaciones.prestaciones' , ['efector = (select cuie from efectores.efectores where id_efector = ?)' , [$id_efector]]);
+    }
+    
+    public function getBeneficiariosInscriptos ($id_efector){
+      $sql = "select 
+  count (*) 
+from 
+  beneficiarios.beneficiarios_periodos
+where 
+  efector_asignado = (select cuie from efectores.efectores where id_efector = ?)
+  and periodo = (select max (periodo) from beneficiarios.beneficiarios_periodos)";
+      return $this->_db->query($sql , [$id_efector])->getResults()[0]['count'];
+    }
+    
+    public function getPrestacionesPriorizadas ($id_efector) {
+      $sql =  "
+          select count (*) as c
+          from 
+             prestaciones.prestaciones
+          where 
+            efector = (select cuie from efectores.efectores where id_efector = ?)
+            and codigo_prestacion in (select codigo_prestacion from pss.codigos_priorizadas)";
+      return $this->_db->query($sql , [$id_efector])->getResults()[0]['c'];
+    }
+    
+    public function getBeneficiariosCeb ($id_efector) {
+      return $this->_db->fquery('getBeneficiariosCeb' , [$id_efector] , FALSE)->getResults()[0]['c'];
+    }
+}

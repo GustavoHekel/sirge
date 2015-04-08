@@ -1,0 +1,106 @@
+<div style="margin: 0px auto; position: relative; top: 20px; width: 1100px">
+  <div class="row-fluid">
+    <div class="responsive span4" data-tablet="span6">
+      <div class="dashboard-stat {INDICADOR_3.6_COLOR}">
+        <div class="visual ">
+          <i class="icon-stethoscope"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.6} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.6} (3.6)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+    <div class="responsive span4" data-tablet="span6">
+      <div  class="dashboard-stat {INDICADOR_3.9_COLOR}">
+        <div class="visual">
+          <i class="icon-hospital"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.9} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.9} (3.9)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+    <div class="responsive span4">
+      <div  class="dashboard-stat {INDICADOR_3.10_COLOR}">
+        <div class="visual">
+            <i class="icon-group"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.10} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.10} (3.10)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="responsive span4">
+      <div  class="dashboard-stat {INDICADOR_3.11_COLOR}">
+        <div class="visual">
+          <i class="icon-stethoscope"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.11} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.11} (3.11)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+    <div class="responsive span4">
+      <div  class="dashboard-stat {INDICADOR_3.12_COLOR}">
+        <div class="visual">
+          <i class="icon-hospital"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.12} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.12} (3.12)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+    <div class="responsive span4">
+      <div class="dashboard-stat {INDICADOR_3.13_COLOR}">
+        <div class="visual">
+            <i class="icon-group"></i>
+        </div>
+        <div class="details">
+          <div class="number">{RESULTADO_INDICADOR_3.13} %</div>
+          <div class="desc">{DESCRIPCION_INDICADOR_3.13} (3.13)</div>
+        </div>
+        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="display: none">
+  <div id="info-indicador"></div>
+</div>
+
+<script>
+$(document).ready(function(){
+  
+  $('.more').click(function(){
+   $.ajax({
+     type : 'post',
+     url  : 'app/controladores/indicadores/test.php',
+     success : function (data) {
+       $('#info-indicador').html(data).dialog({
+         buttons : [{
+             text : 'Aceptar',
+             class : 'btn green',
+             click : function (){
+               $(this).dialog('close');
+             }
+         }]
+       });
+     }
+   });
+  });
+  
+});
+</script>

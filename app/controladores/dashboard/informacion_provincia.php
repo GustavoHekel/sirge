@@ -2,7 +2,7 @@
 
 require_once '../../../init.php';
 
-$html = array (
+$Html = array (
 	'../../vistas/dashboard/informacion_provincia.html'
 );
 
@@ -24,10 +24,8 @@ $diccionario = array (
 	'GRUPO_D' 				=> $beneficiarios->resumen(Sirge::getIdProvincia($_POST['provincia']) , 'beneficiarios_2064'),
 	'EFECTORES' 			=> $efectores->getEfectoresProvincia(Sirge::getIdProvincia($_POST['provincia'])),
 	'EFECTORES_CONVENIO' 	=> $efectores->getEfectoresCompromisoProvincia(Sirge::getIdProvincia($_POST['provincia'])),
-	'DESCENTRALIZACION' 	=> $efectores->descentralizacion(Sirge::getIdProvincia($_POST['provincia'])),
+	'DESCENTRALIZACION' 	=> $efectores->getDescentralizacion(Sirge::getIdProvincia($_POST['provincia'])),
 	'PRESTACIONES' 			=> $prestaciones->getPrestacionesProvincia(Sirge::getIdProvincia($_POST['provincia']))
 );
 
-Html::Vista($html , $diccionario);
-
-?>
+Html::vista($Html , $diccionario);

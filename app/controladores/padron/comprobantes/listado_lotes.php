@@ -2,8 +2,8 @@
 
 require_once '../../../../init.php';
 
-$html = array (
-	'../../../vistas/padron/tabs/lotes_procesados.html'
+$Html = array (
+	'../../../vistas/padron/tabs/listado_lotes.html'
 );
 
 $diccionario = array (
@@ -12,6 +12,4 @@ $diccionario = array (
 	'ID_FUENTE_DATOS'	=> 3
 );
 
-HTML::Vista($html , $diccionario);
-
-?>
+Html::vista($Html , $diccionario);

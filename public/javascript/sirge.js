@@ -78,7 +78,7 @@ $.extend( true , $.fn.dataTable.defaults,{
 		bSort			: false,
 		language		: {
 			emptyTable		: "No se encontraron datos para mostrar" ,
-			search			: "Búsqueda:" ,
+			search			: "Búsqueda : " ,
 			info			: "Mostrando registros _START_ a _END_ de un total de _TOTAL_" ,
 			loadingRecords	: "Espere un momento por favor..." ,
 			infoFiltered	: " - filtrando de  _MAX_ registros" ,
@@ -88,7 +88,7 @@ $.extend( true , $.fn.dataTable.defaults,{
 				previous		: "Anterior",
 				next			: "Siguiente",
 				last			: "&Uacute;ltima"
-			},
+			}
 		}
 });
 
@@ -105,7 +105,7 @@ TableTools.DEFAULTS.sSwfPath = "public/javascript/plugins/data-tables/table_tool
 
 $.datepicker.setDefaults ({
 	dateFormat	: "yy-mm-dd" ,
-	maxDate 	: '2015-12-31' ,
+	maxDate 	: '2016-12-31' ,
 	monthNames  : ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"] ,
 	dayNames	: [ "Domingo", "Lunes", "Martes", "Mi&eacute;rcoles", "Jueves", "Viernes", "S&aacute;bado" ] ,
 	dayNamesMin	: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ] ,

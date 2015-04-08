@@ -2,7 +2,7 @@
 
 require_once '../../../../init.php';
 
-$html = array (
+$Html = array (
 	'../../../vistas/padron/tabs/subidas.html'
 );
 
@@ -14,6 +14,6 @@ $diccionario = array (
 	'METODO_PROCESAR'	=> 'analizar'
 );
 
-Html::vista($html , $diccionario);
+Html::vista($Html , $diccionario);
 
 ?>

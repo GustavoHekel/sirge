@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!DOCTYPE Html>
 <?php
 /*
 Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 ?>
-<html>
+<Html>
 <head>
 	<meta charset="utf-8">
 	<title>Sample &mdash; CKEditor</title>
@@ -33,9 +33,9 @@ else
 foreach ( $postArray as $sForm => $value )
 {
 	if ( get_magic_quotes_gpc() )
-		$postedValue = htmlspecialchars( stripslashes( $value ) ) ;
+		$postedValue = Htmlspecialchars( stripslashes( $value ) ) ;
 	else
-		$postedValue = htmlspecialchars( $value ) ;
+		$postedValue = Htmlspecialchars( $value ) ;
 
 ?>
 		<tr>
@@ -56,4 +56,4 @@ foreach ( $postArray as $sForm => $value )
 		</p>
 	</div>
 </body>
-</html>
+</Html>

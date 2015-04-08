@@ -2,7 +2,7 @@
 
 require '../../../../init.php';
 
-$html = array (
+$Html = array (
 	'../../../vistas/padron/tabs/subidas.html'
 );
 
@@ -10,10 +10,8 @@ $diccionario = array (
 	'CSS_GLOBAL' 		=> 'green' ,
 	'FUENTE_DATOS'		=> 'Prestaciones',
 	'ID_FUENTE_DATOS'	=> 1,
-	'CLASE_PROCESAR'	=> 'Prestaciones',
-	'METODO_PROCESAR'	=> 'procesaPadron'
+	'CLASE_PROCESAR'	=> 'Archivo',
+	'METODO_PROCESAR'	=> 'analizar'
 );
 
-HTML::Vista($html , $diccionario);
-
-?>
+Html::vista($Html , $diccionario);

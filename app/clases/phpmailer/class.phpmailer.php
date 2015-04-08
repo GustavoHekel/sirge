@@ -103,8 +103,8 @@ class PHPMailer {
   public $Subject           = '';
 
   /**
-   * Sets the Body of the message.  This can be either an HTML or text body.
-   * If HTML then run IsHTML(true).
+   * Sets the Body of the message.  This can be either an Html or text body.
+   * If Html then run IsHtml(true).
    * @var string
    */
   public $Body              = '';
@@ -112,8 +112,8 @@ class PHPMailer {
   /**
    * Sets the text-only body of the message.  This automatically sets the
    * email to multipart/alternative.  This body can be read by mail
-   * clients that do not have HTML email capability such as mutt. Clients
-   * that can read HTML will view the normal Body.
+   * clients that do not have Html email capability such as mutt. Clients
+   * that can read Html will view the normal Body.
    * @var string
    */
   public $AltBody           = '';
@@ -344,13 +344,13 @@ class PHPMailer {
   }
 
   /**
-   * Sets message type to HTML.
-   * @param bool $ishtml
+   * Sets message type to Html.
+   * @param bool $isHtml
    * @return void
    */
-  public function IsHTML($ishtml = true) {
-    if ($ishtml) {
-      $this->ContentType = 'text/html';
+  public function IsHtml($isHtml = true) {
+    if ($isHtml) {
+      $this->ContentType = 'text/Html';
     } else {
       $this->ContentType = 'text/plain';
     }
@@ -1163,7 +1163,7 @@ class PHPMailer {
       case 'attachments':
       case 'alt_attachments':
         if($this->InlineImageExists()){
-          $result .= sprintf("Content-Type: %s;%s\ttype=\"text/html\";%s\tboundary=\"%s\"%s", 'multipart/related', $this->LE, $this->LE, $this->boundary[1], $this->LE);
+          $result .= sprintf("Content-Type: %s;%s\ttype=\"text/Html\";%s\tboundary=\"%s\"%s", 'multipart/related', $this->LE, $this->LE, $this->boundary[1], $this->LE);
         } else {
           $result .= $this->HeaderLine('Content-Type', 'multipart/mixed;');
           $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
@@ -1201,7 +1201,7 @@ class PHPMailer {
         $body .= $this->GetBoundary($this->boundary[1], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->GetBoundary($this->boundary[1], '', 'text/html', '');
+        $body .= $this->GetBoundary($this->boundary[1], '', 'text/Html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
         $body .= $this->EndBoundary($this->boundary[1]);
@@ -1221,7 +1221,7 @@ class PHPMailer {
         $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '') . $this->LE; // Create text body
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '') . $this->LE; // Create the HTML body
+        $body .= $this->GetBoundary($this->boundary[2], '', 'text/Html', '') . $this->LE; // Create the Html body
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
         $body .= $this->EndBoundary($this->boundary[2]);
@@ -1714,7 +1714,7 @@ class PHPMailer {
 
   /**
    * Encode string to q encoding.
-   * @link http://tools.ietf.org/html/rfc2047
+   * @link http://tools.ietf.org/Html/rfc2047
    * @param string $str the text to encode
    * @param string $position Where the text is going to be used, see the RFC for what that means
    * @access public
@@ -1776,7 +1776,7 @@ class PHPMailer {
    * use "image/gif".
    * @param string $path Path to the attachment.
    * @param string $cid Content ID of the attachment.  Use this to identify
-   *        the Id for accessing the image in an HTML form.
+   *        the Id for accessing the image in an Html form.
    * @param string $name Overrides the attachment name.
    * @param string $encoding File encoding (see $Encoding).
    * @param string $type File extension (MIME) type.
@@ -2002,7 +2002,7 @@ class PHPMailer {
    * @access public
    * @return $message
    */
-  public function MsgHTML($message, $basedir = '') {
+  public function MsgHtml($message, $basedir = '') {
     preg_match_all("/(src|background)=\"(.*)\"/Ui", $message, $images);
     if(isset($images[2])) {
       foreach($images[2] as $i => $url) {
@@ -2022,14 +2022,14 @@ class PHPMailer {
         }
       }
     }
-    $this->IsHTML(true);
+    $this->IsHtml(true);
     $this->Body = $message;
     $textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$message)));
     if (!empty($textMsg) && empty($this->AltBody)) {
-      $this->AltBody = html_entity_decode($textMsg);
+      $this->AltBody = Html_entity_decode($textMsg);
     }
     if (empty($this->AltBody)) {
-      $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
+      $this->AltBody = 'To view this email message, open it in a program that understands Html!' . "\n\n";
     }
   }
 
@@ -2075,15 +2075,15 @@ class PHPMailer {
       'php'   =>  'application/x-httpd-php',
       'php4'  =>  'application/x-httpd-php',
       'php3'  =>  'application/x-httpd-php',
-      'phtml' =>  'application/x-httpd-php',
+      'pHtml' =>  'application/x-httpd-php',
       'phps'  =>  'application/x-httpd-php-source',
       'js'    =>  'application/x-javascript',
       'swf'   =>  'application/x-shockwave-flash',
       'sit'   =>  'application/x-stuffit',
       'tar'   =>  'application/x-tar',
       'tgz'   =>  'application/x-tar',
-      'xhtml' =>  'application/xhtml+xml',
-      'xht'   =>  'application/xhtml+xml',
+      'xHtml' =>  'application/xHtml+xml',
+      'xht'   =>  'application/xHtml+xml',
       'zip'   =>  'application/zip',
       'mid'   =>  'audio/midi',
       'midi'  =>  'audio/midi',
@@ -2108,9 +2108,9 @@ class PHPMailer {
       'tiff'  =>  'image/tiff',
       'tif'   =>  'image/tiff',
       'css'   =>  'text/css',
-      'html'  =>  'text/html',
-      'htm'   =>  'text/html',
-      'shtml' =>  'text/html',
+      'Html'  =>  'text/Html',
+      'htm'   =>  'text/Html',
+      'sHtml' =>  'text/Html',
       'txt'   =>  'text/plain',
       'text'  =>  'text/plain',
       'log'   =>  'text/plain',

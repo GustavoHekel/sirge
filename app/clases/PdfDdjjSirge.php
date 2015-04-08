@@ -32,6 +32,9 @@ class PdfDdjjSirge extends Pdf {
 		$this->_prestaciones 	= "correspondiente a las PRESTACIONES aprobadas desde la última presentación hasta el día de la fecha, detalladas en el siguiente cuadro:";
 		$this->_comprobantes 	= "correspondiente a los COMPROBANTES recibidos desde la última presentación hasta el día de la fecha, detallados en el siguiente cuadro:";
 		$this->_fondos		  	= "correspondiente a las APLICACIONES DE FONDOS reportadas por los efectores desde la última presentación hasta el día de la fecha, detalladas en el siguiente cuadro:";
+        $this->_osp          	= "correspondiente a la OBRA SOCIAL PROVINCIAL, detallados en el siguiente cuadro:";
+        $this->_sss          	= "correspondiente a la SUPERINTENDENCIA DE SERVICIOS DE SALUD, detallados en el siguiente cuadro:";
+        $this->_profe          	= "correspondiente al PROGRAMA FEDERAL DE SALUD, detallados en el siguiente cuadro:";
 		
 		$this->Cell(130);
 		$this->Cell(25,8,utf8_decode(Sirge::getNombreProvincia($this->_data_sirge[0]['id_provincia'])) . ", " . $this->_data_sirge[0]['fecha_impresion'],0,0,'R');
@@ -73,6 +76,24 @@ class PdfDdjjSirge extends Pdf {
 				$this->SetFont('Arial','BU',11);
 				$this->Ln(10);
 				$this->Cell(0,8,utf8_decode("INFORMACIÓN DE COMPROBANTES:"));
+				break;
+            case 4:
+				$this->Write(8,utf8_decode($this->_sss));
+				$this->SetFont('Arial','BU',11);
+				$this->Ln(10);
+				$this->Cell(0,8,utf8_decode("INFORMACIÓN DE SUPER INTENDENCIA DE SERVICIOS DE SALUD:"));
+				break;
+            case 5:
+				$this->Write(8,utf8_decode($this->_profe));
+				$this->SetFont('Arial','BU',11);
+				$this->Ln(10);
+				$this->Cell(0,8,utf8_decode("INFORMACIÓN DE PROGRAMA FEDERAL DE SALUD:"));
+				break;
+            case 6:
+				$this->Write(8,utf8_decode($this->_osp));
+				$this->SetFont('Arial','BU',11);
+				$this->Ln(10);
+				$this->Cell(0,8,utf8_decode("INFORMACIÓN DE OBRA SOCIAL PROVINCIAL:"));
 				break;
 			default: die("ERROR");
 		}

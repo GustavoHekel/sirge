@@ -7,19 +7,17 @@ class Validar {
 		$_codigos_comunidad;
 	
 	public function __construct ($prestaciones = false) {
-
 		if ($prestaciones) {
 			$sql = "
 				select codigo_prestacion from pss.codigos
 				where 
-					codigo like 'CMI%' or
-					codigo like 'RCM%' or 
-					codigo like 'TAT%' or 
-					codigo like 'ROX001%' or 
-					codigo like 'ROX002%' or 
-					codigo like 'DSY001%'";
-												
-			$this->_codigos_comunidad = BDD::GetInstance()->Query($sql)->GetList();
+					codigo_prestacion like 'CMI%' or
+					codigo_prestacion like 'RCM%' or 
+					codigo_prestacion like 'TAT%' or 
+					codigo_prestacion like 'ROX001%' or 
+					codigo_prestacion like 'ROX002%' or 
+					codigo_prestacion like 'DSY001%'";
+			$this->_codigos_comunidad = Bdd::getInstance()->query($sql)->getList();
 		}
 	}
 	

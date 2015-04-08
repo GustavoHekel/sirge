@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 // If not a POST request, display page below:
 
-?><!DOCTYPE html>
-<html lang="en">
+?><!DOCTYPE Html>
+<Html lang="en">
 <head>
   <title>Live Cropping Demo</title>
-  <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="Content-type" content="text/Html;charset=UTF-8" />
   <script src="../js/jquery.min.js"></script>
   <script src="../js/jquery.Jcrop.js"></script>
   <link rel="stylesheet" href="demo_files/main.css" type="text/css" />
@@ -121,4 +121,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	</div>
 	</body>
 
-</html>
+</Html>

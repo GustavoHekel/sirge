@@ -18,11 +18,12 @@
 $(document).ready(function(){
 	$(function() {
 		$("#tab-fuente-datos").tab();
-		$("#tab-fuente-datos").bind("show", function(e) {    
+		$("#tab-fuente-datos").bind("show", function(e) {
+      mostrar_loading();
 			var contentID  = $(e.target).attr("data-target");
 			var contentURL = $(e.target).attr("href");
-			if (typeof(contentURL) != 'undefined')
-				$(contentID).load(contentURL, function(){ $("#tab-fuente-datos").tab(); });
+			if (typeof(contentURL) !== 'undefined')
+				$(contentID).load(contentURL, function(){ $("#tab-fuente-datos").tab(); ocultar_loading(); });
 			else
 				$(contentID).tab('show');
 		});
