@@ -22,11 +22,7 @@ $(document).ready(function(){
 	function armar_tabla () {
 		mostrar_loading();
 		$(".ddjj").empty();
-<<<<<<< HEAD
 		$(".ddjj").append('<table id="tabla_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-condensed"></table>');
-=======
-		$(".ddjj").append('<table id="tabla_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>');
->>>>>>> 97477a8c1cbe908c65c71c0041e8efb517f228f6
 
 		$.ajax({
 			type 		: 'post' ,
@@ -40,16 +36,10 @@ $(document).ready(function(){
 			success 	: function (data) {
 				$("#tabla_ddjj").empty();
 				$('#tabla_ddjj').dataTable({
-<<<<<<< HEAD
 					sDom : 'frt<"bottom"lp><"clear">' ,
           filter : true,
 					bDestroy : true ,
 					aaData : data['data'] ,
-=======
-					sDom		: 'rt<"bottom"flp><"clear">' ,
-					bDestroy	: true ,
-					aaData		: data['data'] ,
->>>>>>> 97477a8c1cbe908c65c71c0041e8efb517f228f6
 					aoColumns	: data['aoColumns']
 				});
 			} ,
