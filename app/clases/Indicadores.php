@@ -1,9 +1,7 @@
 <?php
 
-class Indicadores 
-{
-	
-  private $_db;
+class Indicadores {
+	private $_db;
 
 	public function __construct()
 	{
@@ -23,6 +21,18 @@ class Indicadores
 
 	public function get_res_ind_prov($periodo, $id_provincia, $indicador)
 	{
-		$this->_db->fquery('res_ind_prov', [$periodo, $id_provincia, $indicador], false)->getResults();
+		return $this->_db->fquery('res_ind_prov', [$periodo, $id_provincia, $indicador], false)->getResults();
 	}
+
+	public function get_res_ind_prov_promedio($fecha, $fecha, $id_provincia, $indicador)
+	{
+		return $this->_db->fquery('res_ind_prov_promedio', [$fecha, $fecha, $id_provincia, $indicador], false)->getResults();
+		//echo '<pre>', print_r($this->_db->getResults()), '</pre>';
+	}
+
+	public function get_descripcion_indicador($indicador)
+	{
+		return $this->_db->fquery('descripcion_indicador', [$indicador], false)->getResults();
+	}
+
 }

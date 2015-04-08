@@ -7,9 +7,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.6} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.6} (3.6)</div>
+          <div class="desc">INDICADOR 3.6</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.6" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
     <div class="responsive span4" data-tablet="span6">
@@ -19,9 +19,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.9} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.9} (3.9)</div>
+          <div class="desc">INDICADOR 3.9</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.9" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
     <div class="responsive span4">
@@ -31,9 +31,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.10} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.10} (3.10)</div>
+          <div class="desc">INDICADOR 3.10</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.10" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
   </div>
@@ -46,9 +46,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.11} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.11} (3.11)</div>
+          <div class="desc">INDICADOR 3.11</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.11" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
     <div class="responsive span4">
@@ -58,9 +58,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.12} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.12} (3.12)</div>
+          <div class="desc">INDICADOR 3.12</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.12" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
     <div class="responsive span4">
@@ -70,9 +70,9 @@
         </div>
         <div class="details">
           <div class="number">{RESULTADO_INDICADOR_3.13} %</div>
-          <div class="desc">{DESCRIPCION_INDICADOR_3.13} (3.13)</div>
+          <div class="desc">INDICADOR 3.13</div>
         </div>
-        <a class="more" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
+        <a class="more" indicador="3.13" href="#">Ver detalles<i class="m-icon-swapright m-icon-white"></i></a>
       </div>
     </div>
   </div>
@@ -85,9 +85,15 @@
 $(document).ready(function(){
   
   $('.more').click(function(){
-   $.ajax({
+    
+    var indicador = $(this).attr('indicador');
+
+    $.ajax({
      type : 'post',
-     url  : 'app/controladores/indicadores/test.php',
+     url  : 'app/controladores/indicadores/detalle_indicador.php',
+     data: {
+      indicador : indicador
+      },
      success : function (data) {
        $('#info-indicador').html(data).dialog({
          buttons : [{
@@ -98,8 +104,8 @@ $(document).ready(function(){
              }
          }]
        });
-     }
-   });
+      }
+    });
   });
   
 });

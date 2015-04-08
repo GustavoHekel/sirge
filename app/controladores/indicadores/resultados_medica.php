@@ -81,6 +81,8 @@ for ($i = 0; $i < count($row); $i++)
 	}
 }
 
+$array_a_mostrar['id_provincia'] = $id_provincia;
+
 //echo "<pre>", print_r($array_a_mostrar), "</pre>";
                //echo "<pre>", print_r($row), "</pre>";
 $diccionario = $array_a_mostrar;
