@@ -18,12 +18,20 @@
 $(document).ready(function(){
 	$(function() {
 		$("#tab-fuente-datos").tab();
+<<<<<<< HEAD
 		$("#tab-fuente-datos").bind("show", function(e) {
       mostrar_loading();
 			var contentID  = $(e.target).attr("data-target");
 			var contentURL = $(e.target).attr("href");
 			if (typeof(contentURL) !== 'undefined')
 				$(contentID).load(contentURL, function(){ $("#tab-fuente-datos").tab(); ocultar_loading(); });
+=======
+		$("#tab-fuente-datos").bind("show", function(e) {    
+			var contentID  = $(e.target).attr("data-target");
+			var contentURL = $(e.target).attr("href");
+			if (typeof(contentURL) != 'undefined')
+				$(contentID).load(contentURL, function(){ $("#tab-fuente-datos").tab(); });
+>>>>>>> 97477a8c1cbe908c65c71c0041e8efb517f228f6
 			else
 				$(contentID).tab('show');
 		});

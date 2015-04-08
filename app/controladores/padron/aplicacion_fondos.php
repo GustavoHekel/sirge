@@ -11,3 +11,8 @@ $diccionario = array (
 );
 
 Html::vista($Html , $diccionario);
+<<<<<<< HEAD
+=======
+
+?>
+>>>>>>> 97477a8c1cbe908c65c71c0041e8efb517f228f6

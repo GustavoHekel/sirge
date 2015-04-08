@@ -92,4 +92,3 @@ class Lote
 		return implode ("<br />" , Bdd::getInstance()->query($sql , array($lote))->getList());
 	}
 }
-

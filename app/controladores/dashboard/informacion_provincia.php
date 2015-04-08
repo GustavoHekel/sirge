@@ -24,7 +24,11 @@ $diccionario = array (
 	'GRUPO_D' 				=> $beneficiarios->resumen(Sirge::getIdProvincia($_POST['provincia']) , 'beneficiarios_2064'),
 	'EFECTORES' 			=> $efectores->getEfectoresProvincia(Sirge::getIdProvincia($_POST['provincia'])),
 	'EFECTORES_CONVENIO' 	=> $efectores->getEfectoresCompromisoProvincia(Sirge::getIdProvincia($_POST['provincia'])),
+<<<<<<< HEAD
 	'DESCENTRALIZACION' 	=> $efectores->getDescentralizacion(Sirge::getIdProvincia($_POST['provincia'])),
+=======
+	'DESCENTRALIZACION' 	=> $efectores->descentralizacion(Sirge::getIdProvincia($_POST['provincia'])),
+>>>>>>> 97477a8c1cbe908c65c71c0041e8efb517f228f6
 	'PRESTACIONES' 			=> $prestaciones->getPrestacionesProvincia(Sirge::getIdProvincia($_POST['provincia']))
 );
 
