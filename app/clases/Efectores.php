@@ -126,24 +126,16 @@ where
     }
     
     public function descargarTabla (){
-      
+      $file = 'efectores.csv';
+      $ruta = '../data/padrones/' . $file;
       $data = $this->_db->fquery('descargarTabla')->getResults();
       $encabezados = array_keys($data[0]);
       
-      file_put_contents('efectores.csv', implode(';', $encabezados), FILE_APPEND);
+      unlink($ruta);
+      file_put_contents($ruta , implode("\t", $encabezados) . "\r\n", FILE_APPEND);
       
-      $file = 'efectores.csv';
-
-      if (file_exists($file)) {
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename='.basename($file));
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($file));
-        readfile($file);
-        exit;
+      foreach ($data as $index => $valor) {
+        file_put_contents($ruta , html_entity_decode (implode("\t", $valor) , ENT_QUOTES , 'UTF-8') . "\r\n", FILE_APPEND);
       }
     }
 }

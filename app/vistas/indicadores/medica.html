@@ -13,6 +13,9 @@
 	</div>
 </div>
 <div id="cuadros_indicadores"></div>
+<div style="display: none">
+  <div id="info-fecha"></div>
+</div>
 
 
 <script>
@@ -35,9 +38,10 @@ $(document).ready(function(){
 
         var d = new Date();
         var month = d.getMonth()+1;
-        var year = d.getYear();
+        var year = d.getFullYear();
         var fecha = $("#meses_periodo").val().split("-");
-        
+        console.log(fecha[0]+" / "+year);
+
         if(( fecha[0] == year && fecha[1] < month ) || (fecha[0] < year))
         {
             $.ajax({
@@ -52,10 +56,29 @@ $(document).ready(function(){
             });
         }
         else if( fecha[0] == year && fecha[1] == month ){
-            
+            $('#info-fecha').html("No hay registros todavía para el mes actual.").dialog({
+                 buttons : [{
+                     text : 'Volver',
+                     class : 'btn green',
+                     click : function (){
+                       $(this).dialog('close');
+                     }
+                 }]
+            });
+            //alert("No hay registros todavía para el mes actual.");
+            ocultar_loading();
         }
         else{
-            alert("No puede buscar un mes futuro.");
+            $('#info-fecha').html("No puede buscar un mes futuro.").dialog({
+                 buttons : [{
+                     text : 'Volver',
+                     class : 'btn green',
+                     click : function (){
+                       $(this).dialog('close');
+                     }
+                 }]
+            });
+            //alert("No puede buscar un mes futuro.");
             ocultar_loading();
         }
     });

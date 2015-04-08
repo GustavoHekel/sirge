@@ -67,4 +67,4 @@ LEFT JOIN efectores.efectores_neonatales neo ON efe.siisa = neo.siisa
 LEFT JOIN efectores.categorias_ppac cpp2 ON neo.id_categoria = cpp2.id_categoria
 LEFT JOIN efectores.descentralizacion des ON efe.id_efector = des.id_efector
 LEFT JOIN efectores.tipo_estado test ON efe.id_estado = test.id_estado
-LIMIT 10
+ORDER BY 1
