@@ -2,13 +2,35 @@
 
 require_once '../../../init.php';
 
+$indic = new Indicadores();
+
+$indicador = $_POST['indicador'];
+$id_provincia = $_POST['id_provincia'];
+$year = $_POST['year'];
+$resultado = $_POST['resultado'];
+$numerador = $_POST['num'];
+$denominador = $_POST['den'];
+
+$data = $indic->get_indicador_medica_rangos($indicador, $id_provincia, $year)[0];
+
+$data2       = $indic->get_descripcion_indicador($indicador)[0];
+$descripcion = $data2['descripcion'];
+$desc_num    = $data2['numerador'];
+$desc_den    = $data2['denominador'];
+
+//echo "<pre>", print_r($data2), "</pre>";
+
 $diccionario = [
-	'ANCHO_ROJO'     => (25 * 500 / 100),
-	'ANCHO_AMARILLO' => (35 * 500 / 100),
-	'ANCHO_VERDE'    => (40 * 500 / 100),
-	'RESULTADO_PX'   => (70 * 500 / 100),
-	'RESULTADO_XX'   => 70,
-];
+	'ANCHO_ROJO'       => (intval($data['min_rojo'] - $data['max_rojo']) * 500 / intval($data['min_verde'])),
+	'ANCHO_AMARILLO'   => (intval($data['max_verde'] - $data['min_rojo']) * 500 / intval($data['min_verde'])),
+	'ANCHO_VERDE'      => (intval($data['min_verde'] - $data['max_verde']) * 500 / intval($data['min_verde'])),
+	'RESULTADO_PX'     => (intval($resultado) * 500 / intval($data['min_verde'])),
+	'RESULTADO_XX'     => intval($resultado),
+	'NUMERADOR'        => $indicador.'.a        = '.$numerador,
+	'DENOMINADOR'      => $indicador.'.b      = '.$denominador,
+	'NOMBRE_INDICADOR' => $descripcion.' - ('.$indicador.')',
+	'DESC_NUMERADOR'   => html_entity_decode($desc_num),
+	'DESC_DENOMINADOR' => html_entity_decode($desc_den)];
 
 $html = [
 	'../../vistas/indicadores/detalle_indicador_medica.html',

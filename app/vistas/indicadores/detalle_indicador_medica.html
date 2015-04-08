@@ -1,18 +1,35 @@
 <div class="portlet box">
 	<div class="portlet-body form">
 		<div class="form-horizontal form-view">
-			<h3 class="form-section">{NOMBRE_INDICADOR}</h3>
-      <h3 class="form-section">{DETALLE DE CALCULO}</h3>
-      <p>{TEXTO}</p>
-	
+			<h4 class="form-section">{NOMBRE_INDICADOR}</h4>
+     <!--  <h4 class="form-section">{NUMERADOR}<p>{DENOMINADOR}</p></h4> -->
+      <div id="desc_numerador"><b>Numerador</b></div>
+	    <h3 class="form-section"></h3>
+      <div id="desc_denominador"><b>Denominador</b></div>
       <h3 class="form-section">Estado</h3>
       <div style="width: 510px; height: 30px;">
         <div style="float:left; background-color: #e35b5a; width: {ANCHO_ROJO}px; height: 14px;"></div>
         <div style="float:left; background-color: #ffb848; width: {ANCHO_AMARILLO}px; height: 14px;"></div>
         <div style="float:left; background-color: #28b779; width: {ANCHO_VERDE}px; height: 14px;"></div>
-        <div style="border: solid 3px white; position: relative; top: -3px; left: {RESULTADO_PX}px; background-color: #4B77BE; width: 15px; height: 14px;"> {RESULTADO_XX} </div>
+        <div style="border: solid 2px white; position: relative; top: -3px; left: {RESULTADO_PX}px; background-color: #4B77BE; width: 7px; height: 14px;"> {RESULTADO_XX} </div>
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  var desc_numerador = "{DESC_NUMERADOR}";
+  var filas = desc_numerador.split("|");
+  for (var i = 0; i <= filas.length - 1; i++) {
+    $("#desc_numerador").append("<p>"+filas[i]+"</p>"); 
+  };
+
+  var desc_denominador = "{DESC_DENOMINADOR}";
+  var filas2 = desc_denominador.split("|");
+  for (var j = 0; j <= filas2.length - 1; j++) {
+    $("#desc_denominador").append("<p>"+filas2[j]+"</p>"); 
+  };
+
+
+</script>
 

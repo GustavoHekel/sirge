@@ -85,5 +85,20 @@ $(document).ready(function(){
       }
     });
   });
+  
+  $('#descargar_tabla').click(function(){
+    $.ajax({
+      type : 'post',
+      url  : 'app/parserAjax.php',
+      data : {
+        c : 'Efectores',
+        m : 'descargarTabla'
+      },
+      success : function (data){
+        console.log (data);
+      }
+    });
+  });
+  
 });
 </script>

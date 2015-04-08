@@ -63,7 +63,16 @@ for ($i = 0; $i < count($row); $i++)
 
 	$array_a_mostrar['RESULTADO_INDICADOR_'.$row[$i]['codigo_indicador']] = $row[$i]['valor'];
 	$array_a_mostrar['INDICADOR_'.$row[$i]['codigo_indicador']] = $row[$i]['codigo_indicador'];
-	$array_a_mostrar['DESCRIPCION_INDICADOR_'.$row[$i]['codigo_indicador']] = $indic->get_descripcion_indicador($row[$i]['codigo_indicador'])[0]['descripcion'];
+	//$array_a_mostrar['DESCRIPCION_INDICADOR_'.$row[$i]['codigo_indicador']] = $indic->get_descripcion_indicador($row[$i]['codigo_indicador'])[0]['descripcion'];
+
+	if (isset($row[$i]['3.'.$indicadores[$i].'.a']))
+	{
+		$array_a_mostrar['NUMERADOR_INDICADOR_3.'.$indicadores[$i].'.a'] = $row[$i]['3.'.$indicadores[$i].'.a'];
+	}
+	if (isset($row[$i]['3.'.$indicadores[$i].'.b']))
+	{
+		$array_a_mostrar['DENOMINADOR_INDICADOR_3.'.$indicadores[$i].'.b'] = $row[$i]['3.'.$indicadores[$i].'.b'];
+	}
 
 	$valor = $row[$i]['valor'];
 
@@ -82,7 +91,7 @@ for ($i = 0; $i < count($row); $i++)
 }
 
 $array_a_mostrar['id_provincia'] = $id_provincia;
-
+$array_a_mostrar['year'] = $year;
 //echo "<pre>", print_r($array_a_mostrar), "</pre>";
                //echo "<pre>", print_r($row), "</pre>";
 $diccionario = $array_a_mostrar;

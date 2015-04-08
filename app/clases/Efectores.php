@@ -124,4 +124,26 @@ where
     public function getBeneficiariosCeb ($id_efector) {
       return $this->_db->fquery('getBeneficiariosCeb' , [$id_efector] , FALSE)->getResults()[0]['c'];
     }
+    
+    public function descargarTabla (){
+      
+      $data = $this->_db->fquery('descargarTabla')->getResults();
+      $encabezados = array_keys($data[0]);
+      
+      file_put_contents('efectores.csv', implode(';', $encabezados), FILE_APPEND);
+      
+      $file = 'efectores.csv';
+
+      if (file_exists($file)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename='.basename($file));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        readfile($file);
+        exit;
+      }
+    }
 }

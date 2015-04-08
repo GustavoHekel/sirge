@@ -25,23 +25,39 @@ $(document).ready(function(){
 			monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
 			minDate: new Date(2014, 0,1), maxDate: new Date(2020, 12,31)
 		});
-    
+        
 
 		$("#provincias").attr('name', 'id_provincia');
     
     $('#indicadores_provincia').submit(function(event){
         event.preventDefault();
         mostrar_loading();
-        $.ajax({
-            type : 'post',
-            url  : 'app/controladores/indicadores/resultados_medica.php',
-            data : $(this).serialize(),
-            success : function (data) {
-                //console.log (data);
-                $('#cuadros_indicadores').html(data);
-                ocultar_loading();
-            }
-        });
+
+        var d = new Date();
+        var month = d.getMonth()+1;
+        var year = d.getYear();
+        var fecha = $("#meses_periodo").val().split("-");
+        
+        if(( fecha[0] == year && fecha[1] < month ) || (fecha[0] < year))
+        {
+            $.ajax({
+                type : 'post',
+                url  : 'app/controladores/indicadores/resultados_medica.php',
+                data : $(this).serialize(),
+                success : function (data) {
+                    //console.log (data);
+                    $('#cuadros_indicadores').html(data);
+                    ocultar_loading();
+                }
+            });
+        }
+        else if( fecha[0] == year && fecha[1] == month ){
+            
+        }
+        else{
+            alert("No puede buscar un mes futuro.");
+            ocultar_loading();
+        }
     });
 });
 </script>

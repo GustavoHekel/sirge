@@ -86,13 +86,53 @@ $(document).ready(function(){
   
   $('.more').click(function(){
     
+    var numerador;
+    var denominador;
+    var resultado;
+
     var indicador = $(this).attr('indicador');
+
+    if(indicador == "3.6"){
+      numerador = "{NUMERADOR_INDICADOR_3.6.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.6.b}";
+      resultado = "{RESULTADO_INDICADOR_3.6}";
+    }
+    else if (indicador == "3.9"){
+      numerador = "{NUMERADOR_INDICADOR_3.9.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.9.b}";
+      resultado = "{RESULTADO_INDICADOR_3.9}";
+    }
+    else if (indicador == "3.10"){
+      numerador = "{NUMERADOR_INDICADOR_3.10.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.10.b}"; 
+      resultado = "{RESULTADO_INDICADOR_3.10}";
+    }
+    else if (indicador == "3.11"){
+      numerador = "{NUMERADOR_INDICADOR_3.11.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.11.b}";
+      resultado = "{RESULTADO_INDICADOR_3.11}";
+    }
+    else if (indicador == "3.12"){
+      numerador = "{NUMERADOR_INDICADOR_3.12.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.12.b}";       
+      resultado = "{RESULTADO_INDICADOR_3.12}";
+    }
+    else if (indicador == "3.13"){
+      numerador = "{NUMERADOR_INDICADOR_3.13.a}";
+      denominador = "{DENOMINADOR_INDICADOR_3.13.b}";       
+      resultado = "{RESULTADO_INDICADOR_3.13}";
+    }
 
     $.ajax({
      type : 'post',
      url  : 'app/controladores/indicadores/detalle_indicador.php',
      data: {
-      indicador : indicador
+      num : numerador,
+      den : denominador,
+      indicador : indicador,
+      id_provincia : "{id_provincia}",
+      resultado : resultado,
+      year : "{year}"
       },
      success : function (data) {
        $('#info-indicador').html(data).dialog({

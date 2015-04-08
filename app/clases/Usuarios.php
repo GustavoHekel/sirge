@@ -27,6 +27,14 @@ class Usuarios {
 			echo json_encode(false);;
 		}
 	}
+    
+    public static function getEmail ($id_usuario){
+      return Bdd::getInstance()->find('email','sistema.usuarios',['id_usuario = ?' , [$id_usuario]]);
+    }
+    
+    public function enviarSugerencia ($texto){
+      
+    }
 	
 }
 
