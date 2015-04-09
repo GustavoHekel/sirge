@@ -15,7 +15,7 @@ if (isset($id_provincia))
 
 	if (count($data))
 	{
-		die($inst_sirge->jsonDT($data, false));
+		echo $inst_sirge->jsonDT($data, false);
 	}
 	else
 	{
