@@ -1,0 +1,74 @@
+<script>
+$(document).ready(function(){
+	$('.contenedor-historial-ddjj').hide();
+	
+	$("#provincia").attr('name', 'provincia');
+
+	$("#provincia").change(function(){
+		mostrar_loading ();
+		$('.contenedor-historial-ddjj').fadeIn();
+		
+		$.ajax({
+			type : 'post' ,
+			data : $("#formu_histo_ddjj").serialize() ,
+			url  : 'app/controladores/backup_ugsp/tabla_historial_ddjj.php' ,
+			dataType : 'json' ,
+			success : function (data) {
+				ocultar_loading ();
+				$('#tabla_historial_ddjj').empty();
+				$('#tabla_historial_ddjj').dataTable({
+					"sDom": 'frt<"bottom"ip><"clear">' ,
+					"bInfo" : true ,
+					"bFilter" : true ,
+					"bDestroy" : true ,
+					"aaData": data ,
+					"aoColumns": [
+						{ "sTitle": "Provincia" , "mData": "provincia" , "sWidth" : "10%" } ,
+						{ "sTitle": "Usuario" , "mData": "usuario" , "sWidth" : "20%"} ,
+						{ "sTitle": "Per&iacute;odo reportado" , "mData": "periodo_reportado" , "sWidth" : "20%" } ,
+						{ "sTitle": "Fecha impresi&oacute;n" , "mData": "fecha_impresion" , "sWidth" : "20%" } ,
+						{ "sTitle": "Motivo reimpresi&oacute;n" , "mData": "motivo_reimpresion" , "sWidth" : "20%" } ,
+						{ "sTitle": "Versi&oacute;n" , "mData": "version" , "sWidth" : "5%" } ,
+						{ "sTitle": "" , "mData": "imprimir_ddjj" , "sWidth" : "5%"}
+					] ,
+				});
+				$('#tabla_historial_ddjj').css('width', '100%');
+			}
+		});
+	});
+	
+	$('#tabla_historial_ddjj').on('click' , '.imprimir_ddjj' , function(){
+		var id_impresion = $(this).attr('id_impresion');
+		
+		window.location.href = 'funciones/genera_declaracion_jurada_backup_sql.php?id_impresion=' + id_impresion;
+		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)		
+	});
+});
+</script>
+
+<div class="portlet box yellow listado-simple">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Seleccione provincia</div>
+	</div>
+	<div class="portlet-body">
+		<form id="formu_histo_ddjj" style="text-align: center">
+			Seleccione la provincia a consultar
+			{provincias}
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
+
+<div class="portlet box yellow listado-simple contenedor-historial-ddjj">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Historial de impresiones
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="container" style="width: 850px;">
+			<table id="tabla_historial_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>
+		</div>
+	</div>
+</div>
+

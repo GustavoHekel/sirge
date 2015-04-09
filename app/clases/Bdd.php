@@ -50,11 +50,10 @@ class Bdd {
     
     public function fquery ($file , $params = array() , $ajax = TRUE) {
         $clase = debug_backtrace()[1]['class'];
-        
         if ($ajax) {
-            $ruta = "../app/sql/{$clase}/" . $file . '.sql';
+          $ruta = "../app/sql/{$clase}/" . $file . '.sql';
 		} else {
-            $ruta = "../../../app/sql/{$clase}/" . $file . '.sql';
+          $ruta = "../../../app/sql/{$clase}/" . $file . '.sql';
         }
         $sql = file_get_contents($ruta);
         return $this->query($sql, $params);

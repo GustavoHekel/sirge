@@ -5,7 +5,9 @@
 		</div>
 	</div>
 	<div class="portlet-body">
-		<div class="container ddjj" style="width: 850px;"></div>
+    <div class="container ddjj_listado" style="width: 850px;">
+      <table id="tabla_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-condensed"></table>
+    </div>
 	</div>
 </div>
 
@@ -21,9 +23,6 @@ $(document).ready(function(){
 	
 	function armar_tabla () {
 		mostrar_loading();
-		$(".ddjj").empty();
-		$(".ddjj").append('<table id="tabla_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-condensed"></table>');
-
 		$.ajax({
 			type 		: 'post' ,
 			url  		: 'app/parserAjax.php' ,
@@ -51,9 +50,9 @@ $(document).ready(function(){
 	
 	armar_tabla ();
 	
-	$('.ddjj').on('click' , '.imprimir' , function (){
+	$('.ddjj_listado').on('click' , '.imprimir' , function (){
 		var id_impresion = $(this).attr('id_impresion');
-		window.location.href = 'app/ddjj_grupal.php?id_padron={ID_FUENTE_DATOS}&id_impresion=' + id_impresion;
+		window.location.href = 'app/funciones/ddjj_grupal.php?id_padron={ID_FUENTE_DATOS}&id_impresion=' + id_impresion;
 	});
 	
 });

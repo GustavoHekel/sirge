@@ -11,9 +11,9 @@ $resultado = $_POST['resultado'];
 $numerador = $_POST['num'];
 $denominador = $_POST['den'];
 
-$data = $indic->get_indicador_medica_rangos($indicador, $id_provincia, $year)[0];
+$data = $indic->getIndicadorMedicaRangos($indicador, $id_provincia, $year)[0];
 
-$data2       = $indic->get_descripcion_indicador($indicador)[0];
+$data2       = $indic->getDescripcionIndicador($indicador)[0];
 $descripcion = $data2['descripcion'];
 $desc_num    = $data2['numerador'];
 $desc_den    = $data2['denominador'];
@@ -37,3 +37,5 @@ $html = [
 ];
 
 Html::vista($html, $diccionario);
+
+?>

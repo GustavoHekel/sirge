@@ -26,18 +26,18 @@ for ($i = 0; $i < 6; $i++)
 	$indicador_a = $indicador.".a";
 	$indicador_b = $indicador.".b";
 
-	$data = $indic->get_indicador_medica_rangos($indicador, $id_provincia, $year);
+	$data = $indic->getIndicadorMedicaRangos($indicador, $id_provincia, $year);
 
 	$row[$i] = $data[0];
 
-	$data2 = $indic->get_res_ind_prov($periodo, $id_provincia, '%'.$indicador.'%');
+	$data2 = $indic->getResultadosIndicadorProvincial($periodo, $id_provincia, '%'.$indicador.'%');
 
 	for ($w = 0; $w < count($data2); $w++)
 	{
 
 		if (in_array($data2[$w]['codigo_indicador'], array("3.11.b", "3.12.b", "3.13.b")))
 		{
-			$resultado = $indic->get_res_ind_prov_promedio($fecha, $fecha, $id_provincia, $data2[$w]['codigo_indicador'])[0]['round'];
+			$resultado = $indic->getResultadosIndicadorProvPromedio($fecha, $fecha, $id_provincia, $data2[$w]['codigo_indicador'])[0]['round'];
 		}
 		else
 		{
@@ -63,7 +63,7 @@ for ($i = 0; $i < count($row); $i++)
 
 	$array_a_mostrar['RESULTADO_INDICADOR_'.$row[$i]['codigo_indicador']] = $row[$i]['valor'];
 	$array_a_mostrar['INDICADOR_'.$row[$i]['codigo_indicador']] = $row[$i]['codigo_indicador'];
-	//$array_a_mostrar['DESCRIPCION_INDICADOR_'.$row[$i]['codigo_indicador']] = $indic->get_descripcion_indicador($row[$i]['codigo_indicador'])[0]['descripcion'];
+	//$array_a_mostrar['DESCRIPCION_INDICADOR_'.$row[$i]['codigo_indicador']] = $indic->getDescripcionIndicador($row[$i]['codigo_indicador'])[0]['descripcion'];
 
 	if (isset($row[$i]['3.'.$indicadores[$i].'.a']))
 	{

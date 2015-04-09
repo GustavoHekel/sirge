@@ -13,26 +13,26 @@ class Indicadores {
 		return $this->_db->fquery('prueba', [1], false)->getResults();
 	}
 
-	public function get_indicador_medica_rangos($indicador, $id_provincia, $year)
+	public function getIndicadorMedicaRangos($indicador, $id_provincia, $year)
 	{
-		return $this->_db->fquery('indicador_medica_rangos', [$indicador, $id_provincia, $year], false)->getResults();
+		return $this->_db->fquery('getIndicadorMedicaRangos', [$indicador, $id_provincia, $year], false)->getResults();
 		//echo '<pre>', print_r($this->_db->getResults()), '</pre>';
 	}
 
-	public function get_res_ind_prov($periodo, $id_provincia, $indicador)
+	public function getResultadosIndicadorProvincial($periodo, $id_provincia, $indicador)
 	{
-		return $this->_db->fquery('res_ind_prov', [$periodo, $id_provincia, $indicador], false)->getResults();
+		return $this->_db->fquery('getResultadosIndicadorProvincial', [$periodo, $id_provincia, $indicador], false)->getResults();
 	}
 
-	public function get_res_ind_prov_promedio($fecha, $fecha, $id_provincia, $indicador)
+	public function getResultadosIndicadorProvPromedio($fecha, $fecha, $id_provincia, $indicador)
 	{
-		return $this->_db->fquery('res_ind_prov_promedio', [$fecha, $fecha, $id_provincia, $indicador], false)->getResults();
+		return $this->_db->fquery('getResultadosIndicadorProvPromedio', [$fecha, $fecha, $id_provincia, $indicador], false)->getResults();
 		//echo '<pre>', print_r($this->_db->getResults()), '</pre>';
 	}
 
-	public function get_descripcion_indicador($indicador)
+	public function getDescripcionIndicador($indicador)
 	{
-		return $this->_db->fquery('descripcion_indicador', [$indicador], false)->getResults();
+		return $this->_db->fquery('getDescripcionIndicador', [$indicador], false)->getResults();
 	}
 
 }

@@ -63,7 +63,7 @@ $(document).ready(function(){
 			url  	: 'app/controladores/padron/detalle_lote.php' ,
 			data 	: 'lote=' + lote ,
 			success : function (data) {
-				if (estado === 2) {
+				if (estado == 2) {
 					botones[0] = {
 						text : 'Eliminar lote',
 						class : 'btn blue',

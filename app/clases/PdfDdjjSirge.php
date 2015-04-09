@@ -181,8 +181,6 @@ class PdfDdjjSirge extends Pdf {
 		$this->Ln(15);
 	}
 	
-	
-	
 	public function ddjjSirge ($id_impresion) {
 		$this->getDataImpresion($id_impresion);
 		$this->encabezado();

@@ -7,8 +7,8 @@ class Pdf extends FPDF {
 	}
 	
 	private
-		$_logo_sumar = '../public/img/sumar-grande.png',
-		$_logo_minis = '../public/img/min_logo.jpg';
+		$_logo_sumar = '../../public/img/sumar-grande.png',
+		$_logo_minis = '../../public/img/min_logo.jpg';
 	
 	final public function header () {
 		$this->SetFont('Arial','B',11);
@@ -34,5 +34,3 @@ class Pdf extends FPDF {
 	}
 	
 }
-
-?>
