@@ -21,16 +21,8 @@ $(document).ready(function(){
 					"bInfo" : true ,
 					"bFilter" : true ,
 					"bDestroy" : true ,
-					"aaData": data ,
-					"aoColumns": [
-						{ "sTitle": "Provincia" , "mData": "provincia" , "sWidth" : "10%" } ,
-						{ "sTitle": "Usuario" , "mData": "usuario" , "sWidth" : "20%"} ,
-						{ "sTitle": "Per&iacute;odo reportado" , "mData": "periodo_reportado" , "sWidth" : "20%" } ,
-						{ "sTitle": "Fecha impresi&oacute;n" , "mData": "fecha_impresion" , "sWidth" : "20%" } ,
-						{ "sTitle": "Motivo reimpresi&oacute;n" , "mData": "motivo_reimpresion" , "sWidth" : "20%" } ,
-						{ "sTitle": "Versi&oacute;n" , "mData": "version" , "sWidth" : "5%" } ,
-						{ "sTitle": "" , "mData": "imprimir_ddjj" , "sWidth" : "5%"}
-					] ,
+					"aaData": data['data'] ,
+					"aoColumns": data['aoColumns']
 				});
 				$('#tabla_historial_ddjj').css('width', '100%');
 			}
@@ -40,7 +32,7 @@ $(document).ready(function(){
 	$('#tabla_historial_ddjj').on('click' , '.imprimir_ddjj' , function(){
 		var id_impresion = $(this).attr('id_impresion');
 		
-		window.location.href = 'funciones/genera_declaracion_jurada_backup_sql.php?id_impresion=' + id_impresion;
+		window.location.href = 'app/funciones/genera_declaracion_jurada_backup_sql.php?id_impresion=' + id_impresion;
 		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)		
 	});
 });
