@@ -11,9 +11,9 @@ $resultado = $_POST['resultado'];
 $numerador = $_POST['num'];
 $denominador = $_POST['den'];
 
-$data = $indic->get_indicador_medica_rangos($indicador, $id_provincia, $year)[0];
+$data = $indic->getIndicadorMedicaRangos($indicador, $id_provincia, $year)[0];
 
-$data2       = $indic->get_descripcion_indicador($indicador)[0];
+$data2       = $indic->getDescripcionIndicador($indicador)[0];
 $descripcion = $data2['descripcion'];
 $desc_num    = $data2['numerador'];
 $desc_den    = $data2['denominador'];
@@ -26,8 +26,8 @@ $diccionario = [
 	'ANCHO_VERDE'      => (intval($data['min_verde'] - $data['max_verde']) * 500 / intval($data['min_verde'])),
 	'RESULTADO_PX'     => (intval($resultado) * 500 / intval($data['min_verde'])),
 	'RESULTADO_XX'     => intval($resultado),
-	'NUMERADOR'        => $indicador.'.a        = '.$numerador,
-	'DENOMINADOR'      => $indicador.'.b      = '.$denominador,
+	'NUMERADOR'        => $indicador.'.a               = '.$numerador,
+	'DENOMINADOR'      => $indicador.'.b           = '.$denominador,
 	'NOMBRE_INDICADOR' => $descripcion.' - ('.$indicador.')',
 	'DESC_NUMERADOR'   => html_entity_decode($desc_num),
 	'DESC_DENOMINADOR' => html_entity_decode($desc_den)];
