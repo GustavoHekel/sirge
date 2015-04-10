@@ -32,7 +32,7 @@ $(document).ready(function(){
 	$('#tabla_historial_ddjj').on('click' , '.imprimir_ddjj' , function(){
 		var id_impresion = $(this).attr('id_impresion');
 		
-		window.location.href = 'app/funciones/genera_declaracion_jurada_backup_sql.php?id_impresion=' + id_impresion;
+		window.location.href = 'app/funciones/ddjj_backup.php?id_impresion=' + id_impresion;
 		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)		
 	});
 });

@@ -4,6 +4,8 @@ require_once '../../../init.php';
 
 $inst_ddjj = new DdjjBackup();
 
+//$_SESSION['grupo'] = "04";
+
 if ( ! isset($_POST['acc']))
 {
 	$Html = array(
@@ -29,7 +31,7 @@ else
 		{
 				$data = $inst_ddjj->getImpresionEnPeriodo($_SESSION['grupo'], $_POST['periodo']);
 
-				if ($data)
+				if ($data > 0)
 			{
 					die("1"); 	// Ya se informó el periodo
 				}
@@ -46,7 +48,7 @@ else
 
 			if ($res)
 		{
-				$version = $res[0] + 1;
+				$version = $res + 1;
 			}
 		else
 		{
@@ -57,19 +59,23 @@ else
 
 			if ($data)
 		{
-				die("1");
+				die("0"); 	//Se generó un error en la query.
 			}
 		else
 		{
-				die("0");
+				die("1"); 	//Se ingresaron correctamente los datos.
 			}
 			break;
 
 		case 'reimprimir':
 
-			$data = $inst_ddjj->insertarMotivoReimpresionDdjj(htmlentities($_POST['motivo_reimpresion'], ENT_QUOTES, 'UTF-8'), $_SESSION['grupo'], $_POST['periodo'], $_SESSION['grupo'], $_POST['periodo']);
+			$data = $inst_ddjj->updateMotivoReimpresionDdjj(htmlentities($_POST['motivo_reimpresion'], ENT_QUOTES, 'UTF-8'), $_SESSION['grupo'], $_POST['periodo'], $_SESSION['grupo'], $_POST['periodo']);
 
 			if ($data)
+		{
+				die('0');
+			}
+		else
 		{
 				die('1');
 			}

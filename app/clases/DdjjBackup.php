@@ -23,13 +23,18 @@ class DdjjBackup extends PdfDdjjSirge {
 		return $this->_db->fquery('insertarBackupDdjj', [$grupo, $usuario, $periodo, $fecha_backup, $nombre_backup, $version], false)->getError();
 	}
 
-	public function insertarMotivoReimpresionDdjj($motivo, $grupo, $periodo, $grupo, $periodo)
+	public function updateMotivoReimpresionDdjj($motivo, $grupo, $periodo, $grupo, $periodo)
 	{
-		return $this->_db->fquery('insertarMotivoReimpresionDdjj', [$motivo, $grupo, $periodo, $grupo, $periodo], false)->getError();
+		return $this->_db->fquery('updateMotivoReimpresionDdjj', [$motivo, $grupo, $periodo, $grupo, $periodo], false)->getError();
 	}
 
 	public function getHistorialDdjjProvincia($id_provincia)
 	{
 		return $this->_db->fquery('getHistorialDdjjProvincia', [$id_provincia], false)->getResults();
+	}
+
+	public function getBackupsAño($id_provincia, $año)
+	{
+		return $this->_db->fquery('getBackupsAño', [$id_provincia, $año], false)->getResults();
 	}
 }

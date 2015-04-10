@@ -1,0 +1,73 @@
+<div class="portlet box {CSS_GLOBAL} form-up-data">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Seleccione efector a dar de baja</div>
+	</div>
+	<div class="portlet-body">
+		<form id="formu_baja" style="text-align: center">
+			<div>Ingrese el CUIE o código SIISA del efector a dar de baja
+				<input id="efector_baja" name="efector" class="span2 m-wrap" type="text" data-provide="typeahead" autocomplete="off">
+				<input class="btn {CSS_GLOBAL}" type="submit" value="Buscar">
+			</div>
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
+<div id="display_baja"></div>
+<div style="display: none;">
+  <div id="mensaje_baja"></div>
+</div>
+
+<script>
+$(document).ready(function(){
+  estilo_dialog('{CSS_GLOBAL}');
+  
+  $('#efector_baja').typeahead({
+		source : function (query , process) {
+			$.ajax({
+				type : 'get' ,
+        data : {
+          c : 'Efectores',
+          m : 'efectorJson',
+          p : 'term=' + query
+        } ,
+        url : 'app/parserAjax.php',
+				dataType : 'json' ,
+				success : function (data) {
+					process (data);
+				}
+			});
+		} ,
+		minLength : 2
+	});
+  
+  $("#formu_baja").submit(function(event){
+		event.preventDefault();
+		mostrar_loading ();
+      
+    if ($('#efector_baja').val().length != 6) {
+      $('#mensaje_baja')
+        .html('El CUIE ingresado es incorrecto')
+        .dialog({
+          title : 'Atención!',
+          buttons : [{
+              text : 'Aceptar',
+              class : 'btn green',
+              click : function (){
+                $(this).dialog('close');
+              }
+          }]
+        });
+    } else {
+      $.ajax({
+        type : 'post',
+        url : 'app/controladores/efectores/abm/form_baja.php',
+        data : $(this).serialize(),
+        success : function (data){
+          $('#display_baja').html(data);
+          ocultar_loading();
+        }
+      });
+    }
+  });
+});
+</script>

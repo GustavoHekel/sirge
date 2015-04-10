@@ -21,39 +21,25 @@ class Efectores {
 	}
 	
     public function listar ($post) {
-      
       if (strlen ($post['search']['value'])){
         $sql = 'listar_filtrado';
-        $params = [
-          '%' . $post['search']['value'] . '%',
-          '%' . $post['search']['value'] . '%',
-          '%' . $post['search']['value'] . '%',
-          $post['length'],
-          $post['start'],
-        ];
+        $params = ['%' . $post['search']['value'] . '%' , '%' . $post['search']['value'] . '%' , '%' . $post['search']['value'] . '%' , $post['length'] , $post['start']];
       } else {
         $sql = 'listar';
-        $params = [
-          $post['length'],
-          $post['start'],
-        ];
+        $params = [$post['length'] , $post['start']];
       }
-      
       $data = $this->_db->fquery($sql , $params , FALSE)->getResults();
-      
       foreach ($data as $key => $value) {
         $json['data'][$key] = $value;
       }
-      
       $json['recordsFiltered'] = $this->_db->findCount('efectores.efectores' , ['id_estado in (?,?)' , [1,4]]);
       $json['recordsTotal'] = $this->_db->findCount('efectores.efectores' , ['id_estado in (?,?)' , [1,4]]);
       $json['draw'] = $post['draw']++;
-
       return (json_encode ($json));
     }
       
     public function getEfector ($id_efector) {
-      return $this->_db->fquery('getEfector' , [$id_efector] , FALSE)->getResults()[0];
+      return $this->_db->fquery('getEfector' , [$id_efector])->getResults()[0];
     }
     
     public function getEfectorGeo ($id_efector) {
@@ -136,6 +122,46 @@ where
       
       foreach ($data as $index => $valor) {
         file_put_contents($ruta , html_entity_decode (implode("\t", $valor) , ENT_QUOTES , 'UTF-8') . "\r\n", FILE_APPEND);
+      }
+    }
+    
+    public function efectorJson ($busqueda){
+      $params = [
+        $busqueda . '%',
+        $busqueda . '%'
+      ];
+      echo json_encode($this->_db->fquery('efectorJson' , $params , TRUE)->getList());
+    }
+    
+    public function getInfoBaja ($cuie){
+      return $this->_db->findAll('efectores.efectores' , ['cuie = ?' , [$cuie]]);
+    }
+    
+    public function baja ($cuie){
+      $sql = "update efectores.efectores set id_estado = 3 where cuie = ?";
+      $params = [$cuie];
+      
+      if (! $this->_db->query($sql , $params)->getError()){
+        echo 'Se ha soliciado la baja del efector ' . $cuie . ', estar&aacute; a revisi&oacute;n del &aacute;rea C&aacute;pitas.';
+      } else {
+        echo 'Ha ocurrido un error.';
+      }   
+    }
+    
+    public function getSiisa ($jurisdiccion) {
+      $sql = "
+        select '99999999' || '{$jurisdiccion}' || lpad ((max (substring (siisa from 11 for 4)) :: numeric + 1 ) :: varchar , 4 , '0') as siisa
+        from 
+          efectores.efectores 
+        where 
+          substring (siisa from 1 for 8) = '99999999'
+          and substring (siisa from 9 for 2) = ?";
+      $this->_db->query($sql , [$jurisdiccion]);
+      
+      if ($this->_db->getCount()) {
+        echo $this->_db->get()['siisa'];
+      } else {
+        echo '99999999' . $jurisdiccion . '0001' ;
       }
     }
 }

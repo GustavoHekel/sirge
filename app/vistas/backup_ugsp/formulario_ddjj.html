@@ -136,11 +136,11 @@
 				$.ajax({
 					type : 'post' ,
 					data : 'acc=generaddjj&' + $(this).serialize() + '&' + $("#meses_periodo").serialize() ,
-					url  : 'modulos/backup_ugsp/formulario_ddjj.php' ,
+					url  : 'app/controladores/backup_ugsp/formulario_ddjj.php' ,
 					success : function (data) {
 
 						if (data == '1') {
-							window.location.href = 'funciones/genera_declaracion_jurada_backup.php?' + $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() ;
+							window.location.href = 'app/funciones/ddjj_backup.php?' + $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() ;
 							$('#formu_datos')[0].reset();
 							$("#datos_complementarios").fadeOut();
 						} else {
@@ -180,10 +180,26 @@
 				$.ajax({
 					type : 'post' ,
 					data : $(form).serialize() + '&acc=reimprimir&periodo=' + $('#meses_periodo').val() , 
-					url  : 'modulos/backup_ugsp/formulario_ddjj.php' ,
+					url  : 'app/controladores/backup_ugsp/formulario_ddjj.php' ,
 					success : function (data) {
 						$('#formu_mensaje').dialog('close');
-						$("#datos_complementarios").fadeIn();
+						if(data = '1'){							
+							$("#datos_complementarios").fadeIn();
+						}
+						else{
+							$('#mensaje_ajax').html('Ha ocurrido al registrar el motivo, por favor contacte un administrador');
+							$('#mensaje_ajax').dialog({
+								title : '¡Atención!' ,
+								buttons : [{
+									text : 'Aceptar' ,
+									class : 'btn green' ,
+									click : function () {
+										$(this).dialog('close');
+									}
+								}]
+							});
+						}
+						
 					}
 				});
 			}
