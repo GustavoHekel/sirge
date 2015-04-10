@@ -164,4 +164,24 @@ where
         echo '99999999' . $jurisdiccion . '0001' ;
       }
     }
+    
+    public function selectTipoEfector(){
+      $sql = "select * from efectores.tipo_efector where id_tipo_efector <> 9";
+      $data = $this->_db->query($sql)->getResults();
+      $select = '';
+      foreach ($data as $key => $value){
+        $select .= "<option value='{$value['id_tipo_efector']}'>{$value['descripcion']}</option>";
+      }
+      return $select;
+    }
+    
+    public function selectCategorizacion(){
+      $sql = "select * from efectores.tipo_categorizacion where id_categorizacion <> 10";
+      $data = $this->_db->query($sql)->getResults();
+      $select = '';
+      foreach ($data as $key => $value){
+        $select .= "<option value='{$value['id_categorizacion']}'>{$value['descripcion']}</option>";
+      }
+      return $select;
+    }
 }

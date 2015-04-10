@@ -116,8 +116,6 @@ class Bdd {
 		return $this->accion("select {$campo}" , $tabla , $where)->_query->fetch(PDO::FETCH_ASSOC)[$campo];
 	}
 	
-	
-	
 	public function insert($tabla, $campos = array(), $data = array()){
 		$placeholder = '(' . implode (',' , array_fill (0 , count($campos) , '?')) . ')';
 		$sql = "insert into {$tabla} (" . implode (',', $campos) . ") values {$placeholder}";
