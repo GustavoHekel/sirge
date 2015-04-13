@@ -17,9 +17,9 @@ WHERE e.id_estado IN (
 		,4
 		)
     AND (
-      cuie LIKE ?
-      OR siisa LIKE ?
-      OR nombre LIKE ?
+      cuie ILIKE ?
+      OR siisa ILIKE ?
+      OR nombre ILIKE ?
     )
 ORDER BY 2
 LIMIT ?

@@ -39,7 +39,7 @@ class Efectores {
     }
       
     public function getEfector ($id_efector) {
-      return $this->_db->fquery('getEfector' , [$id_efector])->getResults()[0];
+      return $this->_db->fquery('getEfector' , [$id_efector] , FALSE)->getResults()[0];
     }
     
     public function getEfectorGeo ($id_efector) {
@@ -181,6 +181,16 @@ where
       $select = '';
       foreach ($data as $key => $value){
         $select .= "<option value='{$value['id_categorizacion']}'>{$value['descripcion']}</option>";
+      }
+      return $select;
+    }
+    
+    public function selectDependencia(){
+      $sql = "select * from efectores.tipo_dependencia_administrativa where id_dependencia_administrativa <> 5";
+      $data = $this->_db->query($sql)->getResults();
+      $select = '';
+      foreach ($data as $key => $value){
+        $select .= "<option value='{$value['id_dependencia_administrativa']}'>{$value['descripcion']}</option>";
       }
       return $select;
     }

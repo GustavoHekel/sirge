@@ -13,8 +13,11 @@ if (isset($_POST['year'])) {
 		'../../vistas/backup_ugsp/diario_anual.html',
 	);
 
+	/*$diccionario = array(
+	'id_provincia' => $_SESSION['grupo']);*/
+
 	$diccionario = array(
-		'id_provincia' => $_SESSION['grupo']);
+		'id_provincia' => '04');
 
 	Html::vista($Html, $diccionario);
 }

@@ -10,18 +10,18 @@ class PdfDdjjBackup extends Pdf {
 	$_data_backup,
 	$_ddjj,
 	$_db;
+	var $widths;
+	var $aligns;
 
-	public function __construct()
-	{
+	public function __construct() {
 		parent::FPDF();
-		$this->_db = Bdd::getInstance();
+		$this->_db   = Bdd::getInstance();
 		$this->_ddjj = new Ddjj();
 	}
 
-	protected function encabezado()
-	{
+	protected function encabezado() {
 
-		$this->_texto = "Por medio de la presente certifico que el día ".fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion'])." se ha realizado por duplicado la Copia de Resguardo Completa de la Base de Datos de Inscripción referente al período ".$this->_data_backup[0]['periodo_reportado']." en el archivo ".$this->_data_backup[0]['nombre_backup'].".";
+		$this->_texto      = "Por medio de la presente certifico que el día " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']) . " se ha realizado por duplicado la Copia de Resguardo Completa de la Base de Datos de Inscripción referente al período " . $this->_data_backup[0]['periodo_reportado'] . " en el archivo " . $this->_data_backup[0]['nombre_backup'] . ".";
 		$this->_constancia = "Dejo constancia bajo juramento que la información enviada en esta nota es exacta y verdadera y que las copias han sido elaboradas y resguardadas siguiendo todos los procedimientos razonables para garantizar la mayor exactitud posible. Las mismas se encuentran a disposición de cualquier autoridad competente que las requiera.";
 
 		$this->Cell(130);
@@ -31,7 +31,7 @@ class PdfDdjjBackup extends Pdf {
 		$this->Cell(140, 10, utf8_decode('FORMULARIO BACKUP DE DATOS DE INSCRIPCION'), 1, 0, 'C');
 		$this->Cell(30, 10, numero_ddjj($this->_data_backup[0]['id_provincia'], $this->_data_backup[0]['periodo_reportado']), 1, 0, 'C');
 
-		$this->Cell(-10, 35, utf8_decode(Sirge::getNombreProvincia($this->_data_backup[0]['id_provincia'])).", ".fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
+		$this->Cell(-10, 35, utf8_decode(Sirge::getNombreProvincia($this->_data_backup[0]['id_provincia'])) . ", " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("SEÑOR"));
 		$this->Ln();
@@ -52,8 +52,7 @@ class PdfDdjjBackup extends Pdf {
 		$this->Ln(15);
 	}
 
-	protected function getDataImpresion($id_impresion)
-	{
+	protected function getDataImpresion($id_impresion) {
 
 		$params = array($id_impresion);
 		$sql    = "
@@ -66,8 +65,7 @@ class PdfDdjjBackup extends Pdf {
 		$this->_data_backup = $this->_db->query($sql, $params)->getResults();
 	}
 
-	protected function setDataBackup($id_impresion)
-	{
+	protected function setDataBackup($id_impresion) {
 
 		$params = array($id_impresion);
 		$sql    = "
@@ -80,10 +78,50 @@ class PdfDdjjBackup extends Pdf {
 		$this->_data_backup = $this->_db->query($sql, $params)->getResults();
 	}
 
-	function mes_a_texto($numero)
-	{
-		switch ($numero)
-		{
+	public function getBackupsAño($id_provincia, $year) {
+
+		$params = array('id_provincia' => $id_provincia, 'year' => $year);
+
+		$sql = "	SELECT
+					p.descripcion AS Provincia
+					, u.usuario
+					, periodo_reportado AS Periodo
+					, version AS Version
+					, fecha_impresion :: date AS Fecha_impresion
+
+					FROM
+						ddjj.backup i
+						,sistema.usuarios u
+						,sistema.provincias p
+						, ( SELECT periodo_reportado as periodoRepor, max(fecha_impresion) as maxFecha
+							FROM
+								ddjj.backup
+							WHERE
+								id_provincia = :id_provincia
+							GROUP BY 1
+							) as tabla
+
+					WHERE
+						i.id_usuario = u.id_usuario
+					AND
+						i.id_provincia = p.id_provincia
+					AND
+						i.id_provincia = :id_provincia
+					AND
+						substring(periodo_reportado,0,5) = :year
+					AND
+						periodo_reportado = periodoRepor
+					AND
+						i.fecha_impresion = tabla.maxFecha
+
+					ORDER BY 1,2,3,4,5";
+
+		return $this->_db->aquery($sql, $params)->getResults();
+
+	}
+
+	function mes_a_texto($numero) {
+		switch ($numero) {
 			case 1:$mes = 'Enero';
 				break;
 			case 2:$mes = 'Febrero';
@@ -113,15 +151,13 @@ class PdfDdjjBackup extends Pdf {
 		return $mes;
 	}
 
-	public function ddjjImpBackup($id_impresion)
-	{
+	public function ddjjImpBackup($id_impresion) {
 		$this->getDataImpresion($id_impresion);
 		$this->encabezado();
 		$this->saludo();
 	}
 
-	public function ddjjImpBackupGen($fecha_backup, $nombre_backup, $periodo, $id_provincia)
-	{
+	public function ddjjImpBackupGen($fecha_backup, $nombre_backup, $periodo, $id_provincia) {
 
 		$parametros = [$id_provincia, $fecha_backup, $nombre_backup, $periodo];
 
@@ -140,21 +176,17 @@ class PdfDdjjBackup extends Pdf {
 
 		return $data['id_impresion'];
 	}
-
 }
 
-function numero_ddjj($id_provincia, $periodo)
-{
+function numero_ddjj($id_provincia, $periodo) {
 	return utf8_decode("Nº $id_provincia/$periodo");
 }
 
-function fecha_con_nombre_mes($fecha)
-{
+function fecha_con_nombre_mes($fecha) {
 
 	$fecha_array = explode('-', $fecha);
 
-	switch ($fecha_array[1])
-	{
+	switch ($fecha_array[1]) {
 		case 1:$mes = 'Enero';
 			break;
 		case 2:$mes = 'Febrero';
@@ -182,7 +214,7 @@ function fecha_con_nombre_mes($fecha)
 		default:break;
 	}
 
-	return utf8_decode(html_entity_decode(substr($fecha_array[2], 0, 2).' de '.$mes.' de '.$fecha_array[0]));
+	return utf8_decode(html_entity_decode(substr($fecha_array[2], 0, 2) . ' de ' . $mes . ' de ' . $fecha_array[0]));
 }
 
 ?>
