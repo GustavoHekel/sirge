@@ -2,22 +2,19 @@
 
 require_once '../../../init.php';
 
-$inst_ddjj = new DdjjBackup();
+$inst_ddjj  = new DdjjBackup();
+$inst_sirge = new Sirge();
 
-if (isset($_POST['year']))
-{
-	var_dump($data = $inst_ddjj->getBackupsAño($_SESSION['grupo'], $_POST['year']));
-}
-else
-{
+if (isset($_POST['year'])) {
+	$data = $inst_ddjj->getBackupsAño($_SESSION['grupo'], $_POST['year']);
+	echo $inst_sirge->jsonDT($data, false);
+} else {
 	$Html = array(
 		'../../vistas/backup_ugsp/diario_anual.html',
 	);
 
-	$sirge = new Sirge();
-
 	$diccionario = array(
-		'provincias' => $sirge->selectProvincia('provincia', $_SESSION['grupo']));
+		'id_provincia' => $_SESSION['grupo']);
 
 	Html::vista($Html, $diccionario);
 }

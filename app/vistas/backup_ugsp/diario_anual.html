@@ -3,44 +3,52 @@ $(document).ready(function(){
 
 	$("#tabla_diario_anual").hide();
 
-	for (i = new Date().getFullYear(); i > 2013; i--)
+	for (i = new Date().getFullYear(); i > 2014; i--)
 	{
 	    $('#yearpicker').append($('<option />').val(i-1).html(i-1));
 	}
 
 	$('#yearpicker').on('change', function(event) {
 		event.preventDefault();
-		mostrar_loading();
 		
-		$.ajax({
-			url: 'app/controladores/backup_ugsp/diario_anual.php',
-			type: 'post',
-			dataType: 'json',
-			data: $('#yearpicker').serialize(),
-			success : function(data){
-				ocultar_loading ();
-				$('#tabla_diario_anual_ddjj').empty();
-				$('#tabla_diario_anual_ddjj').dataTable({
-					"sDom": 'frt<"bottom"ip><"clear">' ,
-					"bInfo" : true ,
-					"bFilter" : true ,
-					"bDestroy" : true ,
-					"aaData": data['data'] ,
-					"aoColumns": data['aoColumns']
-				});
-				$('#tabla_diario_anual_ddjj').css('width', '100%');
-			}
-		}).fail(function() {
-			console.log("error");
-		})
+		if($("#yearpicker").val() != ""){
+			mostrar_loading();
+		
+			$.ajax({
+				url: 'app/controladores/backup_ugsp/diario_anual.php',
+				type: 'post',
+				dataType: 'json',
+				data: $('#yearpicker').serialize(),
+				success : function(data){
+					ocultar_loading ();
+					$('#tabla_diario_anual_ddjj').empty();
+					$('#tabla_diario_anual_ddjj').dataTable({
+						"sDom": 'frt<"bottom"ip><"clear">' ,
+						"bInfo" : true ,
+						"bFilter" : true ,
+						"bDestroy" : true ,
+						"aaData": data['data'] ,
+						"aoColumns": data['aoColumns']
+					});
+					$("#tabla_diario_anual").show();
+					$('#tabla_diario_anual_ddjj').css('width', '100%');
+				}
+			}).fail(function() {
+				console.log("error");
+			})
+		}
 	});
+
+
 	
-	/*$('#tabla_diario_anual_ddjj').on('click' , '.imprimir_ddjj' , function(){
-		var id_impresion = $(this).attr('id_impresion');
-		
-		window.location.href = 'app/funciones/ddjj_backup.php?id_impresion=' + id_impresion;
+	$('#tabla_diario_anual').on('click' , '#imprimir_ddjj' , function(event){
+		event.preventDefault();
+		var id_provincia = "{id_provincia}";
+		var year =  $('#yearpicker').serialize();
+	
+		window.location.href = 'app/funciones/imprimir_diario_anual.php?id_provincia=' + id_provincia + '&'+ year;
 		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)		
-	});*/
+	});
 });
 </script>
 
@@ -51,7 +59,10 @@ $(document).ready(function(){
 	<div class="portlet-body">
 		<form id="formu_periodo" style="text-align: center">
 			<div>Seleccione el a&ntilde;o a mostrar
-				<select name="year" id="yearpicker"></select>
+				<select name="year" id="yearpicker">
+					<option value="">Seleccione a&ntilde;o</option>
+				</select>
+				
 			</div>
 		</form>
 		<div class="error" style="display: none;"></div>
@@ -71,6 +82,9 @@ $(document).ready(function(){
 	<div class="portlet-title">
 		<div class="caption">
 			<i class="icon-reorder"></i>Diario Anual
+		</div>
+		<div class="actions">
+				<a href="#" id="imprimir_ddjj" class="btn green"><i class="icon-print"></i> Imprimir</a>
 		</div>
 	</div>
 	<div class="portlet-body">
