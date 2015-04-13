@@ -85,6 +85,9 @@ $sql = "
 	ALTER TABLE sistema.impresiones_ddjj_backup SET SCHEMA ddjj;
 	ALTER TABLE sistema.impresiones_ddjj_sirge SET SCHEMA ddjj;
 	ALTER TABLE sistema.impresiones_ddjj_doiu9 SET SCHEMA ddjj;
+    ALTER TALBE efectores.departametos SET SCHEMA geo;
+    ALTER TABLE efectores.localidades SET SCHEMA geo;
+    alter table efectores.entidades set schema geo
 	
 	ALTER TABLE ddjj.impresiones_ddjj_backup RENAME TO backup;
 	ALTER TABLE ddjj.impresiones_ddjj_sirge RENAME TO sirge;

@@ -41,7 +41,7 @@ $(document).ready(function(){
 	
 	$('#tabla_diario_anual').on('click' , '#imprimir_ddjj' , function(event){
 		event.preventDefault();
-		var id_provincia = "{id_provincia}";
+		var id_provincia = "{id_provincia}";		
 		var year =  $('#yearpicker').serialize();
 	
 		window.location.href = 'app/funciones/imprimir_diario_anual.php?id_provincia=' + id_provincia + '&'+ year;

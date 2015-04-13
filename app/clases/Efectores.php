@@ -2,7 +2,46 @@
 
 class Efectores {
 		
-	private $_db;
+	private 
+      $_db,
+      $_efector = [
+        'cuie',
+        'siisa',
+        'nombre',
+        'domicilio',
+        'codigo_postal',
+        'tipo_efector',
+        'rural',
+        'cics',
+        'categorizacion',
+        'dependencia_adm',
+        'dependencia_san',
+        'integrante',
+        'compromiso',
+        'alto_impacto',
+        'referente',
+        'numero_compromiso',
+        'firmante_compromiso',
+        'fecha_sus_cg',
+        'fecha_ini_cg',
+        'fecha_fin_cg',
+        'pago_indirecto',
+        'numero_convenio',
+        'firmante_convenio',
+        'fecha_sus_ca',
+        'fecha_ini_ca',
+        'fecha_fin_ca',
+        'nombre_adm',
+        'codigo_adm',
+        'provincia',
+        'ciudad',
+        'departamento',
+        'localidad',
+        'email',
+        'email_observaciones',
+        'telefono',
+        'telefono_observaciones'
+      ];
 	
 	public function __construct(){
 		$this->_db = Bdd::getInstance();
@@ -194,4 +233,9 @@ where
       }
       return $select;
     }
+    
+    public function alta () {
+      $data = (array_combine($this->_efector, func_get_args()));
+    }
+    
 }

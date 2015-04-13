@@ -170,13 +170,13 @@
 			<div class="row-fluid">
 				<div class="span6 ">
 					<div class="control-group">
-						<label class="control-label">Alto Impacto</label>
+						<label class="control-label">Priorizado</label>
 						<div class="controls">
-							<select id="alto_impacto" name="alto_impacto" class="m-wrap span12">
+							<select id="priorizado" name="priorizado" class="m-wrap span12">
 								<option value="N">No</option>
 								<option value="S">Si</option>
 							</select>
-							<span class="help-block">Indique si el efector es de alto impacto o no</span>
+							<span class="help-block">Indique si el efector es priorizado o no</span>
 						</div>
 					</div>
 				</div>
@@ -455,7 +455,92 @@
 </div>
 <script>
 $(document).ready(function(){
+  
   estilo_dialog('{CSS_GLOBAL}');
+  $("#compromiso_gestion , #convenio_administrativo").hide();
+  
+  $("#compromiso").change(function(){
+		var estado = $(this).val();
+		var integrante = $("#integrante").val();
+		
+		if (integrante == 'S') {
+		
+			switch (estado) {
+				case 'S':
+					$("#compromiso_gestion").fadeIn(); 
+				break;
+				case 'N': 
+					$("#compromiso_gestion , #convenio_administrativo").fadeOut();
+				break;
+			}
+		}
+	});
+  
+  $("#integrante").change(function(){
+		var estado = $(this).val();
+		var compromiso = $("#compromiso").val();
+		
+		if (compromiso == 'S') {
+		
+			switch (estado) {
+				case 'S':
+					$("#compromiso_gestion").fadeIn(); 
+				break;
+				case 'N': 
+					$("#compromiso_gestion , #convenio_administrativo").fadeOut();
+				break;
+			}
+		}
+	});
+  
+  $("#pago_indirecto").change(function(){
+		var estado = $(this).val();
+		switch (estado) {
+			case 'S': $("#convenio_administrativo").fadeIn(); break;
+			case 'N': $("#convenio_administrativo").fadeOut();; break;
+		}
+	});
+  
+  $("#fecha_sus_cg , #fecha_ini_cg , #fecha_fin_cg , #fecha_sus_ca , #fecha_ini_ca , #fecha_fin_ca").datepicker();
+  
+  $("#provincia").change(function(){
+		var provincia = $(this).val();
+		$("#departamento").html('');
+		$("#localidad").html('');
+    
+    $.ajax({
+      type : 'post',
+      url : 'app/parserAjax.php',
+      data : {
+        c : 'Geo',
+        m : 'selectDepartamentos',
+        p : 'id_provincia=' + provincia
+      },
+      success : function(data){
+        $('#departamento').html(data);
+      }
+    });
+	});
+  
+  $("#departamento").change(function(){
+		var provincia = $("#provincia").val();
+		var departamento = $(this).val();
+		$("#localidad").html('');
+    
+    $.ajax({
+      type : 'post',
+      url : 'app/parserAjax.php',
+      data : {
+        c : 'Geo',
+        m : 'selectLocalidad',
+        p : 'id_provincia=' + provincia + '&id_departamento=' + departamento
+      },
+      success : function(data){
+        $('#localidad').html(data);
+      }
+    });
+		
+	});
   
   $('#genera_siisa').click(function(event){
 		event.preventDefault();
@@ -483,19 +568,238 @@ $(document).ready(function(){
           });
       }
     });
-    /*
-		$.ajax({
-			type : 'post' ,
-			url  : 'modulos/efectores/abm/alta.php' ,
-			data : 'acc=genera_siisa' ,
-			success : function (data) {
-				console.log (data);
-				$('#siisa').val(data);
-				
-			}
-		});
-    */
 	});
+  
+  $('#formu_alta').validate({
+		rules : {
+			siisa : {
+				required : true ,
+				digits : true ,
+				minlength : 14 ,
+				maxlength : 14
+			} ,
+			nombre : {
+				required : true ,
+				minlength : 7
+			} ,
+			domicilio : {
+				required : true ,
+				minlength : 7
+			} ,
+			codigo_postal : {
+				maxlength : 8
+			} ,
+			tipo_efector : {
+				required : true
+			} ,
+			categorizacion : {
+				required : true
+			} ,
+			dependencia_adm : {
+				required : true
+			} ,
+			referente : {
+				required : true ,
+				minlength : 7
+			} ,
+			departamento : {
+				required : true
+			} ,
+			localidad : {
+				required : true
+			} ,
+			email : {
+				required : false ,
+				email : true
+			} ,
+			numero_compromiso : {
+				required : {
+					depends : function () {
+						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+					}
+				}
+			} ,
+			firmante_compromiso : {
+				required : {
+					depends : function () {
+						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+					}
+				}
+			} ,
+			fecha_sus_cg : {
+				required : {
+					depends : function () {
+						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			fecha_ini_cg : {
+				required : {
+					depends : function () {
+						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			fecha_fin_cg : {
+				required : {
+					depends : function () {
+						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			fecha_sus_ca : {
+				required : {
+					depends : function () {
+						return ($('#pago_indirecto').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			fecha_ini_ca : {
+				required : {
+					depends : function () {
+						return ($('#pago_indirecto').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			fecha_fin_ca : {
+				required : {
+					depends : function () {
+						return ($('#pago_indirecto').val() == 'S');
+					}
+				} ,
+				dateISO : true
+			} ,
+			numero_convenio : {
+				required : {
+					depends : function () {
+						return ($('#pago_indirecto').val() == 'S');
+					}
+				}
+			} ,
+			firmante_convenio : {
+				required : {
+					depends : function () {
+						return ($('#pago_indirecto').val() == 'S');
+					}
+				}
+			}
+		} ,
+		messages : {
+			siisa : {
+				required : 'Campo requerido' ,
+				digits : 'S&oacute;lo se admiten valores num&eacute;ricos' ,
+				minlength : 'El campo debe ser de 14 d&iacute;gitos' ,
+				maxlength : 'El campo debe ser de 14 d&iacute;gitos'
+			} ,
+			nombre : {
+				required : 'Campo requerido' ,
+				minlength : 'M&iacute;nimo 7 caracteres'
+			} ,
+			domicilio : {
+				required : 'Campo requerido' ,
+				minlength : 'M&iacute;nimo 7 caracteres'
+			} ,
+			codigo_postal : {
+				maxlength : 'El valor no puede superar los 8 caracteres'
+			} ,
+			tipo_efector : {
+				required : 'Campo requerido'
+			} ,
+			categorizacion : {
+				required : 'Campo requerido'
+			} ,
+			dependencia_adm : {
+				required : 'Campo requerido'
+			} ,
+			referente : {
+				required : 'Campo requerido' ,
+				minlength : 'M&iacute;nimo 7 caracteres'
+			} ,
+			departamento : {
+				required : 'Campo requerido'
+			} ,
+			localidad : {
+				required : 'Campo requerido'
+			} ,
+			email : {
+				email : 'Ingrese un email v&aacute;lido'
+			} ,
+			numero_compromiso : {
+				required : 'Campo requerido'
+			} ,
+			firmante_compromiso : {
+				required : 'Campo requerido'
+			} ,
+			fecha_sus_cg : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			fecha_ini_cg : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			fecha_fin_cg : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			fecha_sus_ca : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			fecha_ini_ca : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			fecha_fin_ca : {
+				required : 'Campo requerido' ,
+				dateISO : 'Formato de fecha incorrecto'
+			} ,
+			numero_convenio : {
+				required : 'Campo requerido'
+			} ,
+			firmante_convenio : {
+				required : 'Campo requerido'
+			}
+		} ,
+		debug : false ,
+		submitHandler : function (form) {
+			mostrar_loading ();
+			$.ajax({
+				type : 'post',
+				url : 'app/parserAjax.php',
+				data : {
+          c : 'Efectores',
+          m : 'alta',
+          p : $(form).serialize()
+        },
+				success : function (data) {
+					ocultar_loading ();
+					$("#dialog_respuesta")
+            .html(data)
+            .dialog({
+              title		: "Confirmación" ,
+              buttons		: [{
+                text : 'Aceptar' ,
+                class : 'btn green' ,
+                click : function () {
+                  $(this).dialog("close");
+                 // $("#formu_alta")[0].reset();
+                }
+              }]
+            });
+				}
+			});
+		} ,
+		invalidHandler: function(event, validator) {
+			console.log (validator);
+		}
+	});
+  
 });
 
 </script>

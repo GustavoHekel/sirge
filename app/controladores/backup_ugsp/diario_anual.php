@@ -15,9 +15,10 @@ if (isset($_POST['year'])) {
 
 	/*$diccionario = array(
 	'id_provincia' => $_SESSION['grupo']);*/
+	$id_provincia = '04'; // HARDCODEO para probar
 
 	$diccionario = array(
-		'id_provincia' => '04');
+		'id_provincia' => $id_provincia);
 
 	Html::vista($Html, $diccionario);
 }
