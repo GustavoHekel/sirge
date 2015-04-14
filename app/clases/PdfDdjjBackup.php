@@ -57,7 +57,7 @@ class PdfDdjjBackup extends Pdf {
 
 		$hoy = date_format($start_date, 'Y-m-d');
 
-		$this->_texto      = "Por medio de la presente, el registro anual con detalle mensual del Backup de la Base de Datos referente a la Inscripción correspondiente al año" . strstr($this->_data_backup[0]['periodo'], 0, 5) . ".";
+		$this->_texto      = "Por medio de la presente les remito el registro anual con detalle mensual del Backup de la Base de Datos referente a la Inscripción correspondiente al año" . strstr($this->_data_backup[0]['periodo'], 0, 5) . ".";
 		$this->_constancia = "Dejo constancia bajo juramento que la información enviada en esta nota es exacta y verdadera y que las copias han sido elaboradas y resguardadas siguiendo todos los procedimientos razonables para garantizar la mayor exactitud posible.";
 
 		$this->Cell(130);
@@ -77,8 +77,8 @@ class PdfDdjjBackup extends Pdf {
 		$this->Ln();
 		$this->SetFont('Arial', 'BU', 11);
 		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');
-		$this->SetFont('Arial', '', 11);
-		$this->Ln(12);
+		$this->SetFont('Arial', '', 10);
+		$this->Ln(8);
 		$this->Cell(0, 8, utf8_decode("De mi mayor consideración:"));
 		$this->Ln();
 		$this->Cell(42);
@@ -86,7 +86,7 @@ class PdfDdjjBackup extends Pdf {
 		$this->Write(8, utf8_decode($this->_texto));
 		$this->Ln(8);
 		$this->Write(8, utf8_decode($this->_constancia));
-		$this->Ln(10);
+		$this->Ln(5);
 	}
 
 	protected function getDataImpresion($id_impresion) {
@@ -167,20 +167,19 @@ class PdfDdjjBackup extends Pdf {
 		$this->encabezadoTablaBackup($id_provincia);
 
 		$this->SetLineWidth(0.3);
-		$this->Ln(10);
+		$this->Ln(6);
 
-		$this->SetDrawColor(180, 220, 220);
+		$this->SetDrawColor(180, 180, 180);
 		$this->SetLineWidth(0.3);
 
 		$this->SetTextColor(70, 70, 70);
 		$this->SetFont('Arial', 'B', 12);
 
-		$x = 10;
+		$x = 35;
 		$this->SetX($x);
-		$this->Cell(190, 7, "Backups " . utf8_decode($data[0]['provincia']) . " del " . $_GET['year'], 0, 1);
+		//$this->Cell(190, 7, "Backups " . utf8_decode($data[0]['provincia']) . " del " . $_GET['year'], 0, 1);
 
-		$this->Ln(6);
-		$x = 10;
+		$this->Ln(2);
 
 		foreach ($data[0] as $field => $value) {
 			$this->SetX($x);
@@ -188,14 +187,14 @@ class PdfDdjjBackup extends Pdf {
 			$this->SetTextColor(80, 80, 80);
 			$this->SetFont('Arial', 'B', 12);
 			if ($field != "provincia") {
-				$this->Cell(strlen($field) + 25, 7, strtoupper(utf8_decode($field)), 1, 0, 'C', 0);
-				$x += strlen($field) + 25;
+				$this->Cell(strlen($field) + 26, 7, str_replace("_", " ", strtoupper(utf8_decode($field))), 1, 0, 'C', 0);
+				$x += strlen($field) + 26;
 			}
 		}
 
 		for ($i = 0; $i < count($data); $i++) {
 			$this->Ln(7);
-			$x = 10;
+			$x = 35;
 
 			foreach ($data[$i] as $field => $value) {
 				$this->SetX($x);
@@ -204,12 +203,13 @@ class PdfDdjjBackup extends Pdf {
 				$this->SetFont('Arial', 'I', 10);
 				if ($field != "provincia") {
 
-					$this->Cell(strlen($field) + 25, 7, utf8_decode($value), 1, 0, 'C', 0);
-					$x += strlen($field) + 25;
+					$this->Cell(strlen($field) + 26, 7, utf8_decode($value), 1, 0, 'C', 0);
+					$x += strlen($field) + 26;
 				}
 			}
 		}
-
+		$this->SetFont('Arial', '', 10);
+		$this->Ln(14);
 		$this->saludo();
 	}
 
