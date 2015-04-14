@@ -58,7 +58,7 @@ class PdfDdjjBackup extends Pdf {
 		$hoy = date_format($start_date, 'Y-m-d');
 
 		$this->_texto      = "Por medio de la presente, el registro anual con detalle mensual del Backup de la Base de Datos referente a la Inscripción correspondiente al año" . strstr($this->_data_backup[0]['periodo'], 0, 5) . ".";
-		$this->_constancia = "Dejo constancia bajo juramento que la información enviada en esta nota es exacta y verdadera y que las copias han sido elaboradas y resguardadas siguiendo todos los procedimientos razonables para garantizar la mayor exactitud posible. Las mismas se encuentran a disposición de cualquier autoridad competente que las requiera.";
+		$this->_constancia = "Dejo constancia bajo juramento que la información enviada en esta nota es exacta y verdadera y que las copias han sido elaboradas y resguardadas siguiendo todos los procedimientos razonables para garantizar la mayor exactitud posible.";
 
 		$this->Cell(130);
 
@@ -66,8 +66,8 @@ class PdfDdjjBackup extends Pdf {
 		$this->Ln(5);
 		$this->Cell(140, 10, utf8_decode('DIARIO ANUAL DE BACKUPS DE DATOS PROVINCIAL'), 1, 0, 'C');
 		$this->Cell(30, 10, numero_ddjj($id, $this->_data_backup[0]['periodo']), 1, 0, 'C');
-
-		$this->Cell(-10, 35, utf8_decode(Sirge::getNombreProvincia($id)) . ", " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
+		$this->Ln();
+		$this->Cell(160, 10, utf8_decode(Sirge::getNombreProvincia($id)) . ", " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("SEÑOR"));
 		$this->Ln();
@@ -82,10 +82,11 @@ class PdfDdjjBackup extends Pdf {
 		$this->Cell(0, 8, utf8_decode("De mi mayor consideración:"));
 		$this->Ln();
 		$this->Cell(42);
+		$this->SetFont('Arial', '', 10);
 		$this->Write(8, utf8_decode($this->_texto));
-		$this->Ln(15);
+		$this->Ln(8);
 		$this->Write(8, utf8_decode($this->_constancia));
-		$this->Ln(15);
+		$this->Ln(10);
 	}
 
 	protected function getDataImpresion($id_impresion) {
@@ -176,7 +177,7 @@ class PdfDdjjBackup extends Pdf {
 
 		$x = 10;
 		$this->SetX($x);
-		$this->Cell(190, 7, "Backups " . $data[0]['provincia'] . " del " . $_GET['year'], 0, 1);
+		$this->Cell(190, 7, "Backups " . utf8_decode($data[0]['provincia']) . " del " . $_GET['year'], 0, 1);
 
 		$this->Ln(6);
 		$x = 10;
