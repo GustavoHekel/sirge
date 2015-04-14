@@ -26,8 +26,8 @@ $diccionario = [
 	'ANCHO_VERDE'      => (intval($data['min_verde'] - $data['max_verde']) * 500 / intval($data['min_verde'])),
 	'RESULTADO_PX'     => (intval($resultado) * 500 / intval($data['min_verde'])),
 	'RESULTADO_XX'     => intval($resultado),
-	'NUMERADOR'        => $indicador.'.a               = '.$numerador,
-	'DENOMINADOR'      => $indicador.'.b           = '.$denominador,
+	'NUMERADOR'        => $indicador.'.a        = '.$numerador,
+	'DENOMINADOR'      => $indicador.'.b      = '.$denominador,
 	'NOMBRE_INDICADOR' => $descripcion.' - ('.$indicador.')',
 	'DESC_NUMERADOR'   => html_entity_decode($desc_num),
 	'DESC_DENOMINADOR' => html_entity_decode($desc_den)];
@@ -37,3 +37,5 @@ $html = [
 ];
 
 Html::vista($html, $diccionario);
+
+?>

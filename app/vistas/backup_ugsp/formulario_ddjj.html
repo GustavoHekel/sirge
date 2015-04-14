@@ -1,0 +1,212 @@
+<div class="portlet box yellow listado-simple">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Impresi&oacute;n de declaraci&oacute;n jurada de backup mensual</div>
+	</div>
+	<div class="portlet-body">
+		<form id="formu_periodo" style="text-align: center">
+			<div>Seleccione el per&iacute;odo a informar
+				<input id="meses_periodo" name="periodo" type="text" />
+			</div>
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
+
+<div style="display: none">
+	<div id="mensaje_ajax"></div>
+	<div id="formu_mensaje">
+		<form id="motivo_reimpresion">
+			<textarea name="motivo_reimpresion" style="width: 610px; height: 100px;"></textarea>
+		</form>
+	</div>
+</div>
+
+<div id="datos_complementarios" class="portlet box yellow listado-simple">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Datos backup</div>
+	</div>
+	<div class="portlet-body form">
+		<form id="formu_datos" class="horizontal-form">
+			Fecha en que se realiz&oacute; el backup: <input id="fecha_backup" type="text" name="fecha_backup" /> <br />
+			Nombre del archivo que contiene el backup: <input id="nombre_backup" type="text" name="nombre_backup" />
+			<div class="form-actions">
+				<button type="submit" class="btn red"><i class="icon-ok"></i> Generar DDJJ</button>
+			</div>
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$("#datos_complementarios").hide();
+		$("#meses_periodo").attr("readonly","readonly");
+			estilo_dialog ('yellow');
+			
+			options = {
+				dateFormat: 'yy-mm',
+				monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+			};
+	
+		$('#meses_periodo').monthpicker(options);
+		$('#fecha_backup').datepicker();
+
+		$("#meses_periodo").change(function(){
+			
+			$.ajax({
+				type : 'post' ,
+				data : 'acc=consulta&' + $(this).serialize() ,
+				url  : 'app/controladores/backup_ugsp/formulario_ddjj.php' ,
+				success : function (data) {
+				//$("#pruebas").html(data);	
+					switch (data) {
+						case '0' : 
+							$("#datos_complementarios").fadeIn();
+						break;
+						case '1' : 
+							$('#mensaje_ajax').html('Per&iacute;odo ya informado, desea corregir los datos de la DDJJ generada?');
+							$('#mensaje_ajax').dialog({
+								title : '¡Atención!' ,
+								buttons : [{
+									text : 'Aceptar' ,
+									class : 'btn green' ,
+									click  : function () {
+										$(this).dialog ('close');
+										$('#formu_mensaje').dialog({
+											title : 'Ingrese motivo de reimpresión' ,
+											buttons : [{
+												text : 'Aceptar' ,
+												class : 'btn green' ,
+												click : function () {
+													$('#motivo_reimpresion').submit();
+												}
+											}]
+										});
+									}
+								} , {
+									text : 'Cancelar' ,
+									class : 'btn red' ,
+									click : function () {
+										$(this).dialog('close');
+									}
+								}]
+							});
+							$("#datos_complementarios").fadeOut();
+						break;
+						case '2' :
+							$('#mensaje_ajax').html('Su usuario no pertenece a ninguna UGSP, no puede generar una DDJJ');
+							$('#mensaje_ajax').dialog({
+								title : '¡Atención!' ,
+								buttons : [{
+									text : 'Aceptar' ,
+									class : 'btn green' ,
+									click : function () {
+										$(this).dialog('close');
+									}
+								}]
+							});
+						break;
+					}
+				}
+			});
+		});
+
+		$('#formu_datos').submit(function(event){
+			event.preventDefault();
+			
+			if (! ($('#fecha_backup').val().length 
+				&& $('#nombre_backup').val().length 
+				)) {
+				
+				$('#mensaje_ajax').html('El formulario est&aacute; incompleto, revisar.');
+				$('#mensaje_ajax').dialog({
+					title : '¡Atención!' ,
+					buttons : [{
+						text : 'Aceptar' ,
+						class : 'btn green' ,
+						click : function () {
+							$(this).dialog('close');
+						}
+					}]
+				});
+			
+			} else {
+				$.ajax({
+					type : 'post' ,
+					data : 'acc=generaddjj&' + $(this).serialize() + '&' + $("#meses_periodo").serialize() ,
+					url  : 'app/controladores/backup_ugsp/formulario_ddjj.php' ,
+					success : function (data) {
+
+						if (data == '1') {
+							window.location.href = 'app/funciones/ddjj_backup.php?' + $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() ;
+							$('#formu_datos')[0].reset();
+							$("#datos_complementarios").fadeOut();
+						} else {
+							$('#mensaje_ajax').html('Ha ocurrido un error al generar la DDJJ, por favor contacte un administrador');
+							$('#mensaje_ajax').dialog({
+								title : '¡Atención!' ,
+								buttons : [{
+									text : 'Aceptar' ,
+									class : 'btn green' ,
+									click : function () {
+										$(this).dialog('close');
+									}
+								}]
+							});
+						}
+					}
+				});
+			}
+		});
+	
+		$('#motivo_reimpresion').validate({
+			rules : {
+				motivo_reimpresion : {
+					required : true ,
+					minlength : 15
+				}
+			} ,
+			messages : {
+				motivo_reimpresion : {
+					required : 'Ingrese un motivo' ,
+					minlength : 'Descripci&oacute;n muy corta'
+				}
+			} , 
+			submitHandler : function (form) {
+				console.log ($(form).serialize() + '&periodo=' + $('#meses_periodo').val());
+				
+				$.ajax({
+					type : 'post' ,
+					data : $(form).serialize() + '&acc=reimprimir&periodo=' + $('#meses_periodo').val() , 
+					url  : 'app/controladores/backup_ugsp/formulario_ddjj.php' ,
+					success : function (data) {
+						$('#formu_mensaje').dialog('close');
+						if(data = '1'){							
+							$("#datos_complementarios").fadeIn();
+						}
+						else{
+							$('#mensaje_ajax').html('Ha ocurrido al registrar el motivo, por favor contacte un administrador');
+							$('#mensaje_ajax').dialog({
+								title : '¡Atención!' ,
+								buttons : [{
+									text : 'Aceptar' ,
+									class : 'btn green' ,
+									click : function () {
+										$(this).dialog('close');
+									}
+								}]
+							});
+						}
+						
+					}
+				});
+			}
+		});
+
+	});
+
+
+
+</script>

@@ -15,13 +15,13 @@ class Ddjj
 	}
 	
 	public function listarPendientes($id_fuente , $actualizar = false){
-		$params = array ($id_fuente , $_SESSION['grupo']);
-		if ($actualizar) {
-			return $this->registrar($this->_db->fquery('listarPendientes' , $params)->getList());
-		} else {
-			$sirge = new Sirge();
-			return $sirge->jsonDT($this->_db->fquery('listarPendientes' , $params)->getResults() , true);
-		}
+      $params = array ($id_fuente , $_SESSION['grupo']);
+      if ($actualizar) {
+        return $this->registrar($this->_db->fquery('listarPendientes' , $params)->getList());
+      } else {
+        $sirge = new Sirge();
+        return $sirge->jsonDT($this->_db->fquery('listarPendientes' , $params)->getResults() , true);
+      }
 	}
 	
 	public function listarImpresiones ($id_padron) {
