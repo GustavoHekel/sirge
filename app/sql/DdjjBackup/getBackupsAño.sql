@@ -2,8 +2,8 @@ SELECT
 	p.descripcion AS Provincia
 	, u.usuario
 	, periodo_reportado AS Periodo
-	, version AS Version
 	, fecha_impresion :: date AS Fecha_impresion
+	, version AS Version
 	--, '<a href="#" id_impresion="' || id_impresion || '" class="imprimir_ddjj"><i class="halflings-icon print"></i></a>' AS imprimir_ddjj
 	--, '<a href=\"#\"><img class=\"descargar_ddjj\" src=\"img/download.png\" title=\"Descargar DDJJ\" periodo=\"' || periodo_reportado || '\" id_provincia=\"' || p.id_provincia || '\" /></a>' as descargar_ddjj
 	FROM
@@ -31,4 +31,4 @@ SELECT
 	AND
 		i.fecha_impresion = tabla.maxFecha
 
-	ORDER BY 1,2,3,4,5
+	ORDER BY 1,2,3,5,4
