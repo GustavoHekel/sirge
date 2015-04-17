@@ -4,14 +4,14 @@ require_once '../../../init.php';
 
 $inst_info_priorizada = new InformacionPriorizada();
 
-//$grupo = $_SESSION['grupo'];
-$grupo = '06';
+$grupo = $_SESSION['grupo'];
+//$grupo = '06';
 
 if (isset($_POST['acc'])) {
 	switch ($_POST['acc']) {
 		case 'consulta':
 			if ($grupo > 24) {
-				die("2");
+				echo "2";
 			} else {
 
 				//$sql = "select * from sistema.impresiones_ddjj_doiu where id_provincia = '$_SESSION[grupo]' and periodo_reportado = '$_POST[periodo]'";
@@ -20,10 +20,10 @@ if (isset($_POST['acc'])) {
 
 				if ($cantidad > 0) {
 					// Ya se informó el periodo
-					die("1");
+					echo "1";
 				} else {
 					// No se informó el periodo
-					die("0");
+					echo "0";
 				}
 			}
 			break;
@@ -51,30 +51,23 @@ if (isset($_POST['acc'])) {
 				, 'anio_bimestre' => $_POST['anio_bimestre']
 				, 'version' => $version);
 
-			$data = $inst_info_priorizada->insertarDddjjDoiu($array_datos);
+			$data = $inst_info_priorizada->insertarDddjjDoiu($array_datos_assoc);
 
 			if (!$data) {
-				die("1");
+				echo "1";
 			} else {
-				die("0");
+				echo "0";
 			}
 			break;
 
 		case 'reimprimir':
-			$sql = "
-			update sistema.impresiones_ddjj_doiu
-			set motivo_reimpresion = '"	 . pg_escape_string(htmlentities($_POST['motivo_reimpresion'], ENT_QUOTES, 'UTF-8')) . "'
-			where
-				id_provincia = '"	 . $_SESSION['grupo'] . "'
-				and periodo_reportado = '"	 . $_POST['periodo'] . "'
-				and version = (
-					select max (version)
-					from sistema.impresiones_ddjj_doiu
-					where
-						id_provincia = '"	 . $_SESSION['grupo'] . "'
-						and periodo_reportado = '"	 . $_POST['periodo'] . "')";
-			if (pg_query($sql)) {
-				die('1');
+
+			$data = $inst_info_priorizada->insertarMotivoReimpresionDoiu($grupo, $_POST['periodo'], $_POST['motivo_reimpresion']);
+
+			if (!$data) {
+				echo "1";
+			} else {
+				echo "0";
 			}
 
 			break;

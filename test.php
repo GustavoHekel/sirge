@@ -15,5 +15,4 @@ $params = array(
 
 $user['existe'] = $db->query($sql , $params)->getCount();
 
-echo $_GET['callback'] . '(' . json_encode($user) . ')' ;
-
+echo $_GET['callback'] . '(' . json_encode($user) . ')';

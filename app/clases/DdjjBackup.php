@@ -28,7 +28,7 @@ class DdjjBackup extends PdfDdjjSirge {
 	}
 
 	public function getBackupsAño($id_provincia, $year) {
-		$id_provincia = "04";
+		//$id_provincia = "04";
 		return $this->_db->faquery('getBackupsAño', ['id_provincia' => $id_provincia, 'year' => $year], false)->getResults();
 
 	}

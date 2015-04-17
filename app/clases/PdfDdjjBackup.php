@@ -32,14 +32,15 @@ class PdfDdjjBackup extends Pdf {
 		$this->Cell(30, 10, numero_ddjj($this->_data_backup[0]['id_provincia'], $this->_data_backup[0]['periodo_reportado']), 1, 0, 'C');
 		$this->Cell(-10, 35, utf8_decode(Sirge::getNombreProvincia($this->_data_backup[0]['id_provincia'])) . ", " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
 		$this->Ln();
-		$this->Cell(0, 5, utf8_decode("SEÑOR"));
+		$this->destinatario();
+		/*	$this->Cell(0, 5, utf8_decode("SEÑOR"));
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("COORDINADOR DEL ÁREA SISTEMAS INFORMÁTICOS"));
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("LIC. JAVIER E. MINSKY"));
 		$this->Ln();
 		$this->SetFont('Arial', 'BU', 11);
-		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');
+		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');*/
 		$this->SetFont('Arial', '', 11);
 		$this->Ln(12);
 		$this->Cell(0, 8, utf8_decode("De mi mayor consideración:"));

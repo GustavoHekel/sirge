@@ -1,11 +1,12 @@
 UPDATE ddjj.doiu9
-			SET motivo_reimpresion = '"	 . pg_escape_string(htmlentities($_POST['motivo_reimpresion'], ENT_QUOTES, 'UTF-8')) . "'
+			SET motivo_reimpresion = :motivo_reimpresion
 			where
-				id_provincia = '"	 . $_SESSION['grupo'] . "'
-				and periodo_reportado = '"	 . $_POST['periodo'] . "'
+				id_provincia = :id_provincia
+				and periodo_reportado = :periodo
 				and version = (
 					select max (version)
-					from sistema.impresiones_ddjj_doiu
+					from ddjj.doiu9
 					where
-						id_provincia = '"	 . $_SESSION['grupo'] . "'
-						and periodo_reportado = '"	 . $_POST['periodo'] . "')
+						id_provincia = :id_provincia
+						and periodo_reportado = :periodo
+						)

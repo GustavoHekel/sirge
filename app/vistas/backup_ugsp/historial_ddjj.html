@@ -2,9 +2,13 @@
 $(document).ready(function(){
 	$('.contenedor-historial-ddjj').hide();
 	
+	//$("#provincia [value=0]").attr('selected', 'selected');
 	$("#provincia").attr('name', 'provincia');
 
-	$("#provincia").change(function(){
+	$("#provincia").on('change',function(){
+
+		$(".contenedor-historial-ddjj").remove();
+		$(".contenedor-todo-historial-ddjj").html('<div class="portlet box yellow listado-simple contenedor-historial-ddjj"><div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Historial de impresiones</div></div><div class="portlet-body"><div class="container" style="width: 850px;"><table id="tabla_historial_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table></div></div></div>');
 		mostrar_loading ();
 		$('.contenedor-historial-ddjj').fadeIn();
 		
@@ -38,7 +42,7 @@ $(document).ready(function(){
 });
 </script>
 
-<div class="portlet box yellow listado-simple">
+<div class="portlet box yellow listado-simple prov-contenedor-historial-ddjj">
 	<div class="portlet-title">
 		<div class="caption"><i class="icon-reorder"></i>Seleccione provincia</div>
 	</div>
@@ -50,7 +54,7 @@ $(document).ready(function(){
 		<div class="error" style="display: none;"></div>
 	</div>
 </div>
-
+<div class="contenedor-todo-historial-ddjj" >
 <div class="portlet box yellow listado-simple contenedor-historial-ddjj">
 	<div class="portlet-title">
 		<div class="caption">
@@ -62,5 +66,6 @@ $(document).ready(function(){
 			<table id="tabla_historial_ddjj" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>
 		</div>
 	</div>
+</div>
 </div>
 

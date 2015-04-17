@@ -26,9 +26,11 @@ class InformacionPriorizada {
 
 	public function insertarDddjjDoiu($array_datos) {
 		return $this->_db->faquery('insertarDddjjDoiu', $array_datos, false)->getError();
+		//var_dump($this->_db->faquery('insertarDddjjDoiu', $array_datos, false)->getErrorInfo());
 	}
 
-	public function insertarMotivoReimpresionDoiu($id_provincia, $periodo) {
-		return $this->_db->faquery('insertarMotivoReimpresionDoiu', ['id_provincia' => $id_provincia, 'periodo' => $periodo], false)->getError();
+	public function insertarMotivoReimpresionDoiu($id_provincia, $periodo, $motivo) {
+		return $this->_db->faquery('insertarMotivoReimpresionDoiu', ['id_provincia' => $id_provincia, 'periodo' => $periodo, 'motivo_reimpresion' => $motivo], false)->getError();
+		//var_dump($this->_db->faquery('insertarMotivoReimpresionDoiu', ['id_provincia' => $id_provincia, 'periodo' => $periodo, 'motivo_reimpresion' => $motivo], false)->getErrorInfo());
 	}
 }
