@@ -1,0 +1,43 @@
+<script>
+$(document).ready(function(){
+	$.ajax({
+		type : 'get' ,
+		url  : 'app/controladores/informacion_priorizada/historial_consolidado.php' ,
+		data : 'armar_tabla=1' ,
+		dataType : 'json' ,
+		success : function (data) {
+			$('#tabla_historial_consolidado').dataTable({
+				"sDom": 'T<"clear">frt<"bottom"l><"clear">' ,
+				"bDestroy" : true ,
+				"bSort" : true ,
+				"iDisplayLength": 25 ,
+				"bFilter" : true ,
+				"bPaginate" : false ,
+				"aaData" : data['data'] ,
+				"aoColumns" : data['aoColumns']/* ,
+				"oTableTools": {
+						"sSwfPath": "metronic/assets/plugins/data-tables/table_tools/media/swf/copy_csv_xls_pdf.swf" ,
+						"aButtons": [{
+							"sExtends": "csv",
+							"sButtonText": "Guardar"}]
+					} */
+			});
+		}
+	});
+});
+</script>
+
+<div class="portlet box green listado-simple">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Historial consolidado de impresiones de DDJJ de informaci&oacute;n priorizada
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div id="contenedor_tabla_historial_consolidado">
+			<table id="tabla_historial_consolidado" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered"></table>
+		</div>
+	</div>
+</div>
+
+

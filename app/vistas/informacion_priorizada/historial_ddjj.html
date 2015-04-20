@@ -2,20 +2,21 @@
 $(document).ready(function(){
 	$('.contenedor-historial-ddjj').hide();
 	
-	//$("#provincia [value=0]").attr('selected', 'selected');
 	$("#provincia").attr('name', 'provincia');
 
-	$("#provincia").on('change',function(){
+	$("#provincia").change(function(){
+		
 
 		if($("#provincia").val() != 0){
 
 			mostrar_loading ();
+
 			$('.contenedor-historial-ddjj').fadeIn();
 			
 			$.ajax({
 				type : 'post' ,
 				data : $("#formu_histo_ddjj").serialize() ,
-				url  : 'app/controladores/backup_ugsp/tabla_historial_ddjj.php' ,
+				url  : 'app/controladores/informacion_priorizada/historial_ddjj.php' ,
 				dataType : 'json' ,
 				success : function (data) {
 					ocultar_loading ();
@@ -24,7 +25,7 @@ $(document).ready(function(){
 						"sDom": 'frt<"bottom"ip><"clear">' ,
 						"bInfo" : true ,
 						"bFilter" : true ,
-						"bDestroy" : true ,
+						"bDestroy" : true ,						
 						"aaData": data['data'] ,
 						"aoColumns": data['aoColumns']
 					});
@@ -37,26 +38,27 @@ $(document).ready(function(){
 	$('#tabla_historial_ddjj').on('click' , '.imprimir_ddjj' , function(){
 		var id_impresion = $(this).attr('id_impresion');
 		
-		window.location.href = 'app/funciones/ddjj_backup.php?id_impresion=' + id_impresion;
-		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)		
+		window.location.href = 'app/funciones/genera_declaracion_jurada_doiu.php?id_impresion=' + id_impresion;
+		//console.log ('funciones/genera_declaracion_jurada_doiu_sql.php?id_provincia=' + provincia + '&periodo=' + periodo)
+		
 	});
 });
 </script>
 
-<div class="portlet box yellow listado-simple prov-contenedor-historial-ddjj">
+<div class="portlet box green listado-simple">
 	<div class="portlet-title">
 		<div class="caption"><i class="icon-reorder"></i>Seleccione provincia</div>
 	</div>
 	<div class="portlet-body">
 		<form id="formu_histo_ddjj" style="text-align: center">
 			Seleccione la provincia a consultar
-			{provincias}
+			{provincias}							
 		</form>
 		<div class="error" style="display: none;"></div>
 	</div>
 </div>
-<div class="contenedor-todo-historial-ddjj" >
-<div class="portlet box yellow listado-simple contenedor-historial-ddjj">
+
+<div class="portlet box green listado-simple contenedor-historial-ddjj">
 	<div class="portlet-title">
 		<div class="caption">
 			<i class="icon-reorder"></i>Historial de impresiones
@@ -68,5 +70,3 @@ $(document).ready(function(){
 		</div>
 	</div>
 </div>
-</div>
-

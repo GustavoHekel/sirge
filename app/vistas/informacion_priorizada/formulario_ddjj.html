@@ -102,9 +102,17 @@ $(document).ready(function(){
 				success : function (data) {
 
 					if (data == '1') {
-						window.location.href = 'funciones/genera_declaracion_jurada_doiu.php?' + $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() ;
-						$('#formu_datos')[0].reset();
-						$("#datos_complementarios").fadeOut();
+
+						console.log( $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize());
+
+						$.post('app/controladores/informacion_priorizada/formulario_ddjj.php', $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() + '&acc=getIdImpresion', function(data, textStatus, xhr) {
+									window.location.href = 'app/funciones/genera_declaracion_jurada_doiu.php?' + 'id_impresion=' + data + '&' + $("#meses_periodo").serialize();
+							$('#formu_datos')[0].reset();
+							$("#datos_complementarios").fadeOut();
+							console.log("Todo pio hasta aca");
+						
+						});
+					
 					} else {
 						$('#mensaje_ajax').html('Ha ocurrido un error al generar la DDJJ, por favor contacte un administrador');
 						$('#mensaje_ajax').dialog({

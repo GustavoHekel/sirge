@@ -1,13 +1,13 @@
 <?php
 
-class Pdf extends FPDF {
+class PdfLogoViejo extends FPDF {
 
 	public function __construct() {
 		parent::FPDF();
 	}
 
 	private
-	$_logo_sumar = '../../public/img/sumar-grande.png',
+	$_logo_sumar = '../../public/img/header_pdf.png',
 	$_logo_minis = '../../public/img/min_logo.jpg';
 
 	final public function header() {

@@ -47,7 +47,7 @@ if (isset($_POST['acc'])) {
 				, 'fecha_sirge' => $_POST['fecha_sirge']
 				, 'periodo_sirge' => $_POST['periodo_sirge']
 				, 'fecha_reporte_bimestral' => $_POST['fecha_reporte_bimestral']
-				, 'bimestre' => $_POST['bimestre']
+				, 'bimestre' => intval($_POST['bimestre'])
 				, 'anio_bimestre' => $_POST['anio_bimestre']
 				, 'version' => $version);
 
@@ -58,6 +58,8 @@ if (isset($_POST['acc'])) {
 			} else {
 				echo "0";
 			}
+
+			//echo "1";
 			break;
 
 		case 'reimprimir':
@@ -69,6 +71,26 @@ if (isset($_POST['acc'])) {
 			} else {
 				echo "0";
 			}
+
+			break;
+
+		case 'getIdImpresion':
+
+			$array_datos_assoc = array(
+				'id_provincia' => $grupo
+				, 'id_usuario' => $_SESSION['id_usuario']
+				, 'periodo_tablero' => $_POST['periodo_tablero']
+				, 'fecha_cuenta_capitas' => $_POST['fecha_cuenta_capitas']
+				, 'periodo_cuenta_capitas' => $_POST['periodo_cuenta_capitas']
+				, 'fecha_sirge' => $_POST['fecha_sirge']
+				, 'periodo_sirge' => $_POST['periodo_sirge']
+				, 'fecha_reporte_bimestral' => $_POST['fecha_reporte_bimestral']
+				, 'bimestre' => $_POST['bimestre']
+				, 'anio_bimestre' => $_POST['anio_bimestre']);
+
+			$data = $inst_info_priorizada->getIdImpresionDdjjDoiuGen($array_datos_assoc);
+
+			echo $data[0]['id_impresion'];
 
 			break;
 	}
