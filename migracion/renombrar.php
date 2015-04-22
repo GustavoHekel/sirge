@@ -1,4 +1,5 @@
 <?php
+
 require_once 'conexion.php';
 
 $sql = "
@@ -15,39 +16,67 @@ $sql = "
     CREATE SCHEMA osp AUTHORIZATION postgres;
     CREATE SCHEMA profe AUTHORIZATION postgres;
     CREATE SCHEMA sss AUTHORIZATION postgres;
-	
+
 /*
+
+/*
+ *
+ * RENOMBRO ESQUEMAS
+ *
+ */
+
+	ALTER SCHEMA compromiso_anual_2014 name RENAME TO compromiso_anual
+	ALTER TABLE compromiso_anual.metas_descentralizacion ADD COLUMN year integer;
+    ALTER TABLE compromiso_anual.metas_facturacion ADD COLUMN year integer;
+    ALTER TABLE compromiso_anual.metas_codigos_validos ADD COLUMN year integer;
+	UPDATE compromiso_anual.metas_descentralizacion SET year = 2014;
+    UPDATE compromiso_anual.metas_codigos_validos SET year = 2014;
+    UPDATE compromiso_anual.metas_facturacion SET year = 2014;
+
+    ALTER TABLE compromiso_anual.metas_descentralizacion ALTER COLUMN year SET NOT NULL;
+    ALTER TABLE compromiso_anual.metas_facturacion ALTER COLUMN year SET NOT NULL;
+    ALTER TABLE compromiso_anual.metas_codigos_validos ALTER COLUMN year SET NOT NULL;
+
+    ALTER TABLE compromiso_anual.metas_descentralizacion DROP CONSTRAINT metas_descentralizacion_pkey;
+	ALTER TABLE compromiso_anual.metas_descentralizacion ADD CONSTRAINT metas_descentralizacion_pkey PRIMARY KEY (id_provincia, year);
+	ALTER TABLE compromiso_anual.metas_descentralizacion DROP CONSTRAINT metas_facturacion_pkey;
+	ALTER TABLE compromiso_anual.metas_descentralizacion ADD CONSTRAINT metas_facturacion_pkey PRIMARY KEY (id_provincia, year);
+	ALTER TABLE compromiso_anual.metas_descentralizacion DROP CONSTRAINT metas_codigos_validos_pkey;
+	ALTER TABLE compromiso_anual.metas_descentralizacion ADD CONSTRAINT metas_codigos_validos_pkey PRIMARY KEY (id_provincia, year);
+/*
+
+
  *
  * CREAMOS LA vista PROVINCIAS
  *
  */
-	
+
 	DROP TABLE sistema.provincias CASCADE;
-	
-	CREATE OR REPLACE VIEW sistema.provincias AS 
+
+	CREATE OR REPLACE VIEW sistema.provincias AS
 	 SELECT entidades.id_entidad as id_provincia, entidades.id_tipo_entidad, entidades.descripcion, entidades.id_region
 	   FROM sistema.entidades
 	  WHERE entidades.id_entidad < '25'::bpchar;
-	  
+
 /*
  *
  * RENOMBRAMOS TABLAS Y CAMPOS
  *
- */	
- 
+ */
+
 	ALTER TABLE sistema.impresiones_ddjj RENAME TO impresiones_ddjj_sirge;
 	ALTER TABLE sistema.impresiones_ddjj_doiu RENAME TO impresiones_ddjj_doiu9;
 	ALTER TABLE sistema.tipo_estado RENAME TO estados;
 	ALTER TABLE sistema.tipo_padron RENAME TO padrones;
 	ALTER TABLE sistema.tipo_region RENAME TO regiones;
 	ALTER TABLE sistema.log_queries_din RENAME TO log_queries_dinamicos;
-	
+
 	ALTER TABLE sistema.comentarios RENAME COLUMN fecha TO fecha_comentario;
 	ALTER TABLE sistema.log_queries_dinamicos RENAME COLUMN id_consulta TO id_query_dinamico;
-	
+
 	ALTER TABLE sistema.entidades ADD COLUMN id_region integer;
 	ALTER TABLE sistema.entidades ADD COLUMN descripcion character varying(50);
-	
+
 	UPDATE sistema.entidades SET id_region = 1, descripcion = 'CIUDAD AUTONOMA DE BUENOS AIRES' where id_entidad = '01';
 	UPDATE sistema.entidades SET id_region = 1, descripcion = 'BUENOS AIRES' where id_entidad = '02';
 	UPDATE sistema.entidades SET id_region = 3, descripcion = 'CATAMARCA' where id_entidad = '03';
@@ -75,7 +104,7 @@ $sql = "
 	UPDATE sistema.entidades SET id_region = 0, descripcion = 'UNIDAD EJECUTORA CENTRAL' where id_entidad = '25';
 	UPDATE sistema.entidades SET id_region = 0, descripcion = 'PROGRAMA FEDERAL DE SALUD' where id_entidad = '26';
 	UPDATE sistema.entidades SET id_region = 0, descripcion = 'SUPERINTENDENCIA DE SERVICIOS DE SALUD' where id_entidad = '27';
-	
+
 	ALTER TABLE sistema.procesos_obras_sociales SET SCHEMA puco;
 	ALTER TABLE sistema.queries_estandar SET SCHEMA consultas;
 	ALTER TABLE sistema.queries_automaticas SET SCHEMA consultas;
@@ -85,14 +114,18 @@ $sql = "
 	ALTER TABLE sistema.impresiones_ddjj_backup SET SCHEMA ddjj;
 	ALTER TABLE sistema.impresiones_ddjj_sirge SET SCHEMA ddjj;
 	ALTER TABLE sistema.impresiones_ddjj_doiu9 SET SCHEMA ddjj;
+<<<<<<< HEAD
+
+=======
     ALTER TALBE efectores.departametos SET SCHEMA geo;
     ALTER TABLE efectores.localidades SET SCHEMA geo;
     alter table efectores.entidades set schema geo
-	
+
+>>>>>>> 95d862982f4c71e4f06c28f4d5f3b602f3d3d1c8
 	ALTER TABLE ddjj.impresiones_ddjj_backup RENAME TO backup;
 	ALTER TABLE ddjj.impresiones_ddjj_sirge RENAME TO sirge;
-	ALTER TABLE ddjj.impresiones_ddjj_doiu9 RENAME TO backup;
-	
+	ALTER TABLE ddjj.impresiones_ddjj_doiu9 RENAME TO doiu9;
+
 	CREATE TABLE ddjj.sirge2
 	(
 	  id_impresion integer NOT NULL DEFAULT nextval('ddjj.impresiones_ddjj_sirge2_id_impresion_seq'::regclass),
@@ -105,26 +138,26 @@ $sql = "
 	);
 	ALTER TABLE ddjj.sirge2
 	  OWNER TO postgres;
-	  
+
 	insert into ddjj.sirge2
-	select 
+	select
 		row_number() over()
-		, date_trunc ('second' , fecha_impresion_ddjj ) 
+		, date_trunc ('second' , fecha_impresion_ddjj )
 		, array_agg(lote)
 		, id_provincia
-	from 
+	from
 		ddjj.sirge group by 2;
-	
+
 	DROP TABLE ddjj.sirge;
 	ALTER TABLE ddjj.sirge2 RENAME TO sirge;
-	
+
 	DROP TABLE sistema.obras_sociales;
 	DROP TABLE sistema.consultas;
 	DROP TABLE sistema.consultas_automaticas;
 	DROP TABLE sistema.entidades_administrativas;
 	DROP TABLE sistema.entidades_sanitarias;
 	DROP TABLE sistema.nomenclador_unico CASCADE;
-    
+
     alter table puco.osp_01 set schema osp;
     alter table puco.osp_02 set schema osp;
     alter table puco.osp_03 set schema osp;
@@ -149,7 +182,7 @@ $sql = "
     alter table puco.osp_22 set schema osp;
     alter table puco.osp_23 set schema osp;
     alter table puco.osp_24 set schema osp;
-    
+
 
 CREATE TABLE osp.rechazados
 (
@@ -195,7 +228,5 @@ CREATE TABLE profe.beneficiarios
   codigo_os integer DEFAULT 997001,
   lote integer
 );
-  
+
 ";
-
-

@@ -44,13 +44,18 @@ class InformacionPriorizada {
 
 	public function getHistorialConsilidadoDoiu() {
 
-		$i       = '201310';
-		$periodo = $i;
-		$ano     = substr($i, 0, 4);
-		$mes     = substr($i, 4, 2);
-		$sql     = 'select nombre as "Provincia" ';
+		//$i          = '201310';
 
-		while ($periodo < date('Ym')) {
+		$periodo = date('Ym');
+
+		$ano = substr($periodo, 0, 4) - 1;
+		$mes = substr($periodo, 4, 2) - 2;
+
+		$periodo = $ano . $mes;
+
+		$sql = 'select descripcion as "Provincia" ';
+
+		while ($periodo < date('Ym') - 1) {
 
 			$mes++;
 
@@ -62,13 +67,12 @@ class InformacionPriorizada {
 			$periodo = $ano . str_pad($mes, 2, '0', STR_PAD_LEFT);
 			//echo $periodo , '<br />';
 
-			$sql = "
-			select descripcion as \"Provincia\" , case
+			$sql .= ", case
 				when exists (
 					select periodo_reportado
 					from ddjj.doiu9 d
 					where
-						d.id_provincia = p.id_entidad
+						d.id_provincia = p.id_provincia
 						and periodo_reportado = '" . $ano . '-' . str_pad($mes, 2, '0', STR_PAD_LEFT) . "'
 					)
 				then 'X'
@@ -76,10 +80,19 @@ class InformacionPriorizada {
 			end as \"" . $ano . '-' . str_pad($mes, 2, '0', STR_PAD_LEFT) . "\"";
 		}
 
-		$sql .= ' from sistema.entidades p order by id_entidad';
+		$sql .= ' from sistema.provincias p order by id_provincia';
 
 		return $this->_db->query($sql, [], false)->getResults();
 		//var_dump($this->_db->query($sql, [], false)->getErrorInfo());
 
 	}
+}
+
+function get_Datetime_Now() {
+	$tz_object = new DateTimeZone('Brazil/East');
+	//date_default_timezone_set('Argentina/East');
+
+	$datetime = new DateTime();
+	$datetime->setTimezone($tz_object);
+	return $datetime;
 }

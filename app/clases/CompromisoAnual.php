@@ -1,0 +1,20 @@
+<?php
+
+class CompromisoAnual {
+	private
+	$_db;
+
+	public function __construct() {
+		$this->_db = Bdd::getInstance();
+	}
+
+	public function getGraficoDescentralizacion($id_provincia, $year) {
+		return $this->_db->faquery('getGraficoDescentralizacion', ['id_provincia' => $id_provincia, 'year' => $year, 'yearAnt' => ($year - 1)], false)->getResults();
+		//var_dump($this->_db->faquery('getGraficoDescentralizacion', ['id_provincia' => $id_provincia, 'year' => $year, 'yearAnt' => $year - 1], false)->getErrorInfo());
+	}
+
+	public function getGraficoDescentralizacionTotal($year) {
+		return $this->_db->faquery('getGraficoDescentralizacionTotal', ['year' => $year, 'yearAnt' => ($year - 1)], false)->getResults();
+		//var_dump($this->_db->faquery('getGraficoDescentralizacionTotal', ['year' => $year, 'yearAnt' => ($year - 1)], false)->getErrorInfo());
+	}
+}

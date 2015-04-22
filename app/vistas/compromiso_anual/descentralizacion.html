@@ -1,0 +1,115 @@
+<!-- <div class="portlet box blue listado-simple">
+    <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>Descentralizacion Anual</div>
+    </div>
+    <div class="portlet-body">
+        <form id="anio_descentralizacion" style="text-align: center">
+            <div>Seleccione un A&ntilde;o        
+				<select name="year" id="yearpicker">
+					<option value="">Seleccione a&ntilde;o</option>
+				</select>  
+                <input class="btn blue" type="submit" value="Buscar">
+            </div>
+        </form>
+    </div>
+</div> -->
+
+<script>
+$(document).ready(function(){
+
+	var year = new Date().getFullYear();
+
+/*   for (i = new Date().getFullYear(); i > year - 2  - 2; i--)
+	{
+	    $('#yearpicker').append($('<option />').val(i).html(i));
+	}
+
+	$("#yearpicker option[value=2015]").attr('selected', 'selected');*/
+
+	mostrar_loading ();
+
+	$.ajax({
+		type : 'post' ,
+		data : 'year=' + year,
+		url  : 'app/controladores/compromiso_anual/descentralizacion.php' ,
+		dataType : 'json' ,
+		success : function (data) {
+			console.log (data);
+			ocultar_loading ();
+			$('#container').highcharts({
+				chart: {
+				},
+				title: {
+					text: 'Descentralización'
+				},
+				xAxis: {
+					categories: data['nombre'] ,
+					labels : {
+						rotation : -45 ,
+						align : 'right' ,
+						style: {
+							fontSize: '13px',
+							fontFamily: 'Verdana, sans-serif'
+						}
+					}
+				},
+				yAxis: {
+						title: {
+							text: 'Porcentaje descentralizado'
+						}
+					},
+				tooltip: {
+					formatter: function() {
+						var s;
+							s = ''+ this.series.name  +': '+ this.y + '%';
+						return s;
+					}
+				},
+				series: [{
+					type: 'column',
+					name: 'Efectores descentralizados' ,
+					data: data['descentralizacion']
+				}, {
+					type: 'scatter',
+					name: 'Meta 1º Semestre ' + (year-1),
+					data: data['primer_semestre_'+ (year-1)] ,
+					marker: {
+						lineWidth: 0,
+						fillColor: '#CC6699',
+						radius: 4
+					}
+				}, {
+					type: 'scatter',
+					name: 'Meta 2º Semestre '+ (year-1) ,
+					data: data['segundo_semestre_'+ (year-1)] ,
+					marker: {
+						lineWidth: 0,
+						fillColor: '#CC6699',
+						radius: 4
+					}
+				}, {
+					type: 'scatter',
+					name: 'Meta 1º Semestre '+ year,
+					data: data['primer_semestre_'+year] ,
+					marker: {
+						lineWidth: 0,
+						fillColor: '#33FF99',
+						radius: 3
+					}
+				}
+				, {
+					type: 'scatter',
+					name: 'Meta 2º Semestre ' + year,
+					data: data['segundo_semestre_'+year],
+					marker: {
+						lineWidth: 0,
+						fillColor: '#33FF99' ,
+						radius: 4
+					}
+				}]
+			});
+		}
+	});
+});
+</script>
+<div id="container" style="height: 700px"></div>
