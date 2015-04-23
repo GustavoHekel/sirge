@@ -1,0 +1,48 @@
+<div data-role="page" id="map-page">
+	<div data-role="header" data-theme="b">
+		<h1><b>Centros de Salud cercanos</b></h1>
+		<a data-rel="back" href="#" ><i class="fa fa-arrow-circle-left "></i></a>
+	</div>
+	<style type="text/css">
+		#map-page, #map-canvas { width: 100%; height: 90%; padding: 0; }
+	</style>
+	<div role="main" class="ui-content" id="map-canvas"></div>
+	<script>
+	/*
+	 * Google Maps documentation: http://code.google.com/apis/maps/documentation/javascript/basics.html
+	 * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
+	 */
+	$(document).on("pageshow", "#map-page", function() {
+	    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  
+	    if (navigator.geolocation) {
+	        function success(pos) {
+		        drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+				console.log(pos.coords.latitude);
+	        }
+	        function fail(error) {
+	            drawMap(defaultLatLng);
+	        }
+	        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
+	    } else {
+	        drawMap(defaultLatLng);
+	    }
+
+
+	    function drawMap(latlng) {
+	        var myOptions = {
+	            zoom: 10,
+	            center: latlng,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+	        // Add an overlay to the map of current lat/lng
+	        var marker = new google.maps.Marker({
+	            position: latlng,
+	            map: map,
+	            title: "Greetings!"
+	        });
+	    }
+	});
+
+    </script>
+</div>

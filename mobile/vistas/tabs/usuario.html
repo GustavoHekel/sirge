@@ -1,0 +1,25 @@
+<div data-role="content" class="ui-content" role="main" data-theme="b">   
+	<div class="inset">
+		<h1><i class='lIcon fa fa-user'></i><b>Datos Personales</b></h1>
+		<h2>{NOMBRE_APELLIDO}</h2>
+		<h3>{EDAD}</h3>
+		<h3>{TIPO_NUMERO_DOCUMENTO}</h3>
+		<hr />
+		<h1><i class='lIcon fa fa-home'></i><b>Domicilio</b></h1>
+		<h2>{DOMICILIO}</h2>
+		<h3>{PROVINCIA}</h3>
+		<hr />
+		<h1><i class='lIcon fa fa-hospital-o'></i><b>Información SUMAR</b></h1>
+		<h3>Efector Asignado</h3>
+		<h5>{NOMBRE_EFECTOR_ASIGNADO}</h5>
+		<h5>Estado en el Programa SUMAR 
+			<div class="message {CSS_ESTADO}" data-theme="b">
+				<i class="fa {ICONO_ESTADO}"></i>
+				<p>{ESTADO}</p>
+			</div>
+		</h5>
+		<h5>Prácticas recibidas en el último año <b>{PRACTICAS_ULTIMO_AÑO}</b></h5>
+		<h3>Familiares</h3>
+		{FAMILIARES}
+	</div>	        
+</div>

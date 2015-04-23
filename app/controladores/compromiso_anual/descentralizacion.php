@@ -55,6 +55,19 @@ if (isset($_POST['year'])) {
 		}
 
 	}
+	if ($_SESSION['grupo'] < 25) {
+		array_push($datos['nombre'], $datos['nombre'][0] . " " . $_POST['year']);
+		array_push($datos['nombre'], $datos['nombre'][0] . " " . $_POST['year']);
+		array_push($datos['descentralizacion'], $datos['descentralizacion'][0]);
+		$datos['nombre'][0]           = $datos['nombre'][0] . " " . ($_POST['year'] - 1);
+		$datos['primer_semestre']     = array();
+		$datos['segundo_semestre']    = array();
+		$datos['primer_semestre'][0]  = $datos['primer_semestre_' . ($_POST['year'] - 1)][0];
+		$datos['segundo_semestre'][0] = $datos['segundo_semestre_' . ($_POST['year'] - 1)][0];
+		array_push($datos['primer_semestre'], $datos['primer_semestre_' . $_POST['year']][0]);
+		array_push($datos['segundo_semestre'], $datos['segundo_semestre_' . $_POST['year']][0]);
+
+	}
 	echo json_encode($datos, JSON_NUMERIC_CHECK);
 
 	//var_dump($data);
@@ -66,7 +79,7 @@ if (isset($_POST['year'])) {
 		'../../vistas/compromiso_anual/descentralizacion.html',
 	);
 
-	$diccionario = array();
+	$diccionario = array('id_provincia' => $_SESSION['grupo']);
 
 	Html::vista($Html, $diccionario);
 }

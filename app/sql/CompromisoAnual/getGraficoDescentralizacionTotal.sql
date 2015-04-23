@@ -31,7 +31,7 @@ select
 					p.id_provincia = m2.id_provincia
 				AND 
 					m2.year = :year
-		) as segundo_semestre_anio_actual
+		) as primer_semestre_anio_actual
 
 		, ( SELECT 
 				m2.segundo_semestre

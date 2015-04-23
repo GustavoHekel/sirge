@@ -13,7 +13,7 @@ select
 					p.id_provincia = m.id_provincia
 				AND 
 					m.year = :yearAnt
-		) as primer_semestre_:yearAnt 
+		) as primer_semestre_anio_ant 
 		, ( SELECT 
 				m.segundo_semestre
 				FROM 
@@ -22,7 +22,7 @@ select
 					p.id_provincia = m.id_provincia
 				AND 
 					m.year = :yearAnt 
-		) as segundo_semestre_:yearAnt
+		) as segundo_semestre_anio_ant
 		, ( SELECT 
 				m2.primer_semestre
 				FROM 
@@ -31,7 +31,8 @@ select
 					p.id_provincia = m2.id_provincia
 				AND 
 					m2.year = :year
-		) as primer_semestre_:year 
+		) as primer_semestre_anio_actual
+
 		, ( SELECT 
 				m2.segundo_semestre
 				FROM 
@@ -40,7 +41,7 @@ select
 					p.id_provincia = m2.id_provincia
 				AND 
 					m2.year = :year
-		) as segundo_semestre_:year
+		) as segundo_semestre_anio_actual
 	from (
 			select
 				id_provincia
