@@ -9,7 +9,7 @@ $(document).ready(function(){
 	$.ajax({
 		type : 'post' ,
 		data : 'year=' + year ,
-		url  : 'app/controladores/compromiso_anual/facturacion.php' ,
+		url  : 'app/controladores/compromiso_anual/codigos_validos.php' ,
 		dataType : 'json' ,
 		success : function (data) {
 			console.log (data);
@@ -24,7 +24,7 @@ $(document).ready(function(){
 							type: 'column'
 					},
 					title: {
-						text: 'Facturacion Descentralizada'
+						text: 'Correcto uso del PSS'
 					},
 					xAxis: {
 						categories: data['nombre'] ,
@@ -38,7 +38,7 @@ $(document).ready(function(){
 					yAxis: [{
 							max: 100,
 							title: {
-								text: 'Porcentaje de facturación decentralizada'
+								text: 'Porcentaje correcto'
 							}						
 					},	{
 						title: {
@@ -61,9 +61,9 @@ $(document).ready(function(){
 			            }
 			        },
 					series: [{				
-						name: 'Facturacion Decentralizada',
+						name: 'Porcentaje correcto facturado',
 						color: 'rgba(0, 0, 207, 0.8)',
-						data: data['fact_desc'],
+						data: data['porcentaje'],
 						tooltip: {		            
 			                valueSuffix: ' %'
 			            },
@@ -99,7 +99,7 @@ $(document).ready(function(){
 					chart: {
 					},
 					title: {
-						text: 'Facturacion Descentralizada'
+						text: 'Correcto uso del PSS'
 					},
 					xAxis: {
 						categories: data['nombre'] ,
@@ -116,7 +116,7 @@ $(document).ready(function(){
 							min: 0,
 							max: 100,
 							title: {
-								text: 'Porcentaje de facturación decentralizada'
+								text: 'Porcentaje correcto'
 							}
 						},
 					tooltip: {
@@ -128,8 +128,8 @@ $(document).ready(function(){
 					},
 					series: [{
 						type: 'column',
-						name: 'Facturacion Descentralizada' ,
-						data: data['fact_desc']
+						name: 'Porcentaje correcto facturado' ,
+						data: data['porcentaje']
 					}, {
 						type: 'scatter',
 						name: 'Meta 1º Semestre ' + (year-1),
@@ -175,3 +175,76 @@ $(document).ready(function(){
 });
 </script>
 <div id="container" style="height: 700px; margin-left: auto; margin-right:auto;" ></div>
+
+
+<script>
+/*$(document).ready(function(){
+	mostrar_loading ();
+	var provincia = $(this).val();
+	
+	$.ajax({
+		type : 'post' ,
+		data : 'id_provincia=' + provincia ,
+		url  : 'app/controladores/compromiso_anual/codigos_validos.php' ,
+		dataType : 'json' ,
+		success : function (data) {
+			console.log (data);
+			ocultar_loading ();
+			$('#container').highcharts({
+				chart: {
+				},
+				title: {
+					text: 'Correcto uso del PSS'
+				},
+				xAxis: {
+					categories: data['nombre'] ,
+					labels : {
+						rotation : -45 ,
+						align : 'right' ,
+						style: {
+							fontSize: '13px',
+							fontFamily: 'Verdana, sans-serif'
+						}
+					}
+				},
+				yAxis: {
+						title: {
+							text: 'Porcentaje correcto'
+						}
+					},
+				tooltip: {
+					formatter: function() {
+						var s;
+							s = ''+ this.series.name  +': '+ this.y + '%';
+						return s;
+					}
+				},
+				series: [{
+					type: 'column',
+					name: 'Porcentaje correcto facturado' ,
+					data: data['porcentaje']
+				}, {
+					type: 'scatter',
+					name: 'Meta 1º Semestre',
+					data: data['primer_semestre'] ,
+					marker: {
+						lineWidth: 0,
+						fillColor: 'orange',
+						radius: 5
+					}
+				}, {
+					type: 'scatter',
+					name: 'Meta 2º Semestre',
+					data: data['segundo_semestre'],
+					marker: {
+						lineWidth: 0,
+						fillColor: 'red' ,
+						radius: 5
+					}
+				}]
+			});
+		}
+	});
+});*/
+</script>
+

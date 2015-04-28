@@ -3,7 +3,7 @@ session_start();
 
 $GLOBALS['configuracion'] = array(
 	'postgresql' => array (
-		'host' => '192.6.0.71',
+		'host' => '192.6.0.205',
 		'usuario' => 'postgres',
 		'password' => '110678',
 		'db' => 'sirge2'
