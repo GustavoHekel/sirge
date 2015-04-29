@@ -182,6 +182,7 @@ class PdfDdjjSirge extends Pdf {
 	}
 
 	public function ddjjSirge($id_impresion) {
+
 		$this->getDataImpresion($id_impresion);
 		$this->encabezado();
 		$this->tablaLotes();
