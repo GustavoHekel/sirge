@@ -1,0 +1,112 @@
+<div class="portlet form-up-data baja-detalle">
+<div class="portlet-title">
+	<div class="caption"><i class="icon-reorder"></i>Informaci&oacute;n b&aacute;sica del efector a dar de baja</div>
+</div>
+<div class="portlet-body form">
+	<div class="form-horizontal form-view">
+		<h3 class="form-section">Generales</h3>
+		<div class="row-fluid">
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">CUIE</label>
+					<div class="controls">
+						<span class="text bold" id="cuie_b">{CUIE}</span>
+					</div>
+				</div>
+			</div>
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">SIISA</label>
+					<div class="controls">
+						<span class="text bold">{SIISA}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12 ">
+				<div class="control-group">
+					<label class="control-label">Nombre</label>
+					<div class="controls">
+						<span class="text bold">{NOMBRE}</span> 
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">SUMAR</label>
+					<div class="controls">
+						<span class="text bold">{SUMAR}</span>
+					</div>
+				</div>
+			</div>
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">Priorizado</label>
+					<div class="controls">                                                
+						<span class="text bold">{PRIORIZADO}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">Integrante</label>
+					<div class="controls">
+						<span class="text bold">{INTEGRANTE}</span>
+					</div>
+				</div>
+			</div>
+			<div class="span6 ">
+				<div class="control-group">
+					<label class="control-label">Compromiso de gesti&oacute;n</label>
+					<div class="controls">
+						<span class="text bold">{COMPROMISO}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-actions">
+			<button id="solicitar_baja" type="submit" class="btn red"><i class="icon-remove"></i> Solicitar baja</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<script>
+$(document).ready(function(){
+  estilo_dialog('{CSS_GLOBAL}');
+  
+  $("#solicitar_baja").click(function(){
+		mostrar_loading ();
+		var cuie = $("#cuie_b").html();
+    $.ajax({
+      type : 'post',
+      url : 'app/parserAjax.php',
+      data : {
+        c : 'Efectores',
+        m : 'baja',
+        p : 'cuie=' + cuie
+      },
+      success : function (data){
+        ocultar_loading();
+        $('#mensaje_baja')
+          .html(data)
+          .dialog({
+            title		: "Confirmación" ,
+            buttons 	: [{
+              text : "Aceptar" ,
+              class : 'btn green' ,
+              click : function(){
+                $(this).dialog("close");
+              }
+            }]
+          });
+      }
+    });
+	});
+});
+</script>

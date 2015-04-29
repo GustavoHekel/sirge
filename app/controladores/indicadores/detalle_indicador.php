@@ -4,12 +4,12 @@ require_once '../../../init.php';
 
 $indic = new Indicadores();
 
-$indicador = $_POST['indicador'];
+$indicador    = $_POST['indicador'];
 $id_provincia = $_POST['id_provincia'];
-$year = $_POST['year'];
-$resultado = $_POST['resultado'];
-$numerador = $_POST['num'];
-$denominador = $_POST['den'];
+$year         = $_POST['year'];
+$resultado    = $_POST['resultado'];
+$numerador    = $_POST['num'];
+$denominador  = $_POST['den'];
 
 $data = $indic->getIndicadorMedicaRangos($indicador, $id_provincia, $year)[0];
 
@@ -26,9 +26,9 @@ $diccionario = [
 	'ANCHO_VERDE'      => (intval($data['min_verde'] - $data['max_verde']) * 500 / intval($data['min_verde'])),
 	'RESULTADO_PX'     => (intval($resultado) * 500 / intval($data['min_verde'])),
 	'RESULTADO_XX'     => intval($resultado),
-	'NUMERADOR'        => $indicador.'.a        = '.$numerador,
-	'DENOMINADOR'      => $indicador.'.b      = '.$denominador,
-	'NOMBRE_INDICADOR' => $descripcion.' - ('.$indicador.')',
+	'NUMERADOR'        => $indicador . '.a        = ' . $numerador,
+	'DENOMINADOR'      => $indicador . '.b      = ' . $denominador,
+	'NOMBRE_INDICADOR' => $descripcion . ' - (' . $indicador . ')',
 	'DESC_NUMERADOR'   => html_entity_decode($desc_num),
 	'DESC_DENOMINADOR' => html_entity_decode($desc_den)];
 
@@ -39,3 +39,4 @@ $html = [
 Html::vista($html, $diccionario);
 
 ?>
+

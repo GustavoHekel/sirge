@@ -1,0 +1,177 @@
+<script>
+$(document).ready(function(){
+		
+	var year = new Date().getFullYear();
+	var grupo = "{id_provincia}";	
+
+	mostrar_loading ();
+
+	$.ajax({
+		type : 'post' ,
+		data : 'year=' + year ,
+		url  : 'app/controladores/compromiso_anual/facturacion.php' ,
+		dataType : 'json' ,
+		success : function (data) {
+			console.log (data);
+			ocultar_loading();			
+										
+			if(grupo < 25){
+			
+				$("#container").css('width', '700px');
+
+				$('#container').highcharts({
+					chart: {
+							type: 'column'
+					},
+					title: {
+						text: 'Facturacion Descentralizada'
+					},
+					xAxis: {
+						categories: data['nombre'] ,
+						labels : {
+							style: {
+								fontSize: '13px',
+								fontFamily: 'Verdana, sans-serif'
+							}
+						}
+					},
+					yAxis: [{
+							max: 100,
+							title: {
+								text: 'Porcentaje de facturación decentralizada'
+							}						
+					},	{
+						title: {
+								text: ''
+							}
+							
+					}],
+
+					legend: {
+				        shadow: false
+				      		},
+					tooltip: {
+						shared: true
+					},
+					plotOptions: {
+			            column: {
+			                grouping: false,
+			                shadow: false,
+			                borderWidth: 0
+			            }
+			        },
+					series: [{				
+						name: 'Facturacion Decentralizada',
+						color: 'rgba(0, 0, 207, 0.8)',
+						data: data['fact_desc'],
+						tooltip: {		            
+			                valueSuffix: ' %'
+			            },
+						pointPadding: 0.1,
+	            		pointPlacement: 0
+					}, {					
+						name: 'Meta 1º Semestre',
+						color: 'rgba(250, 190, 0, 0.7)',
+						data: data['primer_semestre'] ,
+						tooltip: {		            
+			                valueSuffix: ' %'
+			            },
+			            pointPadding: 0.4,
+			            pointPlacement: 0			            
+			        }, {					
+						name: 'Meta 2º Semestre ',
+						color: 'rgba(165, 255, 240, 0.7)',
+						data: data['segundo_semestre'] ,
+						tooltip: {		            
+			                valueSuffix: ' %'
+			            },
+			            pointPadding: 0.3,
+			            pointPlacement: 0			            
+					}]
+				});
+			
+			}
+			else{			
+				
+				$("#container").css('width', 'auto');
+
+				$('#container').highcharts({
+					chart: {
+					},
+					title: {
+						text: 'Facturacion Descentralizada'
+					},
+					xAxis: {
+						categories: data['nombre'] ,
+						labels : {
+							rotation : -45 ,
+							align : 'right' ,
+							style: {
+								fontSize: '13px',
+								fontFamily: 'Verdana, sans-serif'
+							}
+						}
+					},
+					yAxis: {
+							min: 0,
+							max: 100,
+							title: {
+								text: 'Porcentaje de facturación decentralizada'
+							}
+						},
+					tooltip: {
+						formatter: function() {
+							var s;
+								s = ''+ this.series.name  +': '+ this.y + '%';
+							return s;
+						}
+					},
+					series: [{
+						type: 'column',
+						name: 'Facturacion Descentralizada' ,
+						data: data['fact_desc']
+					}, {
+						type: 'scatter',
+						name: 'Meta 1º Semestre ' + (year-1),
+						data: data['primer_semestre_'+ (year-1)] ,
+						marker: {
+							lineWidth: 0,
+							fillColor: '#CC6699',
+							radius: 4
+						}
+					}, {
+						type: 'scatter',
+						name: 'Meta 2º Semestre '+ (year-1) ,
+						data: data['segundo_semestre_'+ (year-1)] ,
+						marker: {
+							lineWidth: 0,
+							fillColor: '#CC6699',
+							radius: 4
+						}
+					}, {
+						type: 'scatter',
+						name: 'Meta 1º Semestre '+ year,
+						data: data['primer_semestre_'+year] ,
+						marker: {
+							lineWidth: 0,
+							fillColor: '#33FF99',
+							radius: 3
+						}
+					}
+					, {
+						type: 'scatter',
+						name: 'Meta 2º Semestre ' + year,
+						data: data['segundo_semestre_'+year],
+						marker: {
+							lineWidth: 0,
+							fillColor: '#33FF99' ,
+							radius: 4
+						}
+					}]
+				});
+			}								
+		}		
+	});
+});
+</script>
+<div id="container" style="height: 700px; margin-left: auto; margin-right:auto;" ></div>

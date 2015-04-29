@@ -13,8 +13,8 @@ if (isset ($_REQUEST) && count ($_REQUEST)) {
 	if (isset ($_REQUEST[0])) {
 		parse_str($_REQUEST[0], $params);
 	}
-	
-	$instancia = new $clase;
+
+    $instancia = new $clase;
 	
 	call_user_func_array ([$instancia , $metodo], $params);
 }

@@ -1,0 +1,28 @@
+<ul id="tab-efectores" class="nav nav-tabs">
+	<li><a data-target="#alta" data-toggle="tab" href="app/controladores/efectores/abm/alta.php">Alta</a></li>
+	<li><a data-target="#modificacion" data-toggle="tab" href="app/controladores/efectores/abm/modificacion.php">Modificaci&oacute;n</a></li>
+	<li><a data-target="#baja" data-toggle="tab" href="app/controladores/efectores/abm/baja.php">Baja</a></li>
+</ul>
+
+<div class="tab-content tab-contenedor">
+	<div class="tab-pane" id="alta">Cargando...</div>
+	<div class="tab-pane" id="baja">Cargando...</div>
+	<div class="tab-pane" id="modificacion">Cargando...</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$(function() {
+		$("#tab-efectores").tab();
+		$("#tab-efectores").bind("show", function(e) {    
+			var contentID  = $(e.target).attr("data-target");
+			var contentURL = $(e.target).attr("href");
+			if (typeof(contentURL) != 'undefined')
+				$(contentID).load(contentURL, function(){ $("#tab-efectores").tab(); });
+			else
+				$(contentID).tab('show');
+		});
+		$('#tab-efectores a:first').tab("show");
+	});
+});
+</script>

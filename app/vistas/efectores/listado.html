@@ -87,6 +87,7 @@ $(document).ready(function(){
   });
   
   $('#descargar_tabla').click(function(){
+    mostrar_loading();
     $.ajax({
       type : 'post',
       url  : 'app/parserAjax.php',
@@ -94,8 +95,9 @@ $(document).ready(function(){
         c : 'Efectores',
         m : 'descargarTabla'
       },
-      success : function (data){
-        window.location='app/funciones/download.php?file=../../data/padrones/efectores.csv'
+      success : function (){
+        window.location='app/funciones/download_tabla_efectores.php?file=../../data/padrones/efectores.csv'
+        ocultar_loading();
       }
     });
   });

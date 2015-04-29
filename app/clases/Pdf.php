@@ -33,6 +33,30 @@ class Pdf extends FPDF {
 		$this->Cell(80, 6, utf8_decode("Firma y sello del Coordinador Ejecutivo"), 'T', 0, 'C');
 	}
 
+	final protected function destinatario() {
+		$this->SetFont('Arial', 'B', 10);
+		$this->Cell(0, 5, utf8_decode("SEÑOR"));
+		$this->Ln();
+		$this->Cell(0, 5, utf8_decode("COORDINADOR DEL ÁREA SISTEMAS INFORMÁTICOS"));
+		$this->Ln();
+		$this->Cell(0, 5, utf8_decode("LIC. JAVIER E. MINSKY"));
+		$this->Ln();
+		$this->SetFont('Arial', 'BU', 11);
+		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');
+	}
+
+	final protected function destinatarioCoordNac() {
+		$this->SetFont('Arial', 'B', 10);
+		$this->Cell(0, 5, utf8_decode("SEÑOR"));
+		$this->Ln();
+		$this->Cell(0, 5, utf8_decode("COORDINADOR NACIONAL DEL PROGRAMA SUMAR"));
+		$this->Ln();
+		$this->Cell(0, 5, utf8_decode("DR. MARTIN SABIGNOSO"));
+		$this->Ln();
+		$this->SetFont('Arial', 'BU', 11);
+		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');
+	}
+
 }
 
 ?>

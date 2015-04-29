@@ -32,10 +32,10 @@ $(document).ready(function(){
 			success 	: function (data) {
 				$("#tabla_archivos_subidos").empty();
 				$('#tabla_archivos_subidos').dataTable({
-					sDom		: 'rt<"bottom"flp><"clear">' ,
-					bDestroy	: true ,
-					aaData		: data['data'] ,
-					aoColumns	: data['aoColumns']
+					sDom : 'rt<"bottom"flp><"clear">' ,
+					bDestroy : true ,
+					aaData : data['data'] ,
+					aoColumns : data['aoColumns']
 				});
 			}
 		});

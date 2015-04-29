@@ -32,14 +32,15 @@ class PdfDdjjBackup extends Pdf {
 		$this->Cell(30, 10, numero_ddjj($this->_data_backup[0]['id_provincia'], $this->_data_backup[0]['periodo_reportado']), 1, 0, 'C');
 		$this->Cell(-10, 35, utf8_decode(Sirge::getNombreProvincia($this->_data_backup[0]['id_provincia'])) . ", " . fecha_con_nombre_mes($this->_data_backup[0]['fecha_impresion']), 0, 0, 'R');
 		$this->Ln();
-		$this->Cell(0, 5, utf8_decode("SEÑOR"));
+		$this->destinatario();
+		/*	$this->Cell(0, 5, utf8_decode("SEÑOR"));
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("COORDINADOR DEL ÁREA SISTEMAS INFORMÁTICOS"));
 		$this->Ln();
 		$this->Cell(0, 5, utf8_decode("LIC. JAVIER E. MINSKY"));
 		$this->Ln();
 		$this->SetFont('Arial', 'BU', 11);
-		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');
+		$this->Cell(0, 5, "S           /           D", 0, 0, 'D');*/
 		$this->SetFont('Arial', '', 11);
 		$this->Ln(12);
 		$this->Cell(0, 8, utf8_decode("De mi mayor consideración:"));
@@ -175,7 +176,7 @@ class PdfDdjjBackup extends Pdf {
 		$this->SetTextColor(70, 70, 70);
 		$this->SetFont('Arial', 'B', 12);
 
-		$x = 37;
+		$x = 35;
 		$this->SetX($x);
 		//$this->Cell(190, 7, "Backups " . utf8_decode($data[0]['provincia']) . " del " . $_GET['year'], 0, 1);
 
@@ -187,14 +188,14 @@ class PdfDdjjBackup extends Pdf {
 			$this->SetTextColor(80, 80, 80);
 			$this->SetFont('Arial', 'B', 12);
 			if ($field != "provincia") {
-				$this->Cell(strlen($field) + 25, 7, str_replace(strtoupper(utf8_decode($field), "_", " ")), 1, 0, 'C', 0);
-				$x += strlen($field) + 25;
+				$this->Cell(strlen($field) + 26, 7, str_replace("_", " ", strtoupper(utf8_decode($field))), 1, 0, 'C', 0);
+				$x += strlen($field) + 26;
 			}
 		}
 
 		for ($i = 0; $i < count($data); $i++) {
 			$this->Ln(7);
-			$x = 37;
+			$x = 35;
 
 			foreach ($data[$i] as $field => $value) {
 				$this->SetX($x);
@@ -203,8 +204,8 @@ class PdfDdjjBackup extends Pdf {
 				$this->SetFont('Arial', 'I', 10);
 				if ($field != "provincia") {
 
-					$this->Cell(strlen($field) + 25, 7, utf8_decode($value), 1, 0, 'C', 0);
-					$x += strlen($field) + 25;
+					$this->Cell(strlen($field) + 26, 7, utf8_decode($value), 1, 0, 'C', 0);
+					$x += strlen($field) + 26;
 				}
 			}
 		}

@@ -1,0 +1,234 @@
+<script>
+$(document).ready(function(){
+	$("#datos_complementarios").hide();
+	$("input:text").attr("readonly","readonly");
+	estilo_dialog ('red');
+	
+	options = {
+		dateFormat: 'yy-mm',
+		monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+	};
+	
+	$('#meses_periodo , #periodo_tablero , #periodo_cuenta_capitas , #periodo_sirge').monthpicker(options);
+	$('#fecha_cuenta_capitas , #fecha_sirge , #fecha_reporte_bimestral').datepicker();
+	
+	$("#meses_periodo").change(function(){
+		$.ajax({
+			type : 'post' ,
+			data : 'acc=consulta&' + $(this).serialize() ,
+			url  : 'app/controladores/informacion_priorizada/formulario_ddjj.php' ,
+			success : function (data) {
+				switch (data) {
+					case '0' : 
+						$("#datos_complementarios").fadeIn();
+					break;
+					case '1' : 
+						$('#mensaje_ajax').html('Per&iacute;odo ya informado, desea corregir los datos de la DDJJ generada?');
+						$('#mensaje_ajax').dialog({
+							title : '¡Atención!' ,
+							buttons : [{
+								text : 'Aceptar' ,
+								class : 'btn green' ,
+								click  : function () {
+									$(this).dialog ('close');
+									$('#formu_mensaje').dialog({
+										title : 'Ingrese motivo de reimpresión' ,
+										buttons : [{
+											text : 'Aceptar' ,
+											class : 'btn green' ,
+											click : function () {
+												$('#motivo_reimpresion').submit();
+											}
+										}]
+									});
+								}
+							} , {
+								text : 'Cancelar' ,
+								class : 'btn red' ,
+								click : function () {
+									$(this).dialog('close');
+								}
+							}]
+						});
+						$("#datos_complementarios").fadeOut();
+					break;
+					case '2' :
+						$('#mensaje_ajax').html('Su usuario no pertenece a ninguna UGSP, no puede generar una DDJJ');
+						$('#mensaje_ajax').dialog({
+							title : '¡Atención!' ,
+							buttons : [{
+								text : 'Aceptar' ,
+								class : 'btn green' ,
+								click : function () {
+									$(this).dialog('close');
+								}
+							}]
+						});
+					break;
+				}
+			}
+		});
+	});
+	
+	$('#formu_datos').submit(function(event){
+		event.preventDefault();
+		
+		if (! ($('#periodo_tablero').val().length 
+			&& $('#fecha_cuenta_capitas').val().length 
+			&& $('#periodo_cuenta_capitas').val().length 
+			&& $('#fecha_sirge').val().length 
+			&& $('#periodo_sirge').val().length 
+			&& $('#fecha_reporte_bimestral').val().length 
+			&& parseInt($('#bimestre').val())
+			&& parseInt($('#anio_bimestre').val()))) {
+			
+			$('#mensaje_ajax').html('El formulario est&aacute; incompleto, revisar.');
+			$('#mensaje_ajax').dialog({
+				title : '¡Atención!' ,
+				buttons : [{
+					text : 'Aceptar' ,
+					class : 'btn green' ,
+					click : function () {
+						$(this).dialog('close');
+					}
+				}]
+			});
+			
+		} else {
+			$.ajax({
+				type : 'post' ,
+				data : 'acc=generaddjj&' + $(this).serialize() + '&' + $("#meses_periodo").serialize() ,
+				url  : 'app/controladores/informacion_priorizada/formulario_ddjj.php' ,
+				success : function (data) {
+
+					if (data == '1') {
+
+						console.log( $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize());
+
+						$.post('app/controladores/informacion_priorizada/formulario_ddjj.php', $("#formu_datos").serialize() + '&' + $("#meses_periodo").serialize() + '&acc=getIdImpresion', function(data, textStatus, xhr) {
+									window.location.href = 'app/funciones/genera_declaracion_jurada_doiu.php?' + 'id_impresion=' + data + '&' + $("#meses_periodo").serialize();
+							$('#formu_datos')[0].reset();
+							$("#datos_complementarios").fadeOut();
+							console.log("Todo pio hasta aca");
+						
+						});
+					
+					} else {
+						$('#mensaje_ajax').html('Ha ocurrido un error al generar la DDJJ, por favor contacte un administrador');
+						$('#mensaje_ajax').dialog({
+							title : '¡Atención!' ,
+							buttons : [{
+								text : 'Aceptar' ,
+								class : 'btn green' ,
+								click : function () {
+									$(this).dialog('close');
+								}
+							}]
+						});
+					}
+				}
+			});
+		}
+	});
+	
+	$('#motivo_reimpresion').validate({
+		rules : {
+			motivo_reimpresion : {
+				required : true ,
+				minlength : 15
+			}
+		} ,
+		messages : {
+			motivo_reimpresion : {
+				required : 'Ingrese un motivo' ,
+				minlength : 'Descripci&oacute;n muy corta'
+			}
+		} , 
+		submitHandler : function (form) {
+			console.log ($(form).serialize() + '&periodo=' + $('#meses_periodo').val());
+			
+			$.ajax({
+				type : 'post' ,
+				data : $(form).serialize() + '&acc=reimprimir&periodo=' + $('#meses_periodo').val() , 
+				url  : 'app/controladores/informacion_priorizada/formulario_ddjj.php' ,
+				success : function (data) {
+					$('#formu_mensaje').dialog('close');
+					$("#datos_complementarios").fadeIn();
+				}
+			});
+		}
+	});
+	
+});
+	
+</script>
+<div style="display: none">
+	<div id="mensaje_ajax"></div>
+	<div id="formu_mensaje">
+		<form id="motivo_reimpresion">
+			<textarea name="motivo_reimpresion" style="width: 610px; height: 100px;"></textarea>
+		</form>
+	</div>
+</div>
+
+<div class="portlet box red listado-simple">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Impresi&oacute;n de declaraci&oacute;n jurada con informaci&oacute;n priorizada</div>
+	</div>
+	<div class="portlet-body">
+		<form id="formu_periodo" style="text-align: center">
+			<div>Seleccione el per&iacute;odo a informar
+				<input id="meses_periodo" name="periodo" type="text" />
+			</div>
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
+
+<div id="datos_complementarios" class="portlet box red listado-simple">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Conceptos adicionales</div>
+	</div>
+	<div class="portlet-body form">
+		<form id="formu_datos" class="horizontal-form">
+			Cantidad de efectores integrantes : <span style="font-weight: bold">{cantidad_efectores_integrantes}</span>
+			<br />
+			Cantidad de efectores con convenio : <span style="font-weight: bold">{cantidad_efectores_convenio}</span>
+			<br />
+			<br />
+			1. Se encuentra cargado y autorizado el Tablero de Control del Programa SUMAR con los datos correspondientes al 
+			per&iacute;do <input type="text" name="periodo_tablero" id="periodo_tablero" /><br/>
+			2. Con fecha <input type="text" name="fecha_cuenta_capitas" id="fecha_cuenta_capitas" /> se remiti&oacute; al &Aacute;rea de Supervisi&oacute;n y Auditor&iacute;a de la 
+			Gesti&oacute;n Administrativa y Financiera de la UEC la Declaraci&oacute;n Jurada que incluye los ingresos y egresos de la 
+			Cuenta C&aacute;pitas Provincial del SPS durante el mes de <input type="text" name="periodo_cuenta_capitas" id="periodo_cuenta_capitas" /> 
+			y la copia del extracto bancario de dicha cuenta correspondiente al mismo per&iacute;odo<br />
+			3. Con fecha <input type="text" name="fecha_sirge" id="fecha_sirge" /> se remiti&oacute; al &Aacute;rea Sistemas Inform&aacute;ticos de la UEC
+			la Declaraci&oacute;n Jurada de Prestaciones, Comprobantes y Uso de Fondos realizado por los efectores correspondientes al 
+			Sistema de reportes de Gesti&oacute;n (SIRGE), actualizando con los datos correspondientes al per&iacute;odo <input type="text" name="periodo_sirge" id="periodo_sirge" /><br />
+			4. Con fecha <input type="text" name="fecha_reporte_bimestral" id="fecha_reporte_bimestral" /> se remti&oacute; al &Aacute;rea Planificaci&oacute;n Estrat&eacute;gica de la 
+			UEC, el Reporte bimestral de Prestaciones del SPS del Programa SUMAR y el Reporte bimestral de Uso de Fondos del SPS del Programa
+			SUMAR correspondientes al bimestre 
+			<select name="bimestre" id="bimestre">
+				<option value="0">Seleccione bimestre</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</select> 
+			del a&ntilde;o
+			<select name="anio_bimestre" id="anio_bimestre">
+				<option value="0">Seleccione a&ntilde;o</option>
+				<option value="2013">2013</option>
+				<option value="2014">2014</option>
+				<option value="2015">2015</option>
+			</select>
+			<br />
+			<div class="form-actions">
+				<button type="submit" class="btn red"><i class="icon-ok"></i> Generar DDJJ</button>
+			</div>
+		</form>
+		<div class="error" style="display: none;"></div>
+	</div>
+</div>
