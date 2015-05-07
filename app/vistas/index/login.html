@@ -41,6 +41,17 @@
 
 <script>
 $(document).ready(function(){
+	
+	$.backstretch([
+		"public/img/back/1.png",
+		"public/img/back/2.png",
+		"public/img/back/3.png",
+		"public/img/back/4.png",
+		], {
+		  fade: 1000,
+		  duration: 6000
+	});
+	
 	$('.alert').hide();
 	$('form').submit(function(event){
 		event.preventDefault();

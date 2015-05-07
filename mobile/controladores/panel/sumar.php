@@ -2,16 +2,11 @@
 
 require_once '../../init.php';
 
-$id = $_REQUEST['user'];
-$u = new Usuario();
-
 $html = [
-  '../../vistas/tabs/hc.html'
+  '../../vistas/panel/sumar.html'
 ];
 
-$diccionario = [
-	'PRACTICAS' => $u->getListadoPracticas($id)
-];
+$diccionario = [];
 
 $params = [
 	'template' => Html::vista($html , $diccionario)

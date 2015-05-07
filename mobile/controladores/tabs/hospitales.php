@@ -2,15 +2,14 @@
 
 require_once '../../init.php';
 
-$id = $_REQUEST['user'];
-$u = new Usuario();
+$e = new Efector();
 
 $html = [
-  '../../vistas/tabs/hc.html'
+  '../../vistas/tabs/hospitales.html'
 ];
 
 $diccionario = [
-	'PRACTICAS' => $u->getListadoPracticas($id)
+	'LISTADO' => $e->getListadoCercano($_REQUEST['lat'] , $_REQUEST['lon'])
 ];
 
 $params = [

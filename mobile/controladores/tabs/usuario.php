@@ -3,22 +3,26 @@
 require_once '../../init.php';
 
 $u = new Usuario();
+$e = new Efector();
 $id = $_REQUEST['user'];
+$data = $u->getUserData($id);
+$estado = $u->getEstado($id);
 
 $html = [
   '../../vistas/tabs/usuario.html'
 ];
 
 $diccionario = [
-	'NOMBRE_APELLIDO' => $u->getNombreApellido($id),
-	'EDAD' => $u->getEdad($id),
-	'TIPO_NUMERO_DOCUMENTO' => $u->getTipoNumero($id),
-	'DOMICILIO' => 'Av. Nazca 1450 4ºF',
-	'PROVINCIA' => 'Ciudad Autónoma de Buenos Aires',
-	'NOMBRE_EFECTOR_ASIGNADO' => '',
-	'ESTADO' => '',
-	'PRACTICAS_ULTIMO_AÑO' => '',
-	'FAMILIARES' => ''
+	'NOMBRE_APELLIDO' => $data['n'],
+	'EDAD' => $data['edad'],
+	'TIPO_NUMERO_DOCUMENTO' => $data['dni'],
+	'DOMICILIO' => $data['domicilio'],
+	'PROVINCIA' => $data['provincia'],
+	'NOMBRE_EFECTOR_ASIGNADO' => $e->getEfectorAsignado($id),
+	'ESTADO' => $estado['ESTADO'],
+	'CSS_ESTADO' => $estado['CSS_ESTADO'],
+	'ICONO_ESTADO' => $estado['ICONO_ESTADO'],
+	'PRACTICAS_ULTIMO_AÑO' => $u->getPracticasUltimoAnio($id)
 ];
 
 $params = [

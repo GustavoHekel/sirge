@@ -1,0 +1,56 @@
+<div class="portlet box green listado-simple">
+	<div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>Efectores Priorizados</div>
+	</div>
+	<div class="portlet-body">
+		<form id="indicadores_provincia" style="text-align: center">
+			<div>Seleccione una Provincia
+				{provincias}
+			<div style="display:inline-block;" id="div-indicadores">
+				<div class="control-group">                
+	                <div class="controls">
+	                    <select class="selectpicker" id="indicadores" name="indicador">
+	                        <option value="1.1">1.1 - TASA DE CEB</option>
+	                        <option value="1.2">1.2 - TASA DE CEB EN NIÑOS</option>
+	                        <option value="1.3">1.3 - NIVEL DE ACTIVIDADES EXTRAMURO</option>
+	                        <option value="1.4">1.4 - NIVEL DE BUSQUEDA ACTIVA (ADOLESCENTES)</option>
+	                        <option value="5.1">5.1 - TASA DE CEB EN POB INDIGENA</option>
+	                        <option value="5.2">5.2 - TASA DE COBERTURA DE CONTROL DE SALUD A POB INDIGENA REAL. EN TERRENO</option>
+	                        <option value="5.3">5.3 - NIVEL DE ACTIVIDADES EXTRAMURO</option>
+	                    </select>
+	                </div>
+            	</div>
+            </div>
+				<input class="btn green" type="submit" value="Buscar">
+			</div>
+		</form>
+	</div>
+</div>
+<div id="tabla_efectores_priorizados"></div>
+
+<script>
+$(document).ready(function(){
+	
+	$('#indicadores_provincia').on('submit',function(event){
+    	event.preventDefault();
+
+    	$("#provincias").attr('name', 'provincia');
+
+    	$.ajax({
+    		url: 'app/controladores/indicadores/indicadores_epriorizados_provincial.php',
+    		type: 'POST',    	
+    		data: $("#indicadores_provincia").serialize(),
+    		success: function(data){
+    			$("#tabla_efectores_priorizados").html(data);
+    		}
+    	})    	
+    	.fail(function() {
+    		console.log("error");
+    	})
+    	.always(function() {
+    		console.log("complete");
+    	});
+    	
+	});
+});
+</script>

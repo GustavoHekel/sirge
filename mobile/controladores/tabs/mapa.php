@@ -2,15 +2,12 @@
 
 require_once '../../init.php';
 
-$id = $_REQUEST['user'];
-$u = new Usuario();
-
 $html = [
-  '../../vistas/tabs/hc.html'
+  '../../vistas/tabs/hospitales.html'
 ];
 
 $diccionario = [
-	'PRACTICAS' => $u->getListadoPracticas($id)
+	'LISTADO' => getListadoCercano($_REQUEST['ll'])
 ];
 
 $params = [
