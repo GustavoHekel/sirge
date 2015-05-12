@@ -33,4 +33,26 @@ class Indicadores {
 		return $this->_db->faquery('getEfectoresPriorizados', ['indicador' => $indicador, 'id_provincia' => $id_provincia], false)->getResults();
 	}
 
+	public function getEfectoresPriorizadosPorcentual($indicador, $id_provincia, $periodo) {
+		return $this->_db->faquery('getEfectoresPriorizadosPorcentual', ['indicador' => $indicador, 'id_provincia' => $id_provincia, 'periodo' => $periodo], false)->getResults();
+		//var_dump($this->_db->faquery('getEfectoresPriorizadosPorcentual', ['indicador' => $indicador, 'id_provincia' => $id_provincia, 'periodo' => $periodo], false)->getErrorInfo());
+	}
+
+	public function getAnualEfectoresPriorizadosPorcentual($indicador, $id_provincia, $periodo) {
+		return $this->_db->faquery('getAnualEfectoresPriorizadosPorcentual', ['indicador' => $indicador, 'id_provincia' => $id_provincia, 'periodo' => $periodo], false)->getResults();
+		//var_dump($this->_db->faquery('getEfectoresPriorizadosPorcentual', ['indicador' => $indicador, 'id_provincia' => $id_provincia, 'periodo' => $periodo], false)->getErrorInfo());
+	}
+
+	public function getColorCuatrimestre($resultado, $meta) {
+		if ($resultado == 0) {
+			return 'red';
+		} /*elseif ($resultado - $meta < ($meta * -0.5)) {
+		return 'red';
+		} */elseif ($resultado - $meta < 0) {
+			return 'red';
+		} else {
+			return 'green';
+		}
+	}
+
 }

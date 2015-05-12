@@ -13,49 +13,12 @@
 
 			<label for="provincia">Provincia:</label>
 			{SELECT_PROVINCIA}
-			<!--
-			<select name="provincia" data-native-menu="true">
-				<option value="02">Buenos Aires</option>
-				<option value="03">Catamarca</option>
-				<option value="16">Chaco</option>
-				<option value="17">Chubut</option>
-				<option value="01">Ciudad Autónoma de Buenos Aires</option>
-				<option value="04">Córdoba</option>
-				<option value="05">Corrientes</option>
-				<option value="06">Entre Rios</option>
-				<option value="18">Formosa</option>
-				<option value="07">Jujuy</option>
-				<option value="19">La Pampa</option>
-				<option value="08">La Rioja</option>
-				<option value="09">Mendoza</option>
-				<option value="20">Misiones</option>
-				<option value="21">Neuquén</option>
-				<option value="22">Rio Negro</option>
-				<option value="10">Salta</option>
-				<option value="11">San Juan</option>
-				<option value="12">San Luis</option>
-				<option value="23">Santa Cruz</option>
-				<option value="13">Santa Fe</option>
-				<option value="14">Santiago del Estero</option>
-				<option value="24">Tierra del Fuego</option>
-				<option value="15">Tucumán</option>
-			</select>
-			-->
 
 			<label for="email">Email:</label>
 			<input type="text" value="{EMAIL}" name="email">
 
 			<label for="tipo_documento">Tipo documento:</label>
 			{SELECT_TIPO_DOC}
-			<!--
-			<select name="tipo_documento" data-native-menu="true">
-				<option value="DNI">Documento nacional de identidad</option>
-				<option value="CI">Cédula de identidad</option>
-				<option value="LC">Libreta cívica</option>
-				<option value="LE">Libreta de enrolamiento</option>
-				<option value="CM">Cédula migratoria</option>
-			</select>
-			-->
 
 			<label for="numero_documento">Número:</label>
 			<input type="number" value="{NUMERO_DOCUMENTO}" name="numero_documento">
@@ -65,12 +28,7 @@
 
 			<label for="sexo">Género:</label>
 			{SELECT_GENERO}
-			<!--
-			<select name="sexo" data-native-menu="true">
-				<option value="F">Femenino</option>
-				<option value="M" selected="selected">Masculino</option>
-			</select>		
-			-->
+
 			<div class="ui-input-btn ui-btn ui-icon-check ui-btn-icon-left">
 				Actualizar datos
 				<input type="submit" data-enhanced="true">
@@ -117,15 +75,21 @@
 			}
 		},
 		submitHandler : function(form){
-			alert("OK");
 			$.ajax({
 				method  : 'post',
 				url 	: 'http://200.69.210.3/sirge2/mobile/services/update.php',
-				data 	: $('#form-update').serialize(),
+				data 	: $('#form-update').serialize() + '&user=' + localStorage.id_usuario,
 				dataType : 'jsonp',
 				crossDomain : true,
 				success : function(data){
-					alert(JSON.stringify(data));
+					if (data.actualizado == 1){
+						navigator.notification.alert(
+							'Se han actualizado sus datos.',
+							'',
+							'Atención!',
+							'Ok'
+						);
+					}
 				}
 			});
 		}

@@ -93,9 +93,9 @@ class Usuario {
 			'F' => 'Femenino',
 			'M' => 'Masculino'
 		];
-		$select = '<select>';
+		$select = '<select name="genero">';
 		foreach ($sexos as $sigla => $desc) {
-			if ($s == $sigla) {
+			if ($sigla == $s) {
 				$select .= "<option value='{$sigla}' selected='selected'>{$desc}</option>";
 			} else {
 				$select .= "<option value='{$sigla}'>{$desc}</option>";
