@@ -27,4 +27,5 @@ SELECT nombre, r.efector, case
 	FROM indicadores.resumen_anio_indicadores_priorizados(:periodo,:id_provincia,:indicador) r
 	LEFT JOIN indicadores.metas_efectores_priorizados i ON r.efector = i.efector
 	WHERE 
-		i.indicador = :indicador ;
+		i.indicador = :indicador 
+		ORDER BY 3 desc;

@@ -1,0 +1,117 @@
+<div class="portlet box">
+    <div class="portlet-body form">
+        <div class="form-horizontal form-view">
+            <h4 class="form-section" style="text-transform:uppercase;">{NOMBRE_INDICADOR}</h4>
+            <div><b>Efector</b></div>
+            <p>{EFECTOR}</p>
+            <h3 class="form-section"></h3>
+            <!-- <div><b style="text-transform:uppercase;">{DESCRIPCION_INDICADOR}</b> -->
+            <p><b>Numerador: </b>{NUMERADOR}</p>
+            <p><b>Denominador: </b>{DENOMINADOR}</p>
+            <h3 class="form-section"></h3>            
+            <p><b>Atencion! </b>Los datos de cada mes se cargan al mes siguiente. </p>
+            <p></p>
+        </div>
+        <h4 class="form-section">Estado</h4>        
+         <div style="width:550px; height:150px; margin-top:30px;">
+            <table id="table-sparkline" style="text-align:center;">
+                <thead>
+                    <tr>
+                        <th>Cuatrimestre 1</th>
+                        <th>Meta</th>
+                        <th>Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-sparkline" class="tbody-2">
+                    <tr id="valores">                            
+                        <td data-sparkline="{MES1}, {MES2}, {MES3}, {MES4} "/>
+                        <td id="meta" style="font-size:16px;"><b>{META}</b></td>                        
+                        <td style="font-size:16px;"><a href="#" id="boton"><span id="numero"><b>{DIF}</b> </span> <i id="resultado"></i></a></td>
+                        <!-- <td id="diferencia" data-sparkline="{DIF} ; column"/>   -->                      
+                    </tr>
+                </tbody>
+            </table>
+        </div>   
+            <div id="pager">
+            </div>        
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    var difalt = parseInt("{DIF}");
+    var dif = Math.abs(difalt);
+    
+    $("#numero").text(dif);
+
+    $("#numero").css({
+        'display': 'inline-block',
+        'vertical-align': 'super',
+        'margin-right': '13px',        
+        'font-size': '18px'
+    });
+
+    $("#boton").css('width', '70px');
+
+    if(difalt < 0){
+        $("#boton").attr('class', 'btn icn-only red');
+        $("#resultado").attr('class', 'icon-caret-down');
+        $("#resultado").css('color', 'white');
+        $("#resultado").css('font-size', '35px');
+        $("#meta").css('color', 'red');                
+    }
+    else{
+        $("#boton").attr('class', 'btn icn-only green');
+        $("#resultado").attr('class', 'icon-caret-up');
+        $("#resultado").css('color', 'white');
+        $("#resultado").css('font-size', '35px');
+        $("#meta").css('color', 'green');                        
+    }
+    
+    $.getScript("public/javascript/highchart_indicadores.js")
+        .done(function(script, textStatus) {
+            console.log('Successfully loaded script');
+        })
+        .fail(function(jqxhr, settings, exception) {
+            alert('Failed to load script');
+        });
+
+});
+</script>
+<style type="text/css">
+#table-sparkline {    
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid silver;
+    height: 20px;
+}
+
+#table-sparkline td {    
+    height: 70px;
+    min-width: 80px;
+}
+
+thead th {
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+    font-size: 15px;
+}
+
+.highcharts-tooltip>span {
+    background: white;
+    border: 1px solid silver;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #888;
+    padding: 8px;
+}
+
+.highcharts-button{
+    display: none;
+}
+</style>

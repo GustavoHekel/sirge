@@ -1,5 +1,4 @@
 <?php
-
 class Usuario {
 	
 	private 
@@ -13,7 +12,7 @@ class Usuario {
 	}
 	
 	public function login ($callback , $email , $pass){
-		$sql = "select id_usuario from mobile.usuarios where email = ? and pass = ?";
+		$sql = "select id_usuario from mobile.usuarios where email = ? and pass = ? and validado = 'S'";
 		$params = [$email , md5($pass)];
 		$this->_user['id_usuario'] = $this->_db->query($sql , $params)->get()['id_usuario'];
 		echo $callback . '(' . json_encode($this->_user) . ')';
@@ -39,70 +38,6 @@ class Usuario {
 			where
 				id_usuario = ?";
 		return $this->_db->query($sql , [$id])->get();
-	}
-	
-	private function getProvincia ($id){
-		return $this->_db->find('id_provincia' , 'mobile.usuarios' , ['id_usuario = ?' , [$id]]);
-	}
-	
-	public function getSelectProvincia ($id){
-		$id_provincia = $this->getProvincia ($id);
-		$provincias = $this->_db->query('select * from sistema.provincias order by descripcion')->getResults();
-		$select = "<select name='id_provincia'>";
-		foreach ($provincias as $id => $data){
-			if ($data['id_provincia'] == $id_provincia) {
-				$select .= "<option value='{$data['id_provincia']}' selected='selected'>{$data['descripcion']}</option>";
-			} else {
-				$select .= "<option value='{$data['id_provincia']}'>{$data['descripcion']}</option>";
-			}
-		}
-		$select .= '</select>';
-		return $select;
-	}
-	
-	private function getTipoDocumento ($id){
-		return $this->_db->find('tipo_documento' , 'mobile.usuarios' , ['id_usuario = ?' , [$id]]);
-	}
-	
-	public function getSelectTipoDocumento ($id){
-		$tipo_doc = $this->getTipoDocumento($id);
-		$tipos_doc = [
-			'DNI' => 'Documento Nacional de Identidad',
-			'CI' => 'Cédula de identidad',
-			'LC' => 'Libreta Cívica',
-			'LE' => 'Libreta de Enrolamiento',
-			'CM' => 'Cédula migratoria'
-		];
-		
-		$select = '<select name="tipo_documento">';
-		
-		foreach ($tipos_doc as $tipo => $desc) {
-			if ($tipo == $tipo_doc) {
-				$select .= "<option value='{$tipo}' selected='selected'>{$desc}</option>";
-			} else {
-				$select .= "<option value='{$tipo}'>{$desc}</option>";
-			}
-		}
-		$select .= '</select>';
-		return $select;
-	}
-	
-	public function getSelectSexo ($id){
-		$s = $this->_db->find('sexo' , 'mobile.usuarios' , ['id_usuario = ?' , [$id]]);
-		$sexos = [
-			'F' => 'Femenino',
-			'M' => 'Masculino'
-		];
-		$select = '<select name="genero">';
-		foreach ($sexos as $sigla => $desc) {
-			if ($sigla == $s) {
-				$select .= "<option value='{$sigla}' selected='selected'>{$desc}</option>";
-			} else {
-				$select .= "<option value='{$sigla}'>{$desc}</option>";
-			}
-		}
-		$select .= '</select>';
-		return $select;
 	}
 	
 	public function getEstado ($id){
@@ -212,8 +147,105 @@ class Usuario {
 		return $linea;
 	}
 	
+	public function alta ($callback , $data){
+		
+		$e = new Email();
+		$uniqueid = md5(uniqid());
+		
+		$data = json_decode($data , true);
+		$return = ['alta' => 0];
+		$params = [
+			$data['nombre'],
+			$data['apellido'],
+			$data['sexo'],
+			$data['tipo_documento'],
+			$data['ndoc'],
+			$data['fnac'],
+			$data['email'],
+			md5($data['pass']),
+			$data['telefono'],
+			$data['provincia'],
+			'N',
+			$uniqueid
+		];
+		
+		$sql = "
+			insert into mobile.usuarios (nombre , apellido , sexo , tipo_documento , numero_documento , fecha_nacimiento , email , pass , numero , id_provincia , validado , uniqueid)
+			values (?,?,?,?,?,?,?,?,?,?,?,?)";
+		$return['alta'] = $this->_db->query($sql , $params)->getCount();
+		
+		if ($return['alta']){
+			if ($this->existe($data)){
+				$e->enviarValidacion($data['email'] , 'Valide sus datos' , 'vistas/email/validacion.html' , $uniqueid);
+			} else {
+				$e->enviarValidacion($data['email'] , 'Importante' , 'vistas/email/no_encontrado.html' , $uniqueid);
+			}
+		}
+		
+		echo $callback . '(' . json_encode($return) . ')';
+	}
 	
+	private function existe ($data){
+		
+		$params = [
+			$data['tipo_documento'],
+			$data['sexo'],
+			$data['ndoc'],
+			$data['fnac']
+		];
+		
+		$sql = "
+			select count(*) as c 
+			from beneficiarios.beneficiarios 
+			where
+				tipo_documento = ?
+				and sexo = ?
+				and numero_documento = ?
+				and fecha_nacimiento = ?";
+		return $this->_db->query($sql , $params)->get()['c'];
+	}
 	
-	
+	public function validar ($callback , $email , $uniqueid){
+		$params = [$email , $uniqueid];
+		$sql = "
+			update mobile.usuarios
+			set 
+				validado = 'S'
+				and fecha_validado = localtimestamp
+			where
+				email = ?
+				and uniqueid = ?";
+		$validado = $this->_db->query($sql , $params)->getCount();
+		if ($validado){
+			echo 'Gracias por validar su email, ya puede ingresar a la aplicaci&oacute;n';
+		} else {
+			echo 'Error';
+		}
+	}
+
+	public function informarProblema ($callback , $problema , $texto , $user){
+		$e = new Email();
+		$mail = $this->_db->find('email' , 'mobile.usuarios' , ['id_usuario = ?', [$user]]);
+		$html = "
+			<div>
+				<h1>{$mail}</h1>
+				<h2>{$problema}</h2>
+				<h3>{$texto}</h3>
+			</div>";
+
+		$sql = "insert into mobile.reportes_problemas (id_usuario , tipo_problema , descripcion) values (?,?,?)";
+		$params = [$user , $problema , $texto];
+
+		if ($this->_db->query($sql , $params)->getCount()){
+			$e->enviarProblema($html);
+			$data['enviado'] = 1;
+		} else {
+			$data['enviado'] = 0;
+		}
+
+		echo $callback . '(' . json_encode($data) . ')';
+		
+	}
+
 }
 

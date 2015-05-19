@@ -1,86 +1,124 @@
 <div class="portlet box yellow listado-simple">
     <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Indicadores de control</div>
+        <div class="caption"><i class="icon-reorder"></i>Indicadores de control</div>
     </div>
     <div class="portlet-body">
-        <form id="indicadores_provincia" style="text-align: center">
-            <div>Seleccione una Provincia
-                {provincias}
-                <input id="meses_periodo" name="fecha" placeholder="Seleccione Mes y Año"  type="text" />
-                <input class="btn yellow" type="submit" value="Buscar">
+        <form id="indicadores_provincia" style="text-align: center" method="post">
+            <div class="control-group" style="display: inline-block;">
+                <label class="control-label" for="provincias" style="display: inline-block;">Seleccione una Provincia </label>
+                <div class="controls" style="display: inline-block;">
+                    {provincias}
+                </div>
+            </div>
+            <div class="control-group" style="display: inline-block;">
+            <label class="control-label" for="provincias" style="display: inline-block;"></label>
+                <div class="controls" style="display: inline-block;">                    
+                        <input id="meses_periodo" name="fecha" placeholder="Seleccione Mes y Año" type="text" />
+                        <input class="btn yellow" type="submit" value="Buscar" />
+                </div>
             </div>
         </form>
-    </div>
-</div>
+    </div>        
+</div>       
 <div id="cuadros_indicadores"></div>
 <div style="display: none">
-  <div id="info-fecha"></div>
+    <div id="info-fecha"></div>
 </div>
+        <script>
+        $(document).ready(function() {
+
+            $('#meses_periodo').monthpicker({
+                ShowIcon: false,
+                dateFormat: 'yy-mm',
+                buttonImage: '../../../public/javascript/plugins/jquery-ui/images',
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                minDate: new Date(2014, 0, 1),
+                maxDate: new Date(2020, 12, 31)
+            });
 
 
-<script>
-$(document).ready(function(){
+            $("#provincias").attr('name', 'id_provincia');
 
-        $('#meses_periodo').monthpicker({
-            ShowIcon: false,
-            dateFormat: 'yy-mm',
-            buttonImage: '../../../public/javascript/plugins/jquery-ui/images',
-            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            minDate: new Date(2014, 0,1), maxDate: new Date(2020, 12,31)
-        });
-        
+            $("#indicadores_provincia").validate({
 
-        $("#provincias").attr('name', 'id_provincia');
-    
-    $('#indicadores_provincia').submit(function(event){
-        event.preventDefault();
-        mostrar_loading();
+                onfocusout: false,
+                onkeyup: false,
+                onclick: false,
+                onsubmit: true,
+                rules: {
+                    id_provincia: {
+                        required: true
+                    },
+                    fecha: {
+                        required: true
+                    }
+                },
+                messages: {
+                    id_provincia: {
+                        required: ''
+                    },
+                    fecha: {
+                        required: ''
+                    }
+                },
+                errorElement: "div",
+                errorPlacement: function(error, element) {
+                    element.before(error);
+                },
+                submitHandler: function(form) {
 
-        var d = new Date();
-        var month = d.getMonth()+1;
-        var year = d.getFullYear();
-        var fecha = $("#meses_periodo").val().split("-");
-        console.log(fecha[0]+" / "+year);
+                    console.log("Formulario OK");
+                    $(".control-group").css('color', 'green');
 
-        if(( fecha[0] == year && fecha[1] < month ) || (fecha[0] < year))
-        {
-            $.ajax({
-                type : 'post',
-                url  : 'app/controladores/indicadores/resultados_medica.php',
-                data : $(this).serialize(),
-                success : function (data) {
-                    //console.log (data);
-                    $('#cuadros_indicadores').html(data);
-                    ocultar_loading();
+                    mostrar_loading();
+
+                    var d = new Date();
+                    var month = d.getMonth() + 1;
+                    var year = d.getFullYear();
+                    var fecha = $("#meses_periodo").val().split("-");
+                    console.log(fecha[0] + " / " + year);                    
+
+                    if ((fecha[0] == year && fecha[1] < month) || (fecha[0] < year)) {
+                        $.ajax({
+                            type: 'post',
+                            url: 'app/controladores/indicadores/resultados_medica.php',
+                            data: $("#indicadores_provincia").serialize(),
+                            success: function(data) {
+                                //console.log (data);
+                                $('#cuadros_indicadores').html(data);
+                                ocultar_loading();
+                            }
+                        });
+                    } else if (fecha[0] == year && fecha[1] == month) {
+                        $('#info-fecha').html("No hay registros todavía para el mes actual.").dialog({
+                            buttons: [{
+                                text: 'Volver',
+                                class: 'btn green',
+                                click: function() {
+                                    $(this).dialog('close');
+                                }
+                            }]
+                        });
+                        //alert("No hay registros todavía para el mes actual.");
+                        ocultar_loading();
+                    } else {
+                        $('#info-fecha').html("No puede buscar un mes futuro.").dialog({
+                            buttons: [{
+                                text: 'Volver',
+                                class: 'btn green',
+                                click: function() {
+                                    $(this).dialog('close');
+                                }
+                            }]
+                        });
+                        //alert("No puede buscar un mes futuro.");
+                        ocultar_loading();
+                    }
+                },
+                invalidHandler: function(event, validator) {
+                    console.log(validator);
+                    $(".control-group").css('color', 'red');
                 }
             });
-        }
-        else if( fecha[0] == year && fecha[1] == month ){
-            $('#info-fecha').html("No hay registros todavía para el mes actual.").dialog({
-                 buttons : [{
-                     text : 'Volver',
-                     class : 'btn green',
-                     click : function (){
-                       $(this).dialog('close');
-                     }
-                 }]
-            });
-            //alert("No hay registros todavía para el mes actual.");
-            ocultar_loading();
-        }
-        else{
-            $('#info-fecha').html("No puede buscar un mes futuro.").dialog({
-                 buttons : [{
-                     text : 'Volver',
-                     class : 'btn green',
-                     click : function (){
-                       $(this).dialog('close');
-                     }
-                 }]
-            });
-            //alert("No puede buscar un mes futuro.");
-            ocultar_loading();
-        }
-    });
-});
-</script>
+        });
+        </script>

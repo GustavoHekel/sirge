@@ -1,0 +1,1 @@
+SELECT * FROM indicadores.resumen_anio_indicadores_priorizados_efector(:periodo,:efector,:indicador);

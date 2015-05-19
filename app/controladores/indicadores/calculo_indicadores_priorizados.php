@@ -3,6 +3,7 @@
 require_once '../../../init.php';
 
 $efectores_priorizados = new Indicadores();
+$inst_sirge            = new Sirge();
 
 $tz_object = new DateTimeZone('Brazil/East');
 //date_default_timezone_set('Argentina/East');
@@ -22,6 +23,6 @@ for ($i = 0; $i < count($datos); $i++) {
 	$datos[$i]['c3_color'] = $efectores_priorizados->getColorCuatrimestre($datos[$i]['c3'], $datos[$i]['meta_c3']);
 }
 
+//echo $inst_sirge->jsonDT($datos, false);
 echo json_encode($datos);
-
 ?>

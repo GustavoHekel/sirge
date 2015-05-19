@@ -1,7 +1,6 @@
 <?php
-
 require 'init.php';
 
 $u = new Usuario();
 
-$u->getListadoPracticas(31);
+$u->envarEmail(1);

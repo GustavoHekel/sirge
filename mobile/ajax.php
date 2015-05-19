@@ -3,14 +3,12 @@
 require_once 'init.php';
 
 if (isset ($_REQUEST) && count ($_REQUEST)) {
-	
 	$_REQUEST = array_values($_REQUEST);
 	
 	$callback = array_shift($_REQUEST);
-	
-	$params = [];
 	$clase 	= array_shift ($_REQUEST);
 	$metodo = array_shift ($_REQUEST);
+	$params = [];
 	
 	$_REQUEST[0] = 'callback=' . $callback . '&' . $_REQUEST[0];
 	

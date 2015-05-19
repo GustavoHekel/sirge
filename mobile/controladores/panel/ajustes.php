@@ -14,12 +14,12 @@ $diccionario = [
 	'NOMBRE' => $data['nombre'],
 	'APELLIDO' => $data['apellido'],
 	'DOMICILIO' => $data['domicilio'],
-	'SELECT_PROVINCIA' => $u->getSelectProvincia($id),
+	'SELECT_PROVINCIA' => Forms::getSelectProvincia($id),
 	'EMAIL' => $data['email'],
-	'SELECT_TIPO_DOC' => $u->getSelectTipoDocumento($id),
+	'SELECT_TIPO_DOC' => Forms::getSelectTipoDocumento($id),
 	'NUMERO_DOCUMENTO' => $data['numero_documento'],
 	'FECHA_NACIMIENTO' => date_format(date_create($data['fecha_nacimiento']) , "d/m/Y"),
-	'SELECT_GENERO' => $u->getSelectSexo($id)
+	'SELECT_GENERO' => Forms::getSelectSexo($id)
 ];
 
 $params = [

@@ -1,0 +1,52 @@
+<div data-role="content" class="ui-content" role="main">
+	<div class="inset">
+		<form id="form-reportar-problema" class="formulario_registro">
+			<label for="asunto">Seleccione el tipo de problema:</label>
+			<select name="asunto">
+				<option value="1">No puedo actualizar mis datos</option>
+				<option value="2">La información médica que muestra no es la mia</option>
+				<option value="3">No puedo asignar un miembro a mi grupo familiar</option>
+				<option value="4">No aparecen prácticas que me brindaron</option>
+				<option value="5">Otros</option>
+			</select>
+
+			<label for="descripcion">Agregue un detalle:</label>
+			<textarea name="descripcion"></textarea>
+			<div class="ui-input-btn ui-btn ui-icon-check ui-btn-icon-left">
+				Enviar
+				<input type="submit" data-enhanced="true">
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#form-reportar-problema').submit(function(event){
+			event.preventDefault();
+			$.mobile.loading("show");
+			$.ajax({
+				method : 'post',
+				url : 'http://200.69.210.3/sirge2/mobile/ajax.php',
+				data : {
+					c : 'Usuario',
+					m : 'informarProblema',
+					p : $('#form-reportar-problema').serialize() + '&user=' + localStorage.id_usuario
+				},
+				crossDomain : true,
+				dataType : 'jsonp',
+				success : function(data){
+					$.mobile.loading("hide");
+					if (data.enviado == 1){
+						navigator.notification.alert(
+							'Su inconveniente ha sido reportado',
+							'',
+							'Atención!',
+							'Ok'
+						);
+					}
+				}
+			});
+
+		});
+	});
+	</script>
+</div>

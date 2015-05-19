@@ -1,36 +1,66 @@
-<div class="portlet" style="width:900px; margin-left:auto; margin-right:auto;">
-				<div class="portlet-title" style="margin-top:60px;">
-					<div class="caption"><i class="icon-shopping-cart"></i>Resultados Efectores de la provincia</div>
-					<div class="tools">
-						<a href="javascript:;" class="collapse"></a>
-						<a href="#portlet-config" data-toggle="modal" class="config"></a>
-						<a href="javascript:;" class="reload"></a>
-						<a href="javascript:;" class="remove"></a>
-					</div>
-				</div>
-				<div class="portlet-body">
-					<table class="table table-striped table-bordered table-hover table-full-width">
-						<thead>
-							<tr>
-								<th><i class="icon-hospital"></i> Nombre</th>
-								<th><i class="icon-star"></i> CUIE</th>								
-								<th><i class="icon-bar-chart"></i> Q1</th>
-								<th><i class="icon-bar-chart"></i> Q2</th>								
-								<th><i class="icon-bar-chart"></i> Q3</th>																
-							</tr>
-						</thead>
-						<tbody id="table_priorizados_body">							
-						</tbody>
-					</table>
-				</div>
+
+<div class="portlet box green" style="width:900px; margin-left:auto; margin-right:auto;">
+		<div class="portlet-title" style="margin-top:60px;">
+			<div class="caption">
+				<i class="icon-reorder"></i>Resultados Efectores de la provincia
 			</div>
+		</div>
+				
+		<div class="portlet-body">
+		<div class="container efectores_priorizados" style="width: 855px;">	
+				<table id="tabla2_efectores_priorizados" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+					<thead>
+						<tr>
+							<th><i class="icon-hospital"></i> Nombre</th>
+							<th><i class="icon-star"></i> CUIE</th>								
+							<th><i class="icon-bar-chart"></i> Q1</th>
+							<th><i class="icon-bar-chart"></i> Q2</th>								
+							<th><i class="icon-bar-chart"></i> Q3</th>																
+						</tr>
+					</thead>
+						<tbody id="table_priorizados_body">							
+					</tbody>
+				</table>
+			</div>					
+		</div>
 </div>
+
 <div id="info-indicador"></div>
 
 <script>
 
 	$(document).ready(function() {
 		
+		var fecha = new Date();
+		var year = fecha.getFullYear();
+		var mes2 = fecha.getMonth();
+		var cuatrimestre_actual = 0;
+
+		switch(mes2){
+
+			case 0:
+		    case 1:
+		    case 2:
+	        case 3:
+	            cuatrimestre_actual = 1;
+	            break;
+	        case 4:
+		    case 5:
+		    case 6:
+	        case 7:
+	            cuatrimestre_actual = 2;
+	            break;
+	        case 8:
+		    case 9:
+		    case 10:
+	        case 11:
+	            cuatrimestre_actual = 3;
+	            break;
+    	}
+
+    	console.log(mes2);
+    	console.log(cuatrimestre_actual);
+
 		$.ajax({
 		     type : 'post',
 		     url  : 'app/controladores/indicadores/calculo_indicadores_priorizados.php',
@@ -38,47 +68,102 @@
 		      provincia : "{id_provincia}",
 		      indicador : "{indicador}"		      		     
 		      },
-		      dataType: 'json',
+		     dataType: 'json',
 		     success : function (data) {
 
 		     console.log(data);		     				
-		     var resultado = 0;
+		     var resultado = 0;		   
 
-				for (var i = 0; i < data.length; i++) {									
+				for (var i = 0; i < data.length; i++) {
+					
+					if(cuatrimestre_actual == 1){						
+						data[i].c2_color = 'grey';
+						data[i].c3_color = 'grey';
+					}									
+					else if(cuatrimestre_actual == 2){						
+						data[i].c3_color = 'grey';	
+					}					
 
-					$("#table_priorizados_body").append('<tr><td><a href="#">'+data[i].nombre+'</a></td><td><a href="#">'+data[i].efector+'</a></td><td><a href="#" efector="'+data[i].efector+'" cuatri="1" class="detalle btn mini '+data[i].c1_color+'-stripe">'+ data[i].c1 +'</a></td></td><td><a href="#" efector="'+data[i].efector+'" cuatri="2" class="detalle btn mini '+data[i].c2_color+'-stripe">'+ data[i].c2 +'</a></td></td><td><a href="#" efector="'+data[i].efector+'" cuatri="3" class="detalle btn mini '+data[i].c3_color+'-stripe">'+ data[i].c3 +'</a></td></tr>');
-	      			}
+					data[i].c1 = '<a href="#" efector="'+data[i].efector+'" color="'+data[i].c1_color+'" cuatri="1" class="detalle btn mini '+data[i].c1_color+'-stripe">'+ data[i].c1 +'</a>';	
+					data[i].c2 = '<a href="#" efector="'+data[i].efector+'" color="'+data[i].c2_color+'" cuatri="2" class="detalle btn mini '+data[i].c2_color+'-stripe">'+ data[i].c2 +'</a>';									
+					data[i].c3 = '<a href="#" efector="'+data[i].efector+'" color="'+data[i].c3_color+'" cuatri="3" class="detalle btn mini '+data[i].c3_color+'-stripe">'+ data[i].c3 +'</a>';																														
+	      		}
 
-				}		   			       		
-		    });
+	      		$('#tabla2_efectores_priorizados').remove();
 
-	});
+	      		$('.efectores_priorizados').append('<table id="tabla2_efectores_priorizados" cellpadding="0" cellspacing="0" border="0" class="table table-striped"><thead><tr><th><i class="icon-hospital"></i> Nombre</th><th><i class="icon-star"></i> CUIE</th><th><i class="icon-bar-chart"></i> Q1</th><th><i class="icon-bar-chart"></i> Q2</th><th><i class="icon-bar-chart"></i> Q3</th></tr></thead><tbody id="table_priorizados_body"></tbody></table>');
 
-	$("#tabla_efectores_priorizados").on('click',".detalle", function(event) {
-		event.preventDefault();
-		
-		var efector = $(this).attr('efector');		
-
-		/*$.ajax({
-		     type : 'post',
-		     url  : 'app/controladores/indicadores/detalle_indicador.php',
-		     data: {
-		      indicador : indicador,
-		      id_provincia : "{id_provincia}"
-		      },
-		     success : function (data) {*/
-		       $('#info-indicador').html("HOLA").dialog({
-		       	title: 'Resutado 1er cuatrimestre',
-		         buttons : [{
-		             text : 'Aceptar',
-		             class : 'btn green',
-		             click : function (){
-		               $(this).dialog('close');
-		             }
-		         }]
-		       });
-		  /*    }
-		    });*/
+	      		$('#tabla2_efectores_priorizados').dataTable({
+			        "data": data,
+			        dom	: 'frt<"bottom"lp><"clear">' ,
+				    info : true,
+					filter : true,
+					"iDisplayLength": 10,
+			        "processing": true,
+			        "columns": [
+		            { "data": "nombre" },
+		            { "data": "efector" , "sWidth": "22%"},
+		            { "data": "c1", "class": "center" , "sWidth": "12%"},
+		            { "data": "c2", "class": "center" , "sWidth": "12%"},
+		            { "data": "c3", "class": "center" , "sWidth": "12%"}
+		        	]
+		    	});   
+	      	} 	      							   			       	
+		    
 		});
+
+		$("#tabla_efectores_priorizados").on('click',".detalle", function(event) {
+			event.preventDefault();
+			
+			var efector = $(this).attr('efector');
+			var cuatri = $(this).attr('cuatri');
+			var valor = $(this).text();
+			var color = $(this).attr('color');
+			var indicador = $("#indicadores option:selected").val();
+
+			console.log(cuatrimestre_actual);
+			console.log(cuatri);
+
+			if(cuatrimestre_actual > cuatri || cuatrimestre_actual == cuatri){
+				$.ajax({
+			     type : 'post',
+			     url  : 'app/controladores/indicadores/cuatrimestre_efector_priorizado.php',
+			     data: {
+			      indicador : indicador,
+			      efector : efector,
+			      cuatri : cuatri,
+			      year : year,
+			      valor: valor,
+			      color: color
+			      },
+			     success : function (data) {
+			       $('#info-indicador').html(data).dialog({
+			       	title: 'Progreso cuatrimestre '+cuatri+' indicador '+indicador,
+			         buttons : [{
+			             text : 'Aceptar',
+			             class : 'btn green',
+			             click : function (){
+			               $(this).dialog('close').empty();
+			             }
+			         }]
+			       });
+			      }
+				});
+			}
+			else{
+				$('#info-indicador').html('Este cuatrimestre todav&iacute;a no tiene datos').dialog({			       	
+			         width: 300,
+			         buttons : [{
+			             text : 'Aceptar',			             
+			             class : 'btn yellow',
+			             click : function (){
+			               $(this).dialog('close').empty();
+			             }
+			         }]
+		       });
+			}			
+		});
+
+});
 
 </script>

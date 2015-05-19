@@ -138,7 +138,7 @@ class SIRGe {
 	}
 
 	public static function selectProvincia($id_Html, $id_provincia = null) {
-		$Html = '<select id="' . $id_Html . '"><option value="0" selected="selected">Seleccione una entidad</option>';
+		$Html = '<select id="' . $id_Html . '"><option value="" selected="selected">Seleccione una entidad</option>';
 		$sql  = "select * from sistema.provincias";
 		$data = Bdd::getInstance()->query($sql)->getResults();
 		foreach ($data as $index => $valor) {
