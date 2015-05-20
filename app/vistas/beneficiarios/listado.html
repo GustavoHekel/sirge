@@ -1,0 +1,110 @@
+<div class="portlet box {CSS_GLOBAL} listado-simple" style="width: 1000px">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Listado completo de beneficiarios
+		</div>
+	</div>
+	<div class="portlet-body">
+    <div class="table-toolbar">
+      <!--
+      <div class="btn-group">
+        <button id="descargar_tabla" class="btn green">
+        Descargar padrón de beneficiarios <i class="icon-download"></i>
+        </button>
+      </div>
+      -->
+    </div>
+		<div class="container beneficiarios" style="width: 950px;">
+      <table id="tabla_beneficiarios" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+        <thead>
+          <tr>
+            <th>+</th>
+            <th>C.B.</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Número Documento</th>
+            <th>Fecha Nacimiento</th>
+            <th>Provincia</th>
+            <th>Activo</th>
+          </tr>
+        </thead>
+      </table>
+		</div>
+	</div>
+</div>
+
+<div style="display:none">
+	<div id="dialog-efector"></div>
+	<div id="map_canvas"></div>
+	<div id="respuesta_ajax"></div>
+</div>
+
+<script>
+$(document).ready(function(){
+  mostrar_loading();
+  estilo_dialog ('{CSS_GLOBAL}');
+
+  $('#tabla_beneficiarios').dataTable({
+    "serverSide": true,
+    "processing": true,
+    dom	: 'frt<"bottom"lp><"clear">' ,
+    info : true,
+    filter : true,
+    bDestroy : true,
+    pageLength : 30,
+    "ajax" : {
+      "url"  : 'app/controladores/beneficiarios/listado_json.php',
+      "type" : 'post'
+    },
+    "columns": [
+      { "data": "d" },
+      { "data": "clave_beneficiario" },
+      { "data": "nombre" },
+      { "data": "apellido" },
+      { "data": "numero_documento" },
+      { "data": "fecha_nacimiento" },
+      { "data": "id_provincia_alta" },
+      { "data": "activo" }
+    ]
+  });
+
+  $('.efectores').on('click' , '#tabla_efectores .row-details' , function(){
+    mostrar_loading();
+    $.ajax({
+      type : 'post',
+      url  : 'app/controladores/efectores/detalle_efector.php',
+      data : 'id_efector=' + $(this).attr('id_efector'),
+      success : function (data) {
+        ocultar_loading();
+        $('#respuesta_ajax').html(data).dialog({
+          width : '1000px',
+          buttons : [{
+              text : 'Aceptar',
+              class : 'btn green',
+              click : function (){
+                $(this).dialog('close');
+              }
+          }]
+        });
+      }
+    });
+  });
+  
+  $('#descargar_tabla').click(function(){
+    mostrar_loading();
+    $.ajax({
+      type : 'post',
+      url  : 'app/parserAjax.php',
+      data : {
+        c : 'Efectores',
+        m : 'descargarTabla'
+      },
+      success : function (){
+        window.location='app/funciones/download_tabla_efectores.php?file=../../data/padrones/efectores.csv'
+        ocultar_loading();
+      }
+    });
+  });
+  
+});
+</script>

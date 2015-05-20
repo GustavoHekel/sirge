@@ -150,6 +150,13 @@ class SIRGe {
 		return $Html;
 	}
 
+	public static function get_Datetime_Now() {
+		$tz_object = new DateTimeZone('Brazil/East');
+		$datetime  = new DateTime();
+		$datetime->setTimezone($tz_object);
+		return $datetime;
+	}
+
 }
 
 ?>

@@ -1,0 +1,1 @@
+SELECT * FROM indicadores.resumen_anio_indicadores_priorizados_efector_no_porcentual(:periodo,:efector,:indicador);

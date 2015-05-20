@@ -48,6 +48,10 @@ switch ($cuatrimestre) {
 		break;
 }
 
+if ($indicador == "5.3") {
+	$descripcion['numerador'] = "No tiene numerador.";
+}
+
 $diccionario = [
 	'NOMBRE_INDICADOR'      => $descripcion['descripcion'],
 	'EFECTOR'               => $efector,

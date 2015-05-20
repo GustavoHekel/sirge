@@ -59,4 +59,22 @@ class Beneficiarios
     public function getDataBeneficiarioDNI ($dni){
         return $this->_db->fquery('getDataBeneficiarioDNI' , [$dni] , false)->getResults()[0];
     }
+    
+    public function listar ($post) {
+      if (strlen ($post['search']['value'])){
+        $sql = 'listar_filtrado';
+        $params = ['%' . $post['search']['value'] . '%' , '%' . $post['search']['value'] . '%' , '%' . $post['search']['value'] . '%' , $post['length'] , $post['start']];
+      } else {
+        $sql = 'listar';
+        $params = [$post['length'] , $post['start']];
+      }
+      $data = $this->_db->fquery($sql , $params , FALSE)->getResults();
+      foreach ($data as $key => $value) {
+        $json['data'][$key] = $value;
+      }
+      $json['recordsFiltered'] = $this->_db->findCount('beneficiarios.beneficiarios' , ['id_provincia_alta in (?,?)' , ['01','24']]);
+      $json['recordsTotal'] = $this->_db->findCount('beneficiarios.beneficiarios' , ['id_provincia_alta in (?,?)' , ['01','24']]);
+      $json['draw'] = $post['draw']++;
+      return (json_encode ($json));
+    }
 }

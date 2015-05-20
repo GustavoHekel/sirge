@@ -1,0 +1,1 @@
+SELECT beneficiarios.unir_beneficiarios_periodos_ceb_periodo( :periodo ) ; 
