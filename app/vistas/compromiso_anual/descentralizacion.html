@@ -1,30 +1,8 @@
-<!-- <div class="portlet box blue listado-simple">
-    <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Descentralizacion Anual</div>
-    </div>
-    <div class="portlet-body">
-        <form id="anio_descentralizacion" style="text-align: center">
-            <div>Seleccione un A&ntilde;o        
-				<select name="year" id="yearpicker">
-					<option value="">Seleccione a&ntilde;o</option>
-				</select>  
-                <input class="btn blue" type="submit" value="Buscar">
-            </div>
-        </form>
-    </div>
-</div> -->
-
 <script>
 $(document).ready(function(){
 
 	var year = new Date().getFullYear();
 	var grupo = "{id_provincia}";
-/*   for (i = new Date().getFullYear(); i > year - 2  - 2; i--)
-	{
-	    $('#yearpicker').append($('<option />').val(i).html(i));
-	}
-
-	$("#yearpicker option[value=2015]").attr('selected', 'selected');*/
 
 	mostrar_loading ();
 
@@ -136,7 +114,7 @@ $(document).ready(function(){
 					},
 					yAxis: {
 							min: 0,
-							max: 100,
+							max: 105,
 							title: {
 								text: 'Porcentaje descentralizado'
 							}

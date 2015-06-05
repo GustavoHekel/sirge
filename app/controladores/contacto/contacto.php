@@ -2,13 +2,18 @@
 
 require_once '../../../init.php';
 
-$html = [
-  '../../vistas/contacto/formulario.html'
-];
+if (!isset($_POST['emailTo'])) {
 
-$diccionario = [
-    'NOMBRE_USUARIO' => $_SESSION['descripcion'],
-    'EMAIL_USUARIO' => Usuarios::getEmail($_SESSION['id_usuario'])
-];
+	$html = [
+		'../../vistas/contacto/formulario.html',
+	];
 
-Html::vista($html , $diccionario);
+	$diccionario = [
+		'NOMBRE_USUARIO' => $_SESSION['descripcion'],
+		'EMAIL_USUARIO'  => Usuarios::getEmail($_SESSION['id_usuario']),
+	];
+
+	Html::vista($html, $diccionario);
+} else {
+	return Email::enviar_mail($_POST);
+}

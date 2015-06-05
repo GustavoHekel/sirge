@@ -68,12 +68,13 @@ $(document).ready(function(){
     ]
   });
 
-  $('.efectores').on('click' , '#tabla_efectores .row-details' , function(){
+  $('.beneficiarios').on('click' , '#tabla_beneficiarios .row-details' , function(){
     mostrar_loading();
     $.ajax({
       type : 'post',
-      url  : 'app/controladores/efectores/detalle_efector.php',
-      data : 'id_efector=' + $(this).attr('id_efector'),
+      //url  : 'app/controladores/efectores/detalle_efector.php',
+      url : 'app/vistas/beneficiarios/historia_clinica.html',
+      //data : 'id_efector=' + $(this).attr('id_efector'),
       success : function (data) {
         ocultar_loading();
         $('#respuesta_ajax').html(data).dialog({
@@ -90,21 +91,7 @@ $(document).ready(function(){
     });
   });
   
-  $('#descargar_tabla').click(function(){
-    mostrar_loading();
-    $.ajax({
-      type : 'post',
-      url  : 'app/parserAjax.php',
-      data : {
-        c : 'Efectores',
-        m : 'descargarTabla'
-      },
-      success : function (){
-        window.location='app/funciones/download_tabla_efectores.php?file=../../data/padrones/efectores.csv'
-        ocultar_loading();
-      }
-    });
-  });
+  
   
 });
 </script>

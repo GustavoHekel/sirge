@@ -4,7 +4,12 @@ $(document).ready(function(){
 	var year = new Date().getFullYear();
 	var grupo = "{id_provincia}";	
 
-	mostrar_loading ();
+	
+	$.unblockUI({
+                onUnblock: function () {
+						mostrar_loading ();
+				}
+         }); 
 
 	$.ajax({
 		type : 'post' ,

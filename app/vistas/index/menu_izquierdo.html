@@ -21,7 +21,7 @@ $(document).ready(function(){
 			default:
 				mostrar_loading();
 				$('.page-content').empty();
-				$('.page-content').hide().load(href , function () { ocultar_loading(); }).fadeIn();
+				$('.page-content').hide().load(href , function () { ocultar_loading(); return false;}).fadeIn();
 				$('li').removeClass('active');
 				$('.selected').remove();
 				$(this).parents('li').addClass('active');

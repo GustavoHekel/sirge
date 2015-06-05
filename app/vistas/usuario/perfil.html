@@ -1,32 +1,176 @@
-<div style="position: relative; top: 20px; left: 20px; width: 1000px;">
-<div class="tab-pane row-fluid active">
-  <ul class="unstyled profile-nav span3">
-    <li><img style="width: 230px" src="public/img/users/gus_about.png" alt=""></li>
-    <li><button class="btn green span12">Mensaje</button></li>
-  </ul>
-  <div class="span9">
+<!-- BEGIN PAGE CONTAINER-->
+<div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
     <div class="row-fluid">
-      <div class="span9 profile-info">
-        <h1>Gustavo D. Hekel</h1>
-        <h3>Desarrollador Sr.</h3>
-        <h5>gdhekel@gmail.com</h5>
-        <ul class="unstyled inline">
-          <li><i class="icon-map-marker"></i> Argentina - Capital Federal</li>
-          <li><i class="icon-calendar"></i> 15 Oct 1988</li>
-          <li><i class="icon-calendar"></i> Ultima conexion : 18 ene 2012</li>
-        </ul>
-      </div>
+        <div class="span12">
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <div class="color-panel hidden-phone">
+                <!-- <div class="color-mode-icons icon-color"></div> -->
+                <div class="color-mode-icons icon-color-close"></div>
+                <div class="color-mode">
+                    <p>THEME COLOR</p>
+                    <ul class="inline">
+                        <li class="color-black current color-default" data-style="default"></li>
+                        <li class="color-blue" data-style="blue"></li>
+                        <li class="color-brown" data-style="brown"></li>
+                        <li class="color-purple" data-style="purple"></li>
+                        <li class="color-grey" data-style="grey"></li>
+                        <li class="color-white color-light" data-style="light"></li>
+                    </ul>
+                    <label>
+                        <span>Layout</span>
+                        <select class="layout-option m-wrap small">
+                            <option value="fluid" selected>Fluid</option>
+                            <option value="boxed">Boxed</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Header</span>
+                        <select class="header-option m-wrap small">
+                            <option value="fixed" selected>Fixed</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Sidebar</span>
+                        <select class="sidebar-option m-wrap small">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected>Default</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Footer</span>
+                        <select class="footer-option m-wrap small">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected>Default</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <!-- END BEGIN STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <h3 class="page-title">
+              Perfil del usuario <!-- <small>user profile sample</small> -->
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <span>Inicio</span>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <span>Usuario</span>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <span>Perfil</span>
+                </li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
     </div>
-    <div>
-      <br />
-      <ul class="social-icons pull-left">
-        <li><a href="#" data-original-title="twitter" class="twitter"></a></li>
-        <li><a href="#" data-original-title="facebook" class="facebook"></a></li>
-        <li><a href="https://www.linkedin.com/in/javierminsky" data-original-title="linkedin" class="linkedin"></a></li>
-        <li><a href="#" data-original-title="Goole Plus" class="googleplus"></a></li>
-        <li><a href="#" data-original-title="skype" class="skype"></a></li>
-      </ul>
+    <!-- BEGIN PAGE CONTENT-->
+    <div style="position:relative;margin-top:20px;align:center;">
+        <div class="row-fluid profile">
+            <div class="span12">
+                <ul class="unstyled profile-nav span3">
+                    <li><img style="width: 230px" src="{ruta_imagen}" alt="No hay imagen" onError="this.onerror=null;this.src='public/img/users/unknown_user.png'"></li>
+                    <br />
+                    <ul class="social-icons pull-left">
+                        <li>
+                            <a id="links" href="{twitter}" data-original-title="twitter" class="twitter"></a>
+                        </li>
+                        <li>
+                            <a id="links" href="{facebook}" data-original-title="facebook" class="facebook"></a>
+                        </li>
+                        <li>
+                            <a id="links" href="{linkedin}" data-original-title="linkedin" class="linkedin"></a>
+                        </li>
+                        <li>
+                            <a id="links" href="{google_plus}" data-original-title="Goole Plus" class="googleplus"></a>
+                        </li>
+                        <li>
+                            <a id="links" href="{skype}" data-original-title="skype" class="skype"></a>
+                        </li>
+                    </ul>
+                </ul>
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="span5 profile-info">
+                            <h1>{descripcion}</h1>
+                            <h3>{ocupacion}</h3>
+                            <ul class="unstyled inline" style="text-transform:uppercase;">
+                                <li><i class="icon-map-marker"></i> Argentina - {provincia}</li>
+                                <li><i class="icon-calendar"></i> {fecha_nacimiento}</li>
+                                <li></li>
+                                <!-- <li><i class="icon-calendar"></i> Ultima conexion : 18 ene 2012</li> -->
+                            </ul>
+                            <br />
+                            <h5>{email}</h5>
+                        </div>
+                        <!--end span5-->
+                        <div class="span6">
+                            <div class="portlet sale-summary">
+                                <div class="portlet-title">
+                                    <div class="caption">Conexiones en el mes</div>
+                                </div>
+                                <div class="portlet-body flip-scroll">
+                                    <table id="ultimas_conexiones" cellspacing="0" class="table">
+                                        <thead class="flip-content">
+                                            <tr>
+                                                <th>Usuario
+                                                    <th>Provincia</th>
+                                                    <th>Fecha</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end span5-->
+                    </div>
+                    <!--end row-fluid-->
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-</div>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $.ajax({
+            url: 'app/controladores/usuario/perfil.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                conexiones: 'yes'
+            },
+            success: function(data) {
+                $('#ultimas_conexiones').dataTable({
+                    "sDom": 'frt<"bottom"ip><"clear">',
+                    "bInfo": true,
+                    //"bFilter" : true ,
+                    "bDestroy": true,
+                    "iDisplayLength": 5,
+                    "aaData": data['data'],
+                    "columns": [{
+                            "data": "usuario"
+                        }, {
+                            "data": "provincia"
+                        }, {
+                            "data": "fecha_login_date"
+                        }]
+                        //"aoColumns": data['aoColumns']
+                })
+            }
+
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+
+});
+</script>

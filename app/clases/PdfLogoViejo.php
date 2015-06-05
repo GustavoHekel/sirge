@@ -11,11 +11,15 @@ class PdfLogoViejo extends FPDF {
 	//$_logo_minis = '../../public/img/min_logo.jpg';
 
 	final public function header() {
-		$this->SetFont('Arial', 'B', 10);
-		$this->Image($this->_logo_sumar, 5, 10, 200);
+		$this->SetFont('Arial', 'I', 10);
+		$this->Image($this->_logo_sumar, 0, 0, 210);
+		$this->SetFont('Arial', 'I', 8);
+		$this->SetTextColor(100, 100, 100);
+		$this->SetX(115);
+		$this->Cell(0, 27, utf8_decode("2015 - \"Año del bicentenario del Congreso de los pueblos libres.\""));
 		//$this->Image($this->_logo_minis, 130, 15, 0, 15);
-		$this->Line(10, 35, 200, 35);
-		$this->Ln(23);
+		$this->Line(10, 28, 200, 28);
+		$this->Ln(16);
 	}
 
 	final public function footer() {

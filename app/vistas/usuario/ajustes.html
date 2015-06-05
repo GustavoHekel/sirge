@@ -1,22 +1,701 @@
-<form action="#">
-  <label class="control-label">Nombre y Apellido</label>
-  <input type="text" placeholder="Juan Perez" class="m-wrap span8">
-  <label class="control-label">Ocupaci&oacute;n</label>
-  <input type="text" placeholder="Ladron de guante blanco" class="m-wrap span8">
-  <label class="control-label">Interests</label>
-  <input type="text" placeholder="Design, Web etc." class="m-wrap span8">
-  <label class="control-label">Occupation</label>
-  <input type="text" placeholder="Web Developer" class="m-wrap span8">
-  <label class="control-label">Pa&iacute;s</label>
-  <div class="controls">
-    <input type="text" class="span8 m-wrap" style="margin: 0 auto;" data-provide="typeahead" data-items="4" >
-    <p class="help-block"><span class="muted">Start typing to auto complete!. E.g: US</span></p>
-  </div>
-  <label class="control-label">About</label>
-  <textarea class="span8 m-wrap" rows="3"></textarea>
-  <label class="control-label">Website Url</label>
-  <input type="text" placeholder="http://www.mywebsite.com" class="m-wrap span8">
-  <div class="submit-btn">
-    <a href="#" class="btn green">Guardar</a>
-  </div>
-</form>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <div class="color-panel hidden-phone">
+                <!-- <div class="color-mode-icons icon-color"></div> -->
+                <div class="color-mode-icons icon-color-close"></div>
+                <div class="color-mode">
+                    <p>THEME COLOR</p>
+                    <ul class="inline">
+                        <li class="color-black current color-default" data-style="default"></li>
+                        <li class="color-blue" data-style="blue"></li>
+                        <li class="color-brown" data-style="brown"></li>
+                        <li class="color-purple" data-style="purple"></li>
+                        <li class="color-grey" data-style="grey"></li>
+                        <li class="color-white color-light" data-style="light"></li>
+                    </ul>
+                    <label>
+                        <span>Layout</span>
+                        <select class="layout-option m-wrap small">
+                            <option value="fluid" selected>Fluid</option>
+                            <option value="boxed">Boxed</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Header</span>
+                        <select class="header-option m-wrap small">
+                            <option value="fixed" selected>Fixed</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Sidebar</span>
+                        <select class="sidebar-option m-wrap small">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected>Default</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Footer</span>
+                        <select class="footer-option m-wrap small">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected>Default</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <!-- END BEGIN STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <h3 class="page-title">
+              Ajustes de usuario <!-- <small>user profile sample</small> -->
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <span>Inicio</span>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <span>Usuario</span>
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li>
+                    <span>Ajustes</span>
+                </li>
+            </ul>
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="span3">
+                <ul class="ver-inline-menu tabbable margin-bottom-10">
+                    <li class="active">
+                        <a data-toggle="tab" href="#tab_1-1">
+                            <i class="icon-cog"></i> Datos personales
+                        </a>
+                        <span class="after"></span>
+                    </li>
+                    <li><a data-toggle="tab" href="#tab_2-2"><i class="icon-picture"></i> Elegir/Cambiar Imagen</a></li>
+                    <li><a data-toggle="tab" href="#tab_3-3"><i class="icon-lock"></i> Modificar Password</a></li>
+                    <li><a data-toggle="tab" href="#tab_4-4"><i class="icon-eye-open"></i> Redes Sociales</a></li>
+                </ul>
+            </div>
+            <div class="span9">
+                <div class="tab-content">
+                    <div id="tab_1-1" class="tab-pane active">
+                        <div style="height: auto;" id="accordion1-1" class="accordion collapse">
+                            <div class="portlet-body form">
+                                <form action="#" method="post" id="datos_personales" class="horizontal-form">
+                                    <div class="alert alert-error hide">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        Tienes algunos errores.
+                                    </div>
+                                    <div class="alert alert-success hide">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        Los datos est&aacute;n correctos!
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="nombrecompleto">Nombre completo</label>
+                                        <div class="controls">
+                                            <input type="text" style="font-weight:bold;" id="nombrecompleto" name="descripcion" class="m-wrap span8" value="{descripcion}">
+                                            <!-- <span class="help-block">This is inline help</span> -->
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="usuario">Usuario</label>
+                                        <div class="controls">
+                                            <input type="text" readonly style="font-weight:bold;" id="usuario" name="usuario" class="m-wrap span8" value="{usuario}" disabled>
+                                            <!-- <span class="help-block">This field has error.</span> -->
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="email">Email</label>
+                                        <div class="controls">
+                                            <input style="font-weight:bold;" type="text" id="email" name="email" class="m-wrap span8" value="{email}">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Fecha de nacimiento</label>
+                                        <div class="controls">
+                                            <input style="font-weight:bold;" class="span4 m-wrap" id="mask_nacimiento" name="fecha_nacimiento" type="text" value="{fecha_nacimiento}" />
+                                            <span class="help-inline">Completa el formato automáticamente</span>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="ocupacion">Ocupaci&oacute;n</label>
+                                        <div class="controls">
+                                            <input type="text" style="font-weight:bold;" id="ocupacion" name="ocupacion" class="m-wrap span8" value="{ocupacion}">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="mask_telefono">Tel&eacute;fono</label>
+                                        <div class="controls">
+                                            <input class="span4 m-wrap" style="font-weight:bold;" id="mask_telefono" name="telefono" type="text" value="{telefono}" />
+                                            <span class="help-inline">S&oacute;lo d&iacute;gitos.</span>
+                                        </div>
+                                    </div>
+                                    <div class="submit-btn">
+                                        <button type="submit" id="confirmar" class="btn green"><i class="icon-ok"></i> Confirmar</button>
+                                        <button type="button" class="btn">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab_2-2" class="tab-pane">
+                        <div style="height: auto;" id="accordion2-2" class="accordion collapse">
+                            <form action="#" id="subir_imagen" class="horizontal-form">
+                                <div class="controls">
+                                    <div>
+                                        <img src="{ruta_imagen}"  style="width: 230px; height: 200px;" alt="No hay imagen" onError="this.onerror=null;this.src='public/img/users/unknown_user.png'" />
+                                    </div>
+                                </div>
+                                <div class="space12"></div>                                                                
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <div class="input-append">
+                                        <div class="uneditable-input">
+                                            <i class="icon-file fileupload-exists"></i>
+                                            <span class="fileupload-preview" id="link_imagen"></span>
+                                        </div>
+                                        <span class="btn btn-file">
+                                    <span class="fileupload-new">Elegir foto</span>
+                                        <span class="fileupload-exists">Cambiar</span>
+                                        <input type="file" class="default" />
+                                        </span>
+                                        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Quitar</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="controls">
+                                    <span class="label label-important">NOTA!</span>
+                                    <span>El plugin utilizado para subir fotos
+                                            es soportado por las &uacute;ltimas versiones de Firefox, Chrome, Opera, 
+                                            Safari e Internet Explorer 10 solamente.</span>
+                                </div>
+                                <div class="space10"></div>
+                                <div class="submit-btn">
+                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Guardar</button>
+                                    <button type="button" class="btn">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="tab_3-3" class="tab-pane">
+                        <div style="height: auto;" id="accordion3-3" class="accordion collapse">
+                            <form action="#" id="modificar_password" class="horizontal-form">
+                                <div class="alert alert-error hide">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Tienes algunos errores.
+                                </div>
+                                <div class="alert alert-success hide">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Los datos est&aacute;n correctos!
+                                </div>
+                                <input type="hidden" name="password_orig" id="password_orig" value="{password}">
+                                <div class="control-group">
+                                    <label class="control-label">Password Actual</label>
+                                    <div class="controls">
+                                        <input type="password" style="font-weight:bold;" name="passwordactual" id="passwordactual" class="m-wrap span5">
+                                    </div>
+                                </div>
+                                <div class="control-group password-strength">
+                                    <label class="control-label">Nueva Password</label>
+                                    <div class="controls">
+                                        <input type="password" class="m-wrap span5" name="nuevapassword" id="nuevapassword">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Re-escribir Nueva Password</label>
+                                    <div class="controls">
+                                        <input type="password" style="font-weight:bold;" name="renuevapassword" class="m-wrap span5">
+                                    </div>
+                                </div>
+                                <div class="submit-btn">
+                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Confirmar</button>
+                                    <button type="button" class="btn">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="tab_4-4" class="tab-pane">
+                        <div style="height: auto;" id="accordion4-4" class="accordion collapse">
+                            <form action="#" class="form-horizontal" id="redes_sociales">
+                                <div class="alert alert-error hide">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Tienes algunos errores.
+                                </div>
+                                <div class="alert alert-success hide">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Los datos est&aacute;n correctos!
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="facebook"><i class="icon-facebook-sign big" style="font-size: 30px;"></i></label>
+                                    <div class="controls">
+                                        <input type="text" id="facebook" name="facebook" class="m-wrap span8" value="{facebook}">
+                                        <span class="help-block">Ej: https://www.facebook.com/robertobolaños</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="twitter"><i class="icon-twitter-sign big" style="font-size: 30px;"></i></label>
+                                    <div class="controls">
+                                        <input type="text" id="twitter" name="twitter" class="m-wrap span8" value="{twitter}">
+                                        <span class="help-block">Ej: https://twitter.com/rbolaños</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="linkedin"><i class="icon-linkedin-sign big" style="font-size: 30px;"></i></label>
+                                    <div class="controls">
+                                        <input type="text" id="linkedin" name="linkedin" class="m-wrap span8" value="{linkedin}">
+                                        <span class="help-block">Ej: https://ar.linkedin.com/pub/blabla</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="google_plus"><i class="icon-google-plus-sign big" style="font-size: 30px;"></i></label>
+                                    <div class="controls">
+                                        <input type="text" id="google_plus" name="google_plus" class="m-wrap span8" value="{google_plus}">
+                                        <span class="help-block">Ej: https://plus.google.com/blabla</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="skype"><i class="icon-skype big" style="font-size: 30px;"></i></label>
+                                    <div class="controls">
+                                        <input type="text" id="skype" name="skype" class="m-wrap span8" value="{skype}">
+                                        <span class="help-block">Ej: roberto.bolaños</span>
+                                    </div>
+                                </div>
+                                <!--end profile-settings-->
+                                <div class="space5"></div>
+                                <div class="submit-btn offset1">
+                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Guardar</button>
+                                    <button type="button" class="btn">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end span9-->
+        </div>
+    </div>
+</div>
+<div id="resultado"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    var form1 = $('#datos_personales');
+    var error1 = $('.alert-error', form1);
+    var success1 = $('.alert-success', form1);
+
+    $('#datos_personales').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        onsubmit: true,
+        rules: {
+            descripcion: {
+                minlength: 4,
+                required: true
+            },
+            email: {
+                required: true,
+                email: true
+            },     
+            telefono: {
+                digits: true
+            },
+            ocupacion: {
+                minlength: 3
+            }
+        },
+        messages: {
+            descripcion: {
+                minlength: 'La longitud debe ser superior a 3',
+                required: 'Este campo es obligatorio'
+            },
+            email: {
+                required: 'Este campo es obligatorio',
+                email: 'Este campo no es un email'
+            },
+            ocupacion: {
+                minlength: 'La logitud del campo debe ser mayor a 3'
+            }
+        },
+        invalidHandler: function(event, validator) { //display error alert on form submit              
+            success1.hide();
+            error1.show();
+            App.scrollTo(error1, -200);
+        },
+
+        highlight: function(element) { // hightlight error inputs
+            $(element)
+                .closest('.help-inline').removeClass('ok'); // display OK icon
+            $(element)
+                .closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+        },
+
+        unhighlight: function(element) { // revert the change done by hightlight
+            $(element)
+                .closest('.control-group').removeClass('error'); // set error class to the control group
+        },
+
+        success: function(label) {
+            label
+                .addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+                .closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+        },
+
+        submitHandler: function(form) {
+            success1.show();
+            error1.hide();
+
+            console.log($("#datos_personales").serialize());
+
+            $.ajax({
+                    url: 'app/controladores/usuario/confirmar_datos.php',
+                    type: 'POST',
+                    data: $("#datos_personales").serialize() + "&tipo=datos_personales",
+                    success: function(data) {                        
+                        if(data == "true" || data == "1"){
+                            $('#resultado').html("Hubo un error en la insercion de los datos. Consultar al administrador.");
+                        }
+                        else{
+                            $('#resultado').html("Los datos han sido modificados correctamente.");
+                        }
+
+                        $('#resultado').dialog({
+                                        title : 'Resultado' ,
+                                        buttons : [{
+                                            text : 'Aceptar' ,
+                                            class : 'btn green' ,
+                                            click : function () {
+                                                $(this).dialog('close').empty();
+                                            }
+                                        }]
+                                    });                        
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+
+        }
+    });
+
+    $.extend($.inputmask.defaults, {
+        'autounmask': true
+    });
+
+    $("#mask_nacimiento").inputmask("d/m/y", {
+        "placeholder": "dd/mm/aaaa"
+    }); //multi-char placeholder
+
+    $("#mask_telefono").inputmask({
+        "mask": "9",
+        "repeat": 13,
+        "greedy": false
+    }); // ~ mask "9" or mask "99" or ... mask "9999999999"
+
+    $("#subir_imagen").on('submit', function(event) {
+        event.preventDefault();
+        
+         console.log($("#link_imagen").text());
+
+            $.ajax({
+                    url: 'app/controladores/usuario/confirmar_datos.php',
+                    type: 'POST',
+                    data: "ruta_imagen="+$("#link_imagen").text() + "&tipo=avatar",
+                    success: function(data) {                        
+                        if(data == "true" || data == "1"){
+                            $('#resultado').html("Hubo un error en la insercion de los datos. Consultar al administrador.");
+                        }
+                        else{
+                            $('#resultado').html("Los datos han sido modificados correctamente.");
+                        }
+
+                        $('#resultado').dialog({
+                                        title : 'Resultado' ,
+                                        buttons : [{
+                                            text : 'Aceptar' ,
+                                            class : 'btn green' ,
+                                            click : function () {
+                                                $(this).dialog('close').empty();
+                                            }
+                                        }]
+                                    });                        
+                    }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+    });
+
+    var form2 = $('#modificar_password');
+    var error2 = $('.alert-error', form2);
+    var success2 = $('.alert-success', form2);
+
+    $('#modificar_password').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        onsubmit: true,
+        rules: {
+            passwordactual: {
+                minlength: 4,
+                required: true,
+                remote: {
+                url: "app/funciones/comparar_encriptado.php",
+                type: "post",
+                data: {
+                  dato: function() {                    
+                      return $( "#passwordactual" ).val();                    
+                  },
+                  dato_encriptado: function(){
+                   return $( "#password_orig" ).val(); 
+                  }
+                }
+              }
+            },
+            nuevapassword: {
+                minlength: 4,
+                required: true
+            },
+            renuevapassword: {
+                minlength: 4,
+                required: true,
+                equalTo: "#nuevapassword"
+            }
+        },
+        messages: {
+            passwordactual: {
+                minlength: 'La longitud debe ser superior a 3',
+                required: 'Este campo es obligatorio',
+                remote: 'La password actual no es correcta'
+            },
+            nuevapassword: {
+                minlength: 'La longitud debe ser superior a 3',
+                required: 'Este campo es obligatorio'
+            },
+            renuevapassword: {
+                minlength: 'La longitud debe ser superior a 3',
+                required: 'Este campo es obligatorio',
+                equalTo: "La nueva password y su confirmacion no son iguales."
+            }
+        },
+        invalidHandler: function(event, validator) { //display error alert on form submit              
+            success2.hide();
+            error2.show();
+            App.scrollTo(error2, -200);
+        },
+
+        highlight: function(element) { // hightlight error inputs
+            $(element)
+                .closest('.help-inline').removeClass('ok'); // display OK icon
+            $(element)
+                .closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+        },
+
+        unhighlight: function(element) { // revert the change done by hightlight
+            $(element)
+                .closest('.control-group').removeClass('error'); // set error class to the control group
+        },
+
+        success: function(label) {
+            label
+                .addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+                .closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+        },
+
+        submitHandler: function(form) {
+            success2.show();
+            error2.hide();
+
+            console.log($("#nuevapassword").val());
+
+            $.ajax({
+                    url: 'app/controladores/usuario/confirmar_datos.php',
+                    type: 'POST',
+                    data: "password="+$("#nuevapassword").val() + "&tipo=password",
+                    success: function(data) {                        
+                        if(data == "true" || data == "1"){
+                            $('#resultado').html("Hubo un error en la insercion de los datos. Consultar al administrador.");
+                        }
+                        else{
+                            $('#resultado').html("Los datos han sido modificados correctamente.");
+                        }
+
+                        $('#resultado').dialog({
+                                        title : 'Resultado' ,
+                                        buttons : [{
+                                            text : 'Aceptar' ,
+                                            class : 'btn green' ,
+                                            click : function () {
+                                                $(this).dialog('close').empty();
+                                            }
+                                        }]
+                                    });                        
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        }
+    });
+
+    var form3 = $('#redes_sociales');
+    var error3 = $('.alert-error', form3);
+    var success3 = $('.alert-success', form3);
+
+    $('#redes_sociales').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        onsubmit: true,
+        rules: {
+            facebook: {
+                minlength: 11                
+            },
+            twitter: {
+                minlength: 11                
+            },
+            linkedin: {
+                minlength: 11                
+            },
+            google_plus: {
+                minlength: 11                
+            },
+            skype: {
+                minlength: 4                
+            }
+        },
+        messages: {
+            facebook: {
+                minlength: 'La longitud debe ser superior a 10'                
+            },
+            twitter: {
+                minlength: 'La longitud debe ser superior a 10'                
+            },
+            linkedin: {
+                minlength: 'La longitud debe ser superior a 10'                
+            },
+            google_plus: {
+                minlength: 'La longitud debe ser superior a 10'                
+            },
+            skype: {
+                minlength: 'La longitud debe ser superior a 3'                
+            }
+        },
+        invalidHandler: function(event, validator) { //display error alert on form submit              
+            success3.hide();
+            error3.show();
+            App.scrollTo(error3, -200);
+        },
+
+        highlight: function(element) { // hightlight error inputs
+            $(element)
+                .closest('.help-inline').removeClass('ok'); // display OK icon
+            $(element)
+                .closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+        },
+
+        unhighlight: function(element) { // revert the change done by hightlight
+            $(element)
+                .closest('.control-group').removeClass('error'); // set error class to the control group
+        },
+
+        success: function(label) {
+            label
+                .addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+                .closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+        },
+
+        submitHandler: function(form) {
+            success3.show();
+            error3.hide();
+
+            console.log($("#redes_sociales").serialize());
+
+            $.ajax({
+                    url: 'app/controladores/usuario/confirmar_datos.php',
+                    type: 'POST',
+                    data: $("#redes_sociales").serialize() + "&tipo=redes_sociales",
+                    success: function(data) {                        
+                        if(data == "true" || data == "1"){
+                            $('#resultado').html("Hubo un error en la insercion de los datos. Consultar al administrador.");
+                        }
+                        else{
+                            $('#resultado').html("Los datos han sido modificados correctamente.");
+                        }
+
+                        $('#resultado').dialog({
+                                        title : 'Resultado' ,
+                                        buttons : [{
+                                            text : 'Aceptar' ,
+                                            class : 'btn green' ,
+                                            click : function () {
+                                                $(this).dialog('close').empty();
+                                            }
+                                        }]
+                                    });                        
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        }
+    });
+
+    var initialized = false;
+    var input = $("#nuevapassword");
+
+    input.keydown(function() {
+        if (initialized === false) {
+            // set base options
+            input.pwstrength({
+                raisePower: 1.5,
+                minChar: 3,
+                verdicts: ["Debil", "Normal", "Medio", "Dificil", "Muy Dificil"],
+                scores: [17, 26, 40, 50, 60]
+            });
+
+            // add your own rule to calculate the password strength
+            input.pwstrength("addRule", "demoRule", function(options, word, score) {
+                return word.match(/[a-z].[0-9]/) && score;
+            }, 10, true);
+
+            // set progress bar's width according to the input width
+            $('.progress', input.parents('.password-strength')).css('width', input.outerWidth() - 2);
+
+            // set as initialized 
+            initialized = true;
+        }
+    });
+
+});
+</script>

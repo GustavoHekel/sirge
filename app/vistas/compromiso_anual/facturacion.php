@@ -1,6 +1,6 @@
 <script>
 $(document).ready(function(){
-	mostrar_loading ();
+	//mostrar_loading ();
 	var provincia = $(this).val();
 
 	$.ajax({
@@ -10,7 +10,7 @@ $(document).ready(function(){
 		dataType : 'json' ,
 		success : function (data) {
 			console.log (data);
-			ocultar_loading ();
+			//ocultar_loading ();
 			$('#container').highcharts({
 				chart: {
 				},

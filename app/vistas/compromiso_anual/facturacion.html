@@ -1,20 +1,44 @@
 <script>
 $(document).ready(function(){
-		
+	
+
 	var year = new Date().getFullYear();
-	var grupo = "{id_provincia}";	
+	var grupo = "{id_provincia}";
+	
+		/*$('#dialogo').html("Aguarde un momento.").dialog({
+          autoOpen: false,
+		      dialogClass: 'ui-dialog-yellow',
+		      show: {
+		        effect: "blind",
+		        duration: 500
+		      },
+		      hide: {
+		        effect: "explode",
+		        duration: 500
+		      }
+       });*/
 
-	mostrar_loading ();
+		$.unblockUI({
+                onUnblock: function () {
+						mostrar_loading ();
+				}
+        }); 
 
+		/*$( "#dialogo" ).dialog( "open" );	
+	   	$(".ui-dialog button").blur();// avoid button autofocus */
+ 
 	$.ajax({
 		type : 'post' ,
 		data : 'year=' + year ,
 		url  : 'app/controladores/compromiso_anual/facturacion.php' ,
 		dataType : 'json' ,
 		success : function (data) {
-			console.log (data);
-			ocultar_loading();			
-										
+			console.log (data);			
+			
+			ocultar_loading ();
+
+			//$( "#dialogo" ).dialog( "close" );	
+
 			if(grupo < 25){
 			
 				$("#container").css('width', '700px');
@@ -52,7 +76,7 @@ $(document).ready(function(){
 				      		},
 					tooltip: {
 						shared: true
-					},
+					},					
 					plotOptions: {
 			            column: {
 			                grouping: false,
@@ -170,8 +194,11 @@ $(document).ready(function(){
 					}]
 				});
 			}								
-		}		
+		}
 	});
+		
 });
 </script>
 <div id="container" style="height: 700px; margin-left: auto; margin-right:auto;" ></div>
+<div id="dialogo" title="CARGANDO..." class="hide">	
+</div>
