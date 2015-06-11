@@ -26,6 +26,8 @@ if (isset($_POST['graficoProvincia'])) {
 				$geo['distribucion'][(int) $reg[$i]['id_departamento']]        = $reg[$i]['distribucion'];
 				$geo['cantidad'][(int) $reg[$i]['id_departamento']]            = $reg[$i]['cantidad'];
 			}
+
+			var_dump($geo);
 		}
 
 		$geo['id_departamento'] = array_merge(array_unique($geo['id_departamento']));
