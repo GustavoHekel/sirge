@@ -1,0 +1,178 @@
+<style>
+#mapa {
+    height: 600px;
+    width: 900px;
+    margin: 0px auto;
+    padding: 0px;
+}
+</style>
+<script>
+$(document).ready(function() {
+
+    $("#formu_provincias").on('submit', function(event) {
+        event.preventDefault();
+
+        var info;
+
+        $.ajax({
+                url: 'app/controladores/usuario/pruebas.php',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    graficoProvincia: 'yes'
+                },
+                success: function(data) {
+                    console.log(data);
+
+                    info = data;
+
+
+
+                    var styles = [{
+                        "stylers": [{
+                            "hue": "#ff1a00"
+                        }, {
+                            "invert_lightness": true
+                        }, {
+                            "saturation": -100
+                        }, {
+                            "lightness": 33
+                        }, {
+                            "gamma": 0.5
+                        }]
+                    }, {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [{
+                            "color": "#46bcec"
+                        }]
+                    }, {
+                        "featureType": "administrative.province",
+                        "elementType": "geometry",
+                        "stylers": [{
+                            "color": "#4682B4"
+                        }, {
+                            "weight": 2
+                        }]
+                    }, {
+                        "featureType": "administrative.country",
+                        "elementType": "geometry",
+                        "stylers": [{
+                            "color": "#4682B4"
+                        }, {
+                            "weight": 2
+                        }]
+                    }, {
+                        "featureType": "road.highway",
+                        "elementType": "geometry",
+                        "stylers": [{
+                            "color": "#DAA520"
+                        }, {
+                            "weight": 0.4
+                        }]
+                    }, {
+                        "featureType": "administrative.locality",
+                        "elementType": "labels",
+                        "stylers": [{
+                            "hue": "#ff4d00"
+                        }, {
+                            "visibility": "off"
+                        }]
+                    }];
+
+                    var mapOptions = {
+                        mapTypeControlOptions: {
+                            mapTypeIds: ['Styled']
+                        },
+                        center: new google.maps.LatLng(-26.886436490787712, -66.2685546875),
+                        zoom: 8,
+                        disableDefaultUI: false,
+                        mapTypeId: 'Styled'
+                    };
+
+                    map = new google.maps.Map(document.getElementById('mapa'), mapOptions);
+                    var styledMapType = new google.maps.StyledMapType(styles, {
+                        name: 'Styled'
+                    });
+                    map.mapTypes.set('Styled', styledMapType);
+
+                    console.log(info);
+                    var dtoCoords = [];
+
+                    $.each(info.id_departamento, function(index, value) {
+
+                        $.each(info.ll[value], function(index, value) {
+                            var ll_arr = value.split(',');
+                            dtoCoords.push(new google.maps.LatLng(parseFloat(ll_arr[0]), parseFloat(ll_arr[1])));
+                        });
+
+                        var departamento;
+
+                        departamento = new google.maps.Polygon({
+                            paths: dtoCoords,
+                            strokeColor: '#4682B4',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 1.5,
+                            fillColor: 'rgb(' + info.rgb[value] + ',' + info.rgb[value] + ',255)',
+                            fillOpacity: 0.7
+                        });
+                        departamento.setMap(map);
+                        dtoCoords = [];
+
+                        google.maps.event.addListener(departamento, 'mouseover', function(event) {
+                            var mensaje = '<b>' + info.nombre_departamento[value] + '</b><br />';
+                            mensaje += 'Código INDEC: ' + value + '<br />';
+                            mensaje += 'Distribución: ' + info.distribucion[value] + '%<br />';
+                            mensaje += 'Cantidad reportada: ' + info.cantidad[value] + ' prestacion(es)<br />';
+
+                            infoWindow.setContent(mensaje);
+                            infoWindow.setPosition(event.latLng);
+
+                            infoWindow.open(map);
+                        });
+                        infoWindow = new google.maps.InfoWindow();
+                    });
+
+
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+    });
+
+    var map;
+    var infoWindow;
+
+    /*  function coordenadas () {
+
+        $.ajax({
+          async : false ,
+          type : 'get' ,
+          data : 'id_provincia=' + id_provincia ,
+          url  : 'modulos/georreferenciamiento/distribucion_prestaciones_historico_departamento.php',
+          dataType : 'json' ,
+          success : function (data) {
+            ocultar_loading();
+            datos = data;
+          }
+        });
+        return datos;
+      }*/
+
+});
+</script>
+<div class="portlet box blue listado-simple">
+    <div class="portlet-title">
+        <div class="caption"><i class="icon-reorder"></i>Prestaciones por departamento</div>
+    </div>
+    <div class="portlet-body">
+        <form id="formu_provincias" style="text-align: center">
+            <div>Seleccione la provincia a consultar {provincias}
+                <input class="btn blue" type="submit" value="Buscar">
+            </div>
+        </form>
+        <div class="error" style="display: none;"></div>
+    </div>
+</div>
+<div id="mapa"></div>

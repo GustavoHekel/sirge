@@ -1,0 +1,43 @@
+<div class="portlet box {CSS_GLOBAL} listado-simple" style="width: 1000px">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="icon-reorder"></i>Listado de consultas programadas
+		</div>
+	</div>
+	<div class="portlet-body">
+    <div class="table-toolbar">
+      <div class="btn-group">
+        <button id="nueva-consulta" class="btn green">
+        Nueva consulta <i class="icon-plus"></i>
+        </button>
+      </div>
+    </div>
+		<div class="container consultas-programadas" style="width: 950px;">
+      <table id="tabla-consultas-programadas" cellpadding="0" cellspacing="0" border="0" class="table table-striped">
+      </table>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+  $.ajax({
+    method : 'post',
+    url : 'app/parserAjax.php',
+    data : {
+      c : 'Consultas',
+      m : 'listarProgramadas'
+    },
+    dataType : 'json',
+    success : function (data){
+      $('#tabla-consultas-programadas').dataTable({
+        sDom : 'frt<"bottom"lp><"clear">' ,
+        filter : true,
+        bDestroy : true ,
+        aaData : data['data'] ,
+        aoColumns : data['aoColumns']
+      });    
+    }
+  });
+
+  
+</script>
