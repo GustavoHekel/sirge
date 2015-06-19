@@ -1,16 +1,160 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-  <head>
-    <title>TODO supply a title</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <div>TODO write content</div>
-  </body>
-</html>
+<div class="portlet box yellow form-up-data">
+    <div class="portlet-title">
+        <div class="caption"><i class="icon-reorder"></i>Seleccione efector a modificar</div>
+    </div>
+    <div class="portlet-body">
+        <form id="formu_modif" style="text-align: center">
+            <div class="alert alert-error hide">
+                <button class="close" data-dismiss="alert"></button>
+                Tienes algunos errores.
+            </div>
+            <div class="alert alert-success hide">
+                <button class="close" data-dismiss="alert"></button>
+                Los datos est&aacute;n correctos!
+            </div>
+            <div class="control-group">
+                <label class="control-label" style="display:inline; vertical-align: -webkit-baseline-middle;" for="efector">Ingrese el CUIE o c&oacute;digo SIISA del efector a modificar</label>
+                <div class="controls" style="display:inline;">
+                    <input id="efector" name="efector" class="span2 m-wrap" type="text" data-provide="typeahead" autocomplete="off" />
+                </div>
+            </div>
+            <div class="submit-btn">
+                <button type="submit" id="buscar" class="btn yellow"><i class="icon-ok"></i> Buscar</button>
+            </div>
+            <!-- <input class="btn yellow" type="submit" value="Buscar" /> -->
+        </form>
+    </div>
+</div>
+<div id="mensaje_modificacion"></div>
+<div id="contenido" style="display:none;">
+<ul id="tab-mod-efector" class="nav nav-tabs">
+	<li><a data-target="#generales" data-toggle="tab" href="modulos/efectores/abm/modificacion/generales.php">Generales</a></li>
+	<li><a data-target="#geo" data-toggle="tab" href="modulos/efectores/abm/modificacion/datos_geograficos.php">Geo</a></li>
+	<li><a data-target="#com_ges" data-toggle="tab" href="modulos/efectores/abm/modificacion/compromiso_gestion.php">Compromiso gesti&oacute;n</a></li>
+	<li><a data-target="#con_adm" data-toggle="tab" href="modulos/efectores/abm/modificacion/convenio_administrador.php">Convenio administrativo</a></li>
+	<li><a data-target="#ref" data-toggle="tab" href="modulos/efectores/abm/modificacion/referentes.php">Referente</a></li>
+	<li><a data-target="#tel" data-toggle="tab" href="modulos/efectores/abm/modificacion/telefono.php">Tel&eacute;fono</a></li>
+	<li><a data-target="#ema" data-toggle="tab" href="modulos/efectores/abm/modificacion/email.php">Email</a></li>
+	<li><a data-target="#dec" data-toggle="tab" href="modulos/efectores/abm/modificacion/descentralizacion.php">Decentralizaci&oacute;n</a></li>
+	<li><a data-target="#ppac" data-toggle="tab" href="modulos/efectores/abm/modificacion/ppac.php">PPAC</a></li>
+</ul>
+<div class="tab-content tab-contenedor tabs-mod">
+	<div class="tab-pane" id="generales">Cargando...</div>
+	<div class="tab-pane" id="geo">Cargando...</div>
+	<div class="tab-pane" id="com_ges">Cargando...</div>
+	<div class="tab-pane" id="con_adm">Cargando...</div>
+	<div class="tab-pane" id="ref">Cargando...</div>
+	<div class="tab-pane" id="tel">Cargando...</div>
+	<div class="tab-pane" id="ema">Cargando...</div>
+	<div class="tab-pane" id="dec">Cargando...</div>
+	<div class="tab-pane" id="ppac">Cargando...</div>
+</div>
+</div>
+<script>
+$(document).ready(function() {
+
+    $.validator.addMethod("CUIE_SIISA", function(value, element, param) {
+        return this.optional(element) || (element.value.length == 6 || element.value.length == 14);
+    });
+
+    estilo_dialog('yellow');
+    $(".partes , .error").hide();
+
+    $('#efector').typeahead({
+        source: function(query, process) {
+            $.ajax({
+                type: 'POST',
+                data: 'term=' + query,
+                url: 'app/controladores/efectores/devuelve_efector.php',
+                dataType: 'json',
+                success: function(data) {
+                    process(data);
+                }
+            });
+        },
+        minLength: 3
+    });
+
+    $('#efector').change(function(){
+		if ($(this).val().length != 6 && $(this).val().length != 14) {
+			$(".tabs-mod").hide();
+		}
+		console.log ($(this).val().length);
+	});
+
+    var form1 = $('#formu_modif');
+
+    $('#formu_modif').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        onsubmit: true,
+        rules: {
+            efector: {
+                CUIE_SIISA: true,
+                required: true
+            }
+        },
+        messages: {
+            efector: {
+                CUIE_SIISA: 'El valor ingresado no es un CUIE (6) ni un codigo SIISA (14) con formato correcto',
+                required: 'Este campo es obligatorio'
+            }
+        },
+        highlight: function(element) { // hightlight error inputs
+            $(element)
+                .closest('.help-inline').removeClass('ok'); // display OK icon
+            $(element)
+                .closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+        },
+
+        unhighlight: function(element) { // revert the change done by hightlight
+            $(element)
+                .closest('.control-group').removeClass('error'); // set error class to the control group
+        },
+
+        success: function(label) {
+            label
+                .addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+                .closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+        },
+
+        submitHandler: function(form) {
+
+            console.log($("#formu_modif").serialize());
+
+            efector = $("#efector").val();
+            
+            $.ajax({
+                type: 'POST',
+                data: 'term=' + efector,
+                url: 'modulos/efectores/abm/modificacion.php',
+                success: function(data) {
+                    if (data == 0) {
+                        dialog_error_modificacion('mensaje_modificacion','Hubo un error en la insercion de los datos. Consultar al administrador.');
+                    } else {
+                    	$("#contenido").show();
+                        $(".tabs-mod").show();
+                        $("#tab-mod-efector").tab();
+                        $("#tab-mod-efector").bind("show", function(e) {
+                            var contentID = $(e.target).attr("data-target");
+                            var contentURL = $(e.target).attr("href");
+                            if (typeof(contentURL) != 'undefined')
+                                $(contentID).load(contentURL + '?efector=' + efector, function() {
+                                    $("#tab-mod-efector").tab();
+                                });
+                            else
+                                $(contentID).tab('show');
+                        });
+                        $('#tab-mod-efector a:first').tab("show");
+                    }
+                }
+            });           
+        }
+    });
+
+});

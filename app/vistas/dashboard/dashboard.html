@@ -239,6 +239,7 @@ $(document).ready(function(){
 		},
 		dataType 	: 'json',
 		success 	: function (geo) {
+			console.log(geo);
 			$('#map-container').highcharts('Map', {
 				title : {
 					text : 'Población'

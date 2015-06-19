@@ -9,7 +9,12 @@ class Geo {
 	}
 
 	public function dashboardMap() {
-		$sql  = "select geojson_provincia as \"hc-key\", habitantes as value from geo.geojson j left join geo.poblacion p on j.id_provincia = p.id_provincia";
+		$sql = "select geojson_provincia as \"hc-key\", p.id_provincia, habitantes as value-- || '</br>' || 'Inscriptos SUMAR: ' ||
+              ,(select sum(i.habitantes_sumar)
+                                                                                                  FROM indec.poblacion_departamentos i
+                                                                                                  WHERE i.id_provincia = p.id_provincia) as habitantes_sumar
+              from geo.geojson j
+              left join indec.poblacion p on j.id_provincia = p.id_provincia";
 		$data = $this->_db->query($sql)->getResults();
 		echo json_encode($data);
 	}
@@ -49,108 +54,45 @@ class Geo {
 
 	public function getGraficoProvincia($id_provincia) {
 
-		/*	$sql = "
-		select
-		 *
-		, 255 - (distribucion * 255 / (
-		select
-		max (distribucion) as distribucion
-		from
-		geo.departamentos d left join (
-		select
-		 *
-		, coalesce (round (100 * cantidad / sum (cantidad) over () , 2) , 0) as distribucion
-		from (
-		select
-		a.id_departamento
-		, a.nombre_departamento
-		, sum (cantidad) as cantidad
-		from (
-		select
-		e.cuie
-		, dto.id_departamento
-		, dto.nombre_departamento
-		from
-		efectores.efectores e left join
-		efectores.datos_geograficos d on e.id_efector = d.id_efector left join
-		efectores.departamentos dto on d.id_provincia || d.id_departamento = dto.id_provincia || dto.id_departamento
-		where d.id_provincia = '" . $id_provincia . "'
-		) a left join (
-		select efector , count (*) as cantidad
-		from prestaciones.p_" . $id_provincia . "
-		--where codigo_prestacion = 'IMV013A98'
-		group by 1
-		order by 1
-		) p on a.cuie = p.efector
-		group by 1,2
-		order by 1,2 ) b )
-		a on d.id_departamento = a.id_departamento
-		where id_provincia = '" . $id_provincia . "')) :: int as rgb
-		from (
-		select
-		latitud :: text || ',' || longitud :: text as ll
-		, d.id_departamento
-		, nombre_departamento
-		, coalesce (cantidad,0) as cantidad
-		, coalesce (a.distribucion,0) as distribucion
-		, coalesce (round (255 * (1 - (distribucion / 100)) , 0),0) as r
-		from
-		geo.departamentos d left join (
-		select
-		 *
-		, coalesce (round (100 * cantidad / sum (cantidad) over () , 2) , 0) as distribucion
-		from (
-		select
-		a.id_departamento
-		, a.nombre_departamento
-		, sum (cantidad) as cantidad
-		from (
-		select
-		e.cuie
-		, dto.id_departamento
-		, dto.nombre_departamento
-		from
-		efectores.efectores e left join
-		efectores.datos_geograficos d on e.id_efector = d.id_efector left join
-		efectores.departamentos dto on d.id_provincia || d.id_departamento = dto.id_provincia || dto.id_departamento
-		where d.id_provincia = '" . $id_provincia . "'
-		) a left join (
-		select efector , count (*) as cantidad
-		from prestaciones.p_" . $id_provincia . "
-		--where codigo_prestacion = 'IMV013A98'
-		group by 1
-		order by 1
-		) p on a.cuie = p.efector
-		group by 1,2
-		order by 1,2 ) b )
-		a on d.id_departamento = a.id_departamento
-		where id_provincia = '" . $id_provincia . "'
-		order by id_punto
-		) a";*/
+		$sql = " SELECT id_dto, cantidad, habitantes, habitantes_sumar, (gep.latitud::text || ',' || gep.longitud::text) as ll, dto.nombre_departamento, round (100 * cantidad / (select count(*)
+		FROM efectores.efectores e
+		INNER JOIN efectores.datos_geograficos d ON e.id_efector = d.id_efector
+		INNER JOIN prestaciones.p_$id_provincia p ON e.cuie = p.efector
+		WHERE id_provincia = '$id_provincia') :: numeric, 2) as distribucion
+		FROM
+		(
+		SELECT d.id_departamento as id_dto, count(e.cuie) as cantidad
+		FROM efectores.efectores e
+		INNER JOIN efectores.datos_geograficos d ON e.id_efector = d.id_efector
+		INNER JOIN prestaciones.p_$id_provincia p ON e.cuie = p.efector
+		WHERE id_provincia = '$id_provincia'
+		GROUP BY 1
+		) as prestaciones_por_dto
+		INNER JOIN
+		geo.departamentos dto ON dto.id_departamento = id_dto
+		INNER JOIN
+		geo.gep_departamentos gep ON gep.id_provincia = dto.id_provincia AND dto.id_departamento = gep.id_departamento
+		INNER JOIN
+		indec.poblacion_departamentos indec ON gep.id_provincia = indec.id_provincia AND indec.id_departamento = gep.id_departamento
+		WHERE
+		dto.id_provincia = '$id_provincia'
+		ORDER BY id_dto, id_punto ";
 
-		$sql = " SELECT id_dto, cantidad, (gep.latitud::text || ',' || gep.longitud::text) as ll, dto.nombre_departamento, round (100 * cantidad / (select count(*)
-                                                      FROM efectores.efectores e
-                                                      INNER JOIN efectores.datos_geograficos d ON e.id_efector = d.id_efector
-                                                      INNER JOIN prestaciones.p_$id_provincia p ON e.cuie = p.efector
-                                                      WHERE id_provincia = '$id_provincia') :: numeric, 2) as distribucion
-                FROM
-                (
-                  SELECT d.id_departamento as id_dto, count(e.cuie) as cantidad
-                    FROM efectores.efectores e
-                    INNER JOIN efectores.datos_geograficos d ON e.id_efector = d.id_efector
-                    INNER JOIN prestaciones.p_$id_provincia p ON e.cuie = p.efector
-                    WHERE id_provincia = '$id_provincia'
-                    GROUP BY 1
-                ) as prestaciones_por_dto
-                INNER JOIN
-                  geo.departamentos dto ON dto.id_departamento = id_dto
-                INNER JOIN
-                  geo.gep_departamentos gep ON gep.id_provincia = dto.id_provincia AND dto.id_departamento = gep.id_departamento
-                WHERE
-                  dto.id_provincia = '$id_provincia'
-                ORDER BY id_dto, id_punto ";
+		/*$sql = " SELECT dto.id_departamento as id_dto, (gep.latitud::text || ',' || gep.longitud::text) as ll, dto.nombre_departamento, 1 as cantidad, 1 as distribucion, 250 as rgb
+		FROM
+		geo.departamentos dto
+		INNER JOIN
+		geo.gep_departamentos gep ON gep.id_provincia = dto.id_provincia AND dto.id_departamento = gep.id_departamento
+		WHERE
+		dto.id_provincia = '01'
+		ORDER BY id_dto, id_punto ";*/
 
 		return $this->_db->query($sql)->getResults();
+		//var_dump($this->_db->query($sql)->getResults());
 
+	}
+
+	public function getPosicionProvincia($grupo) {
+		return $this->_db->fquery('getPosicionProvincia', [$grupo], false)->getResults();
 	}
 }

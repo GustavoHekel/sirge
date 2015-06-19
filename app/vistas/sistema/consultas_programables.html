@@ -19,6 +19,44 @@
 	</div>
 </div>
 
+<div style="display: none">
+  <div id="alta-consulta">
+    <form class="form-horizontal">
+      
+      <div class="control-group">
+        <label class="control-label">Nombre</label>
+        <div class="controls">
+          <input type="text" name="nombre">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">CronJob</label>
+        <div class="controls">
+          <input type="text" name="job">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Nombre archivo .sql</label>
+        <div class="controls">
+          <input type="text" name="ruta">
+          <span class="help-inline">Solo el nombre, sin extensión</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Destinatarios mail</label>
+        <div class="controls">
+          <input type="text" name="destinatarios">
+          <span class="help-inline">Emails separados por coma</span>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
 <script type="text/javascript">
   $.ajax({
     method : 'post',
@@ -39,5 +77,34 @@
     }
   });
 
-  
+  $('#nueva-consulta').click(function(){
+    $('#alta-consulta').dialog({
+      title : 'Nueva consulta programada',
+      buttons : [{
+        text : 'Aceptar',
+        class : 'btn green',
+        click : function(){
+          $.ajax({
+            method : 'post',
+            url : 'app/parserAjax.php',
+            data : {
+              c : 'Consultas',
+              m : 'altaConsultaProgramada',
+              p : $('.form-horizontal').serialize()
+            },
+            success : function(data){
+              console.log(data);
+            }
+          });
+        }
+      },{
+        text : 'Cancelar',
+        class : 'btn red',
+        click : function(){
+          $(this).dialog('close');
+        }
+      }]
+    });
+  });
+
 </script>

@@ -54,6 +54,20 @@ function ocultar_loading () {
 	$.unblockUI();
 }
 
+function dialog_error_modificacion (id, texto) {
+		$("#"+id).html(texto);
+		$("#"+id).dialog({
+			title		: "Atención!" ,
+			buttons 	: [{
+				text : "Aceptar"  ,
+				class : 'btn green ' ,
+				click : function(){
+					$(this).dialog("close").empty();
+				}
+			}]
+		});
+	}
+
 function estilo_dialog (color) {
 	$.extend($.ui.dialog.prototype.options, { 
 		show 		: 'fade' , 

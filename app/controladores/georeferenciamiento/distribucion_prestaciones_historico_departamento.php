@@ -26,10 +26,34 @@ if (isset($_POST['graficoProvincia'])) {
 				$geo['nombre_departamento'][(int) $reg[$i]['id_dto']] = $reg[$i]['nombre_departamento'];
 				$geo['distribucion'][(int) $reg[$i]['id_dto']]        = $reg[$i]['distribucion'];
 				$geo['cantidad'][(int) $reg[$i]['id_dto']]            = $reg[$i]['cantidad'];
+				$geo['habitantes'][(int) $reg[$i]['id_dto']]          = $reg[$i]['habitantes'];
+				$geo['habitantes_sumar'][(int) $reg[$i]['id_dto']]    = $reg[$i]['habitantes_sumar'];
 			}
 		}
 
 		$geo['pos_provincia'] = $instGeo->getPosicionProvincia($_POST['provincia']);
+
+		switch ($_POST['provincia']) {
+			case '01':
+				$geo['zoom'] = (int) 11;
+				break;
+			case '02':
+			case '13':
+			case '15':
+			case '17':
+			case '22':
+			case '23':
+				$geo['zoom'] = (int) 6;
+				break;
+			case '07':
+			case '20':
+				$geo['zoom'] = (int) 8;
+				break;
+
+			default:
+				$geo['zoom'] = (int) 7;
+				break;
+		}
 		//var_dump($geo);
 		//$geo['id_departamento'] = array_merge(array_unique($geo['id_departamento']));
 
@@ -42,7 +66,7 @@ if (isset($_POST['graficoProvincia'])) {
 	$diccionario = array(
 		'provincias' => $sirge->selectProvincia('provincias', $_SESSION['grupo']));
 
-	$html = ['../../vistas/usuario/pruebas.html'];
+	$html = ['../../vistas/georeferenciamiento/distribucion_prestaciones_historico_departamento.html'];
 
 	Html::vista($html, $diccionario);
 

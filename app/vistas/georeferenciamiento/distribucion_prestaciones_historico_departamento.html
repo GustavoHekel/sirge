@@ -14,8 +14,10 @@ $(document).ready(function() {
 
         var info;
 
+        mostrar_loading();
+
         $.ajax({
-                url: 'app/controladores/usuario/pruebas.php',
+                url: 'app/controladores/georeferenciamiento/distribucion_prestaciones_historico_departamento.php',
                 type: 'post',
                 dataType: 'json',
                 data: {
@@ -23,65 +25,44 @@ $(document).ready(function() {
                     provincia: $("#provincias").val()
                 },
                 success: function(data) {
-                    //console.log(data);
+                    //console.log(data);                    
 
-                    info = data;
+                    ocultar_loading();
+
+                    info = data;                
 
                     var styles = [{
-        "stylers": [
-            {
-                "hue": "#ff1a00"
-            },
-            {
-                "invert_lightness": true
-            },
-            {
-                "saturation": -100
-            },
-            {
-                "lightness": 33
-            },
-            {
-                "gamma": 0.5
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#2D333C"
-            }
-        ]
-    }];
+                        "stylers": [{
+                            "hue": "#ff1a00"
+                        }, {
+                            "invert_lightness": true
+                        }, {
+                            "saturation": -100
+                        }, {
+                            "lightness": 33
+                        }, {
+                            "gamma": 0.5
+                        }]
+                    }, {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [{
+                            "color": "#2D333C"
+                        }]
+                    }];
 
-                      /*var styles = [
-                      {
-                        featureType: "all",
-                        stylers: [
-                          { hue: "#0000ff" },
-                          { saturation: -30 }
-                        ]
-                      },
-                      {
-                        featureType: "poi",
-                        elementType: "label",
-                        stylers: [
-                          { visibility: "on" }
-                        ]
-                      }
-                    ];*/
-                    
                     var posprov = info.pos_provincia[0].ll;
-                    var ll_prov = posprov.split(',');                                        
+                    var ll_prov = posprov.split(',');
+                    
+                    var zoom = info.zoom;                    
 
                     var mapOptions = {
+                        scrollwheel: false,
                         mapTypeControlOptions: {
                             mapTypeIds: ['Styled']
                         },
                         center: new google.maps.LatLng(parseFloat(ll_prov[0]), parseFloat(ll_prov[1])),
-                        zoom: 7,
+                        zoom: zoom,
                         disableDefaultUI: false,
                         mapTypeId: 'Styled'
                     };
@@ -120,6 +101,8 @@ $(document).ready(function() {
                             mensaje += 'Código INDEC: ' + value + '<br />';
                             mensaje += 'Distribución: ' + info.distribucion[value] + '%<br />';
                             mensaje += 'Cantidad reportada: ' + info.cantidad[value] + ' prestacion(es)<br />';
+                            mensaje += 'Poblacion: ' + info.habitantes[value] + '<br />';
+                            mensaje += 'Inscriptos Sumar: ' + info.habitantes_sumar[value] + '<br />';
 
                             infoWindow.setContent(mensaje);
                             infoWindow.setPosition(event.latLng);
@@ -139,22 +122,6 @@ $(document).ready(function() {
 
     var map;
     var infoWindow;
-
-    /*  function coordenadas () {
-
-        $.ajax({
-          async : false ,
-          type : 'get' ,
-          data : 'id_provincia=' + id_provincia ,
-          url  : 'modulos/georreferenciamiento/distribucion_prestaciones_historico_departamento.php',
-          dataType : 'json' ,
-          success : function (data) {
-            ocultar_loading();
-            datos = data;
-          }
-        });
-        return datos;
-      }*/
 
 });
 </script>

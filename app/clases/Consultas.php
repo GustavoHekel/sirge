@@ -1,7 +1,11 @@
 <?php
 class Consultas {
 
-	private $_db;
+	private 
+		$_db,
+		$_ruta_sql = '/var/www/sirge2/app/sql/Consultas/Auto/',
+		$_ruta_destino = '/var/www/sirge2/data/export/consultas/sistemas/',
+		$_ruta_job = ' /var/www/sirge2/funciones/automata.php?id_consulta=';
 
 	public function __construct (){
 		$this->_db = Bdd::getInstance();
@@ -47,4 +51,33 @@ class Consultas {
 		echo $sirge->jsonDT($json);
 	}
 
+
+	public function altaConsultaProgramada ($nombre , $job , $ruta , $emails){
+		
+		$params = [
+			$nombre,
+			$this->_ruta_sql . $ruta . '.sql',
+			$this->_ruta_destino . $ruta . '.txt',
+			$job,
+			'{' . $emails . '}'
+		];
+		$sql = "insert into consultas.automaticas (nombre , ruta_sql , ruta_destino , cronjob , destinatarios) values (?,?,?,?,?)";
+		$this->_db->query($sql , $params);
+
+		$id = $this->_db->lastId('consultas.automaticas_id_consulta_seq');
+
+		$params = [
+			$job . $this->_ruta_job . $id,
+			$id
+		];
+
+		$sql = "
+			update consultas.automaticas 
+			set
+				cronjob = ?
+			where
+				id_consulta = ?";
+		$this->_db->query($sql , $params);
+		print_r($this->_db);
+	}
 }
