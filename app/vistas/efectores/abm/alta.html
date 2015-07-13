@@ -1,805 +1,842 @@
 <div class="portlet box green formulario-simple">
-	<div class="portlet-title">
-		<div class="caption"><i class="icon-reorder"></i>Formulario de solicitud de alta de nuevo efector</div>
-	</div>
-	<div class="portlet-body form">
-		<form id="formu_alta" class="form-horizontal">
-			<h3 class="form-section">Generales</h3>
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">CUIE</label>
-						<div class="controls">
-							<input id="cuie" name="cuie" type="text" readonly="readonly" class="m-wrap span12" />
-							<span class="help-block">Valor auto generado</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">SIISA</label>
-						<div class="controls">
-							<input id="siisa" name="siisa" type="text" class="m-wrap span12 "/>
-							<span class="help-block">C&oacute;digo de 14 d&iacute;gitos <a href="#" id="genera_siisa">(No posee c&oacute;digo SIISA?)</a></span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row-fluid">
-				<div class="span12 ">
-					<div class="control-group">
-						<label class="control-label">Nombre</label>
-						<div class="controls">
-							<input id="nombre" name="nombre" type="text" class="m-wrap span12"/>
-							<span class="help-block">Nombre del efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="control-group">
-						<label class="control-label">Domicilio</label>
-						<div class="controls">
-							<input id="domicilio" name="domicilio" type="text" class="m-wrap span12"/>
-							<span class="help-block">Domicilio del efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">C&oacute;digo postal</label>
-						<div class="controls">
-							<input id="codigo_postal" name="codigo_postal" type="text" class="m-wrap span12"/>
-							<span class="help-block">Ingrese el c&oacute;digo postal del efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Tipo efector</label>
-						<div class="controls">
-							<select id="tipo_efector" name="tipo_efector" class="m-wrap span12">
-								<option value="">Seleccione un tipo</option>
-                {OPTIONS_TIPO_EFECTOR}
-							</select>
-							<span class="help-block">Seleccione un tipo de efector</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Rural</label>
-						<div class="controls">                                                
-							<select id="rural" name="rural" title="rural" class="m-wrap span12">
-								<option value="N">No</option>
-								<option value="S">Si</option>
-							</select>
-							<span class="help-block">Indique si se trata de un efector rural o no</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Cics</label>
-						<div class="controls">
-							<select id="cics" name="cics" title="cics" class="m-wrap span12">
-								<option value="N">No</option>
-								<option value="S">Si</option>
-							</select>
-							<span class="help-block">Indique si el efector es CICS o no</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Categorizaci&oacute;n</label>
-						<div class="controls">                                                
-							<select id="categorizacion" name="categorizacion" class="m-wrap span12">
-								<option value="">Seleccione categor&iacute;a</option>
-                {OPTIONS_CATEGORIZACION}
-							</select>
-							<span class="help-block">Indique la categorizaci&oacute;n del efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Dependencia administrativa</label>
-						<div class="controls">
-							<select id="dependencia_adm" name="dependencia_adm" class="m-wrap span12">
-								<option value="0">Seleccione dependencia</option>
-                {OPTIONS_DEPENDENCIA}
-							</select>
-							<span class="help-block">Ingrese la dependencia administrativa a la que corresponde el efector</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Dependencia sanitaria</label>
-						<div class="controls">                                                
-							<input id="dependencia_san" name="dependencia_san" type="text" class="m-wrap span12"/>
-							<span class="help-block">Ingrese la dependencia sanitaria a la que corresponde el efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Integrante</label>
-						<div class="controls">
-							<select id="integrante" name="integrante" class="m-wrap span12">
-								<option value="N">No</option>
-								<option value="S">Si</option>
-							</select>
-							<span class="help-block">Indique si el efector es integrante del programa SUMAR o no</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Compromiso de gesti&oacute;n</label>
-						<div class="controls">                                                
-							<select id="compromiso" name="compromiso" class="m-wrap span12">
-								<option value="N">No</option>
-								<option value="S">Si</option>
-							</select>
-							<span class="help-block">Indique si el efector tiene compromiso de gesti&oacute;n o no</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Priorizado</label>
-						<div class="controls">
-							<select id="priorizado" name="priorizado" class="m-wrap span12">
-								<option value="N">No</option>
-								<option value="S">Si</option>
-							</select>
-							<span class="help-block">Indique si el efector es priorizado o no</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Referente</label>
-						<div class="controls">                                                
-							<input id="referente" name="referente" type="text" class="m-wrap span12" />
-							<span class="help-block">Ingrese el referente del efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div id="compromiso_gestion">
-				<h3 class="form-section">Compromiso de gesti&oacute;n</h3>
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">N&uacute;mero compromiso</label>
-							<div class="controls">
-								<input id="numero_compromiso" name="numero_compromiso" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el n&uacute;mero de compromiso de gesti&oacute;n firmado</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Firmante compromiso</label>
-							<div class="controls">
-								<input id="firmante_compromiso" name="firmante_compromiso" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el firmante del compromiso de gesti&oacute;n</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha suscripci&oacute;n</label>
-							<div class="controls">
-								<input id="fecha_sus_cg" name="fecha_sus_cg" type="text" class="m-wrap span12"/>
-								<span class="help-block">Ingrese la fecha en la cual el efector fue suscripto</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha inicio</label>
-							<div class="controls">
-								<input id="fecha_ini_cg" name="fecha_ini_cg" type="text" class="m-wrap span12"/>
-								<span class="help-block">Ingrese de inicio del compromiso de gesti&oacute;n</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha fin</label>
-							<div class="controls">
-								<input id="fecha_fin_cg" name="fecha_fin_cg" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese la fecha en la cual el compromiso de gesti&oacute;n finaliza</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Pago indirecto</label>
-							<div class="controls">
-								<select id="pago_indirecto" name="pago_indirecto" class="m-wrap span12">
-									<option value="N">No</option>
-									<option value="S">Si</option>
-								</select>
-								<span class="help-block">Indique si el efector utiliza un m&eacute;todo de pago indirecto</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div id="convenio_administrativo">
-				<h3 class="form-section">Convenio administrativo</h3>
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">N&uacute;mero convenio</label>
-							<div class="controls">
-								<input id="numero_convenio" name="numero_convenio" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el n&uacute;mero de convenio firmado</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Firmante convenio</label>
-							<div class="controls">
-								<input id="firmante_convenio" name="firmante_convenio" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el firmante del convenio administrativo</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha suscripci&oacute;n</label>
-							<div class="controls">
-								<input id="fecha_sus_ca" name="fecha_sus_ca" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese la fecha de suscripci&oacute;n al convenio</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha inicio</label>
-							<div class="controls">
-								<input id="fecha_ini_ca" name="fecha_ini_ca" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese la fecha de inicio del convenio</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Fecha fin</label>
-							<div class="controls">
-								<input id="fecha_fin_ca" name="fecha_fin_ca" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese la fecha de finalizaci&oacute;n del convenio</span>
-							</div>
-						</div>
-					</div>
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">Nombre tercer administrador</label>
-							<div class="controls">
-								<input id="nombre_adm" name="nombre_adm" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el nombre del tercer administrador</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid">
-					<div class="span6 ">
-						<div class="control-group">
-							<label class="control-label">C&oacute;digo tercer administrador</label>
-							<div class="controls">
-								<input id="codigo_adm" name="codigo_adm" type="text" class="m-wrap span12" />
-								<span class="help-block">Ingrese el c&oacute;digo del tercer administrador (CUIE o SIISA)</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<h3 class="form-section">Datos geogr&aacute;ficos</h3>
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Provincia</label>
-						<div class="controls">
-							<select class="m-wrap span12" id="provincia" name="provincia">
-                {OPTIONS_PROVINCIA}
-							</select>
-							<span class="help-block">Seleccione la provincia a la que corresponde el efector</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Ciudad</label>
-						<div class="controls">
-							<input class="m-wrap span12" id="ciudad" name="ciudad" type="text" title="ciudad" />
-							<span class="help-block">Ingrese la ciudad en la cual reside el efector</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Departamento</label>
-						<div class="controls">
-							<select id="departamento" name="departamento" class="m-wrap span12" >
-                {OPTIONS_DEPARTAMENTO}
-							</select>
-							<span class="help-block">Indique el departamento dentro de la provincia</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Localidad</label>
-						<div class="controls">
-              <select id="localidad" name="localidad" class="m-wrap span12">
-                {OPTIONS_LOCALIDAD}
-              </select>
-							<span class="help-block">Indique la localidad dentro del departamento</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<h3 class="form-section">Correo electr&oacute;nico</h3>
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Email</label>
-						<div class="controls">
-							<input id="email" name="email" type="text" class="m-wrap span12" />
-							<span class="help-block">Si posee, ingrese un email v&aacute;lido</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Observaciones</label>
-						<div class="controls">
-							<input id="email_observaciones" name="email_observaciones" type="text" class="m-wrap span12" />
-							<span class="help-block">Indique una observaci&oacute;n de ser necesario</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<h3 class="form-section">Tel&eacute;fono</h3>
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">N&uacute;mero</label>
-						<div class="controls">
-							<input id="telefono" name="telefono" type="text" class="m-wrap span12"/>
-							<span class="help-block">Si posee, ingrese un tel&eacute;fono v&aacute;lido</span>
-						</div>
-					</div>
-				</div>
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Tipo</label>
-						<div class="controls">
-							<select id="tipo_telefono" name="tipo_telefono" class="m-wrap span12" >
-                {OPTIONS_TIPO_TELEFONO}
-							</select>
-							<span class="help-block">Indique un tipo de ser necesario</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="row-fluid">
-				<div class="span6 ">
-					<div class="control-group">
-						<label class="control-label">Observaciones</label>
-						<div class="controls">
-							<input id="telefono_observaciones" name="telefono_observaciones" type="text" class="m-wrap span12" />
-							<span class="help-block">Indique una observaci&oacute;n de ser necesario</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="form-actions">
-				<button type="submit" class="btn green"><i class="icon-ok"></i> Solicitar alta de nuevo efector</button>
-			</div>
-		</form>
-	</div>
+    <div class="portlet-title">
+        <div class="caption"><i class="icon-reorder"></i>Formulario de solicitud de alta de nuevo efector</div>
+    </div>
+    <div class="portlet-body form">
+        <form id="formu_alta" class="form-horizontal">
+            <div class="alert alert-error hide">
+                <button class="close" data-dismiss="alert"></button>
+                Tienes algunos errores.
+            </div>
+            <div class="alert alert-success hide">
+                <button class="close" data-dismiss="alert"></button>
+                Los datos est&aacute;n correctos!
+            </div>
+            <h3 class="form-section">Generales</h3>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">CUIE</label>
+                        <div class="controls">
+                            <input id="cuie" name="cuie" type="text" readonly="readonly" class="m-wrap span12" />
+                            <span class="help-block">Valor auto generado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">SIISA</label>
+                        <div class="controls">
+                            <input id="siisa" name="siisa" type="text" class="m-wrap span12 " />
+                            <span class="help-block">C&oacute;digo de 14 d&iacute;gitos <a href="#" id="genera_siisa">(No posee c&oacute;digo SIISA?)</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12 ">
+                    <div class="control-group">
+                        <label class="control-label">Nombre</label>
+                        <div class="controls">
+                            <input id="nombre" name="nombre" type="text" class="m-wrap span12" />
+                            <span class="help-block">Nombre del efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label">Domicilio</label>
+                        <div class="controls">
+                            <input id="domicilio" name="domicilio" type="text" class="m-wrap span12" />
+                            <span class="help-block">Domicilio del efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">C&oacute;digo postal</label>
+                        <div class="controls">
+                            <input id="codigo_postal" name="codigo_postal" type="text" class="m-wrap span12" />
+                            <span class="help-block">Ingrese el c&oacute;digo postal del efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Tipo efector</label>
+                        <div class="controls">
+                            <select id="tipo_efector" name="tipo_efector" class="m-wrap span12">
+                                <option value="">Seleccione un tipo</option>
+                                {OPTIONS_TIPO_EFECTOR}
+                            </select>
+                            <span class="help-block">Seleccione un tipo de efector</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Rural</label>
+                        <div class="controls">
+                            <select id="rural" name="rural" title="rural" class="m-wrap span12">
+                                <option value="N">No</option>
+                                <option value="S">Si</option>
+                            </select>
+                            <span class="help-block">Indique si se trata de un efector rural o no</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Cics</label>
+                        <div class="controls">
+                            <select id="cics" name="cics" title="cics" class="m-wrap span12">
+                                <option value="N">No</option>
+                                <option value="S">Si</option>
+                            </select>
+                            <span class="help-block">Indique si el efector es CICS o no</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Categorizaci&oacute;n</label>
+                        <div class="controls">
+                            <select id="categorizacion" name="categorizacion" class="m-wrap span12">
+                                <option value="">Seleccione categor&iacute;a</option>
+                                {OPTIONS_CATEGORIZACION}
+                            </select>
+                            <span class="help-block">Indique la categorizaci&oacute;n del efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Dependencia administrativa</label>
+                        <div class="controls">
+                            <select id="dependencia_adm" name="dependencia_adm" class="m-wrap span12">
+                                <option value="0">Seleccione dependencia</option>
+                                {OPTIONS_DEPENDENCIA}
+                            </select>
+                            <span class="help-block">Ingrese la dependencia administrativa a la que corresponde el efector</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Dependencia sanitaria</label>
+                        <div class="controls">
+                            <input id="dependencia_san" name="dependencia_san" type="text" class="m-wrap span12" />
+                            <span class="help-block">Ingrese la dependencia sanitaria a la que corresponde el efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Integrante</label>
+                        <div class="controls">
+                            <select id="integrante" name="integrante" class="m-wrap span12">
+                                <option value="N">No</option>
+                                <option value="S">Si</option>
+                            </select>
+                            <span class="help-block">Indique si el efector es integrante del programa SUMAR o no</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Compromiso de gesti&oacute;n</label>
+                        <div class="controls">
+                            <select id="compromiso" name="compromiso" class="m-wrap span12">
+                                <option value="N">No</option>
+                                <option value="S">Si</option>
+                            </select>
+                            <span class="help-block">Indique si el efector tiene compromiso de gesti&oacute;n o no</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Priorizado</label>
+                        <div class="controls">
+                            <select id="priorizado" name="priorizado" class="m-wrap span12">
+                                <option value="N">No</option>
+                                <option value="S">Si</option>
+                            </select>
+                            <span class="help-block">Indique si el efector es priorizado o no</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Referente</label>
+                        <div class="controls">
+                            <input id="referente" name="referente" type="text" class="m-wrap span12" />
+                            <span class="help-block">Ingrese el referente del efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="compromiso_gestion">
+                <h3 class="form-section">Compromiso de gesti&oacute;n</h3>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">N&uacute;mero compromiso</label>
+                            <div class="controls">
+                                <input id="numero_compromiso" name="numero_compromiso" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el n&uacute;mero de compromiso de gesti&oacute;n firmado</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Firmante compromiso</label>
+                            <div class="controls">
+                                <input id="firmante_compromiso" name="firmante_compromiso" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el firmante del compromiso de gesti&oacute;n</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha suscripci&oacute;n</label>
+                            <div class="controls">
+                                <input id="fecha_sus_cg" name="fecha_sus_cg" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese la fecha en la cual el efector fue suscripto</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha inicio</label>
+                            <div class="controls">
+                                <input id="fecha_ini_cg" name="fecha_ini_cg" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese de inicio del compromiso de gesti&oacute;n</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha fin</label>
+                            <div class="controls">
+                                <input id="fecha_fin_cg" name="fecha_fin_cg" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese la fecha en la cual el compromiso de gesti&oacute;n finaliza</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Pago indirecto</label>
+                            <div class="controls">
+                                <select id="pago_indirecto" name="pago_indirecto" class="m-wrap span12">
+                                    <option value="N">No</option>
+                                    <option value="S">Si</option>
+                                </select>
+                                <span class="help-block">Indique si el efector utiliza un m&eacute;todo de pago indirecto</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="convenio_administrativo">
+                <h3 class="form-section">Convenio administrativo</h3>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">N&uacute;mero convenio</label>
+                            <div class="controls">
+                                <input id="numero_convenio" name="numero_convenio" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el n&uacute;mero de convenio firmado</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Firmante convenio</label>
+                            <div class="controls">
+                                <input id="firmante_convenio" name="firmante_convenio" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el firmante del convenio administrativo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha suscripci&oacute;n</label>
+                            <div class="controls">
+                                <input id="fecha_sus_ca" name="fecha_sus_ca" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese la fecha de suscripci&oacute;n al convenio</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha inicio</label>
+                            <div class="controls">
+                                <input id="fecha_ini_ca" name="fecha_ini_ca" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese la fecha de inicio del convenio</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Fecha fin</label>
+                            <div class="controls">
+                                <input id="fecha_fin_ca" name="fecha_fin_ca" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese la fecha de finalizaci&oacute;n del convenio</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">Nombre tercer administrador</label>
+                            <div class="controls">
+                                <input id="nombre_adm" name="nombre_adm" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el nombre del tercer administrador</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6 ">
+                        <div class="control-group">
+                            <label class="control-label">C&oacute;digo tercer administrador</label>
+                            <div class="controls">
+                                <input id="codigo_adm" name="codigo_adm" type="text" class="m-wrap span12" />
+                                <span class="help-block">Ingrese el c&oacute;digo del tercer administrador (CUIE o SIISA)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="form-section">Datos geogr&aacute;ficos</h3>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Provincia</label>
+                        <div class="controls">
+                            <select class="m-wrap span12" id="provincia" name="provincia">
+                                {OPTIONS_PROVINCIA}
+                            </select>
+                            <span class="help-block">Seleccione la provincia a la que corresponde el efector</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Ciudad</label>
+                        <div class="controls">
+                            <input class="m-wrap span12" id="ciudad" name="ciudad" type="text" title="ciudad" />
+                            <span class="help-block">Ingrese la ciudad en la cual reside el efector</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Departamento</label>
+                        <div class="controls">
+                            <select id="departamento" name="departamento" class="m-wrap span12">
+                                {OPTIONS_DEPARTAMENTO}
+                            </select>
+                            <span class="help-block">Indique el departamento dentro de la provincia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Localidad</label>
+                        <div class="controls">
+                            <select id="localidad" name="localidad" class="m-wrap span12">
+                                {OPTIONS_LOCALIDAD}
+                            </select>
+                            <span class="help-block">Indique la localidad dentro del departamento</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="form-section">Correo electr&oacute;nico</h3>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Email</label>
+                        <div class="controls">
+                            <input id="email" name="email" type="text" class="m-wrap span12" />
+                            <span class="help-block">Si posee, ingrese un email v&aacute;lido</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Observaciones</label>
+                        <div class="controls">
+                            <input id="email_observaciones" name="email_observaciones" type="text" class="m-wrap span12" />
+                            <span class="help-block">Indique una observaci&oacute;n de ser necesario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="form-section">Tel&eacute;fono</h3>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">N&uacute;mero</label>
+                        <div class="controls">
+                            <input id="telefono" name="telefono" type="text" class="m-wrap span12" />
+                            <span class="help-block">Si posee, ingrese un tel&eacute;fono v&aacute;lido</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Tipo</label>
+                        <div class="controls">
+                            <select id="tipo_telefono" name="tipo_telefono" class="m-wrap span12">
+                                {OPTIONS_TIPO_TELEFONO}
+                            </select>
+                            <span class="help-block">Indique un tipo de ser necesario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6 ">
+                    <div class="control-group">
+                        <label class="control-label">Observaciones</label>
+                        <div class="controls">
+                            <input id="telefono_observaciones" name="telefono_observaciones" type="text" class="m-wrap span12" />
+                            <span class="help-block">Indique una observaci&oacute;n de ser necesario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn green"><i class="icon-ok"></i> Solicitar alta de nuevo efector</button>
+            </div>
+        </form>
+    </div>
 </div>
 <div style="display: none;">
-  <div id="dialog_respuesta"></div>
+    <div id="dialog_respuesta"></div>
 </div>
 <script>
-$(document).ready(function(){
-  
-  estilo_dialog('{CSS_GLOBAL}');
-  $("#compromiso_gestion , #convenio_administrativo").hide();
-  
-  $("#compromiso").change(function(){
-		var estado = $(this).val();
-		var integrante = $("#integrante").val();
-		
-		if (integrante == 'S') {
-		
-			switch (estado) {
-				case 'S':
-					$("#compromiso_gestion").fadeIn(); 
-				break;
-				case 'N': 
-					$("#compromiso_gestion , #convenio_administrativo").fadeOut();
-				break;
-			}
-		}
-	});
-  
-  $("#integrante").change(function(){
-		var estado = $(this).val();
-		var compromiso = $("#compromiso").val();
-		
-		if (compromiso == 'S') {
-		
-			switch (estado) {
-				case 'S':
-					$("#compromiso_gestion").fadeIn(); 
-				break;
-				case 'N': 
-					$("#compromiso_gestion , #convenio_administrativo").fadeOut();
-				break;
-			}
-		}
-	});
-  
-  $("#pago_indirecto").change(function(){
-		var estado = $(this).val();
-		switch (estado) {
-			case 'S': $("#convenio_administrativo").fadeIn(); break;
-			case 'N': $("#convenio_administrativo").fadeOut();; break;
-		}
-	});
-  
-  $("#fecha_sus_cg , #fecha_ini_cg , #fecha_fin_cg , #fecha_sus_ca , #fecha_ini_ca , #fecha_fin_ca").datepicker();
-  
-  $("#provincia").change(function(){
-		var provincia = $(this).val();
-		$("#departamento").html('');
-		$("#localidad").html('');
-    
-    $.ajax({
-      type : 'post',
-      url : 'app/parserAjax.php',
-      data : {
-        c : 'Geo',
-        m : 'selectDepartamentos',
-        p : 'id_provincia=' + provincia
-      },
-      success : function(data){
-        $('#departamento').html(data);
-      }
-    });
-	});
-  
-  $("#departamento").change(function(){
-		var provincia = $("#provincia").val();
-		var departamento = $(this).val();
-		$("#localidad").html('');
-    
-    $.ajax({
-      type : 'post',
-      url : 'app/parserAjax.php',
-      data : {
-        c : 'Geo',
-        m : 'selectLocalidad',
-        p : 'id_provincia=' + provincia + '&id_departamento=' + departamento
-      },
-      success : function(data){
-        $('#localidad').html(data);
-      }
-    });
-		
-	});
-  
-  $('#genera_siisa').click(function(event){
-		event.preventDefault();
-    $.ajax({
-      type : 'post',
-      url : 'app/parserAjax.php',
-      data : {
-        c : 'Efectores',
-        m : 'getSiisa',
-        p : 'id_session={ID_GRUPO}'
-      },
-      success : function(data){
-        $('#siisa').val(data);
-        $('#dialog_respuesta')
-          .html('Se ha generado un c&oacute;digo provisorio')
-          .dialog({
-            title : 'Atención!' ,
-            buttons : [{
-              text : 'Aceptar' ,
-              class : 'btn green' ,
-              click : function () {
-                $(this).dialog('close');
-              }
-            }]
-          });
-      }
-    });
-	});
-  
-  $('#formu_alta').validate({
-		rules : {
-			siisa : {
-				required : true ,
-				digits : true ,
-				minlength : 14 ,
-				maxlength : 14
-			} ,
-			nombre : {
-				required : true ,
-				minlength : 7
-			} ,
-			domicilio : {
-				required : true ,
-				minlength : 7
-			} ,
-			codigo_postal : {
-				maxlength : 8
-			} ,
-			tipo_efector : {
-				required : true
-			} ,
-			categorizacion : {
-				required : true
-			} ,
-			dependencia_adm : {
-				required : true
-			} ,
-			referente : {
-				required : true ,
-				minlength : 7
-			} ,
-			departamento : {
-				required : true
-			} ,
-			localidad : {
-				required : true
-			} ,
-			email : {
-				required : false ,
-				email : true
-			} ,
-			numero_compromiso : {
-				required : {
-					depends : function () {
-						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
-					}
-				}
-			} ,
-			firmante_compromiso : {
-				required : {
-					depends : function () {
-						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
-					}
-				}
-			} ,
-			fecha_sus_cg : {
-				required : {
-					depends : function () {
-						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			fecha_ini_cg : {
-				required : {
-					depends : function () {
-						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			fecha_fin_cg : {
-				required : {
-					depends : function () {
-						return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			fecha_sus_ca : {
-				required : {
-					depends : function () {
-						return ($('#pago_indirecto').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			fecha_ini_ca : {
-				required : {
-					depends : function () {
-						return ($('#pago_indirecto').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			fecha_fin_ca : {
-				required : {
-					depends : function () {
-						return ($('#pago_indirecto').val() == 'S');
-					}
-				} ,
-				dateISO : true
-			} ,
-			numero_convenio : {
-				required : {
-					depends : function () {
-						return ($('#pago_indirecto').val() == 'S');
-					}
-				}
-			} ,
-			firmante_convenio : {
-				required : {
-					depends : function () {
-						return ($('#pago_indirecto').val() == 'S');
-					}
-				}
-			}
-		} ,
-		messages : {
-			siisa : {
-				required : 'Campo requerido' ,
-				digits : 'S&oacute;lo se admiten valores num&eacute;ricos' ,
-				minlength : 'El campo debe ser de 14 d&iacute;gitos' ,
-				maxlength : 'El campo debe ser de 14 d&iacute;gitos'
-			} ,
-			nombre : {
-				required : 'Campo requerido' ,
-				minlength : 'M&iacute;nimo 7 caracteres'
-			} ,
-			domicilio : {
-				required : 'Campo requerido' ,
-				minlength : 'M&iacute;nimo 7 caracteres'
-			} ,
-			codigo_postal : {
-				maxlength : 'El valor no puede superar los 8 caracteres'
-			} ,
-			tipo_efector : {
-				required : 'Campo requerido'
-			} ,
-			categorizacion : {
-				required : 'Campo requerido'
-			} ,
-			dependencia_adm : {
-				required : 'Campo requerido'
-			} ,
-			referente : {
-				required : 'Campo requerido' ,
-				minlength : 'M&iacute;nimo 7 caracteres'
-			} ,
-			departamento : {
-				required : 'Campo requerido'
-			} ,
-			localidad : {
-				required : 'Campo requerido'
-			} ,
-			email : {
-				email : 'Ingrese un email v&aacute;lido'
-			} ,
-			numero_compromiso : {
-				required : 'Campo requerido'
-			} ,
-			firmante_compromiso : {
-				required : 'Campo requerido'
-			} ,
-			fecha_sus_cg : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			fecha_ini_cg : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			fecha_fin_cg : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			fecha_sus_ca : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			fecha_ini_ca : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			fecha_fin_ca : {
-				required : 'Campo requerido' ,
-				dateISO : 'Formato de fecha incorrecto'
-			} ,
-			numero_convenio : {
-				required : 'Campo requerido'
-			} ,
-			firmante_convenio : {
-				required : 'Campo requerido'
-			}
-		} ,
-		debug : false ,
-		submitHandler : function (form) {
-			mostrar_loading ();
-			$.ajax({
-				type : 'post',
-				url : 'app/parserAjax.php',
-				data : {
-          c : 'Efectores',
-          m : 'alta',
-          p : $(form).serialize()
-        },
-				success : function (data) {
-					ocultar_loading ();
-					$("#dialog_respuesta")
-            .html(data)
-            .dialog({
-              title		: "Confirmación" ,
-              buttons		: [{
-                text : 'Aceptar' ,
-                class : 'btn green' ,
-                click : function () {
-                  $(this).dialog("close");
-                 // $("#formu_alta")[0].reset();
-                }
-              }]
-            });
-				}
-			});
-		} ,
-		invalidHandler: function(event, validator) {
-			console.log (validator);
-		}
-	});
-  
-});
+$(document).ready(function() {
 
+    estilo_dialog('{CSS_GLOBAL}');
+    $("#compromiso_gestion , #convenio_administrativo").hide();
+
+    $("#compromiso").change(function() {
+        var estado = $(this).val();
+        var integrante = $("#integrante").val();
+
+        if (integrante == 'S') {
+
+            switch (estado) {
+                case 'S':
+                    $("#compromiso_gestion").fadeIn();
+                    break;
+                case 'N':
+                    $("#compromiso_gestion , #convenio_administrativo").fadeOut();
+                    break;
+            }
+        }
+    });
+
+    $("#integrante").change(function() {
+        var estado = $(this).val();
+        var compromiso = $("#compromiso").val();
+
+        if (compromiso == 'S') {
+
+            switch (estado) {
+                case 'S':
+                    $("#compromiso_gestion").fadeIn();
+                    break;
+                case 'N':
+                    $("#compromiso_gestion , #convenio_administrativo").fadeOut();
+                    break;
+            }
+        }
+    });
+
+    $("#pago_indirecto").change(function() {
+        var estado = $(this).val();
+        switch (estado) {
+            case 'S':
+                $("#convenio_administrativo").fadeIn();
+                break;
+            case 'N':
+                $("#convenio_administrativo").fadeOut();;
+                break;
+        }
+    });
+
+    $("#fecha_sus_cg , #fecha_ini_cg , #fecha_fin_cg , #fecha_sus_ca , #fecha_ini_ca , #fecha_fin_ca").datepicker();
+
+    $("#provincia").change(function() {
+        var provincia = $(this).val();
+        $("#departamento").html('');
+        $("#localidad").html('');
+
+        $.ajax({
+            type: 'post',
+            url: 'app/parserAjax.php',
+            data: {
+                c: 'Geo',
+                m: 'selectDepartamentos',
+                p: 'id_provincia=' + provincia
+            },
+            success: function(data) {
+                $('#departamento').html(data);
+            }
+        });
+    });
+
+    $("#departamento").change(function() {
+        var provincia = $("#provincia").val();
+        var departamento = $(this).val();
+        $("#localidad").html('');
+
+        $.ajax({
+            type: 'post',
+            url: 'app/parserAjax.php',
+            data: {
+                c: 'Geo',
+                m: 'selectLocalidad',
+                p: 'id_provincia=' + provincia + '&id_departamento=' + departamento
+            },
+            success: function(data) {
+                $('#localidad').html(data);
+            }
+        });
+
+    });
+
+    $('#genera_siisa').click(function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: 'app/parserAjax.php',
+            data: {
+                c: 'Efectores',
+                m: 'getSiisa',
+                p: 'id_session={ID_GRUPO}'
+            },
+            success: function(data) {
+                $('#siisa').val(data);
+                $('#dialog_respuesta')
+                    .html('Se ha generado un c&oacute;digo provisorio')
+                    .dialog({
+                        title: 'Atención!',
+                        buttons: [{
+                            text: 'Aceptar',
+                            class: 'btn green',
+                            click: function() {
+                                $(this).dialog('close');
+                            }
+                        }]
+                    });
+            }
+        });
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: 'app/parserAjax.php',
+        data: {
+            c: 'Efectores',
+            m: 'getNewCuie',
+            p: 'provincia={ID_GRUPO}'
+        },
+        success: function(data) {
+            $('#cuie').val(JSON.parse(data).cuie);
+        }
+    });
+
+    $('#formu_alta').validate({
+        errorElement: 'span', //default input error message container
+        errorClass: 'help-inline', // default input error message class
+        focusInvalid: false, // do not focus the last invalid input
+        ignore: "",
+        //onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        onsubmit: true,
+        rules: {
+            siisa: {
+                required: true,
+                digits: true,
+                minlength: 14,
+                maxlength: 14
+            },
+            nombre: {
+                required: true,
+                minlength: 7
+            },
+            domicilio: {
+                required: true,
+                minlength: 7
+            },
+            codigo_postal: {
+                maxlength: 8
+            },
+            tipo_efector: {
+                required: true
+            },
+            categorizacion: {
+                required: true
+            },
+            dependencia_adm: {
+                required: true
+            },
+            referente: {
+                required: true,
+                minlength: 7
+            },
+            departamento: {
+                required: true
+            },
+            localidad: {
+                required: true
+            },
+            email: {
+                required: false,
+                email: true
+            },
+            numero_compromiso: {
+                required: {
+                    depends: function() {
+                        if ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S') {
+                            return true
+                        };
+                    }
+                }
+
+            },
+            firmante_compromiso: {
+                required: {
+                    depends: function() {
+                        return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+                    }
+                }
+            },
+            fecha_sus_cg: {
+                required: {
+                    depends: function() {
+                        return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            fecha_ini_cg: {
+                required: {
+                    depends: function() {
+                        return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            fecha_fin_cg: {
+                required: {
+                    depends: function() {
+                        return ($('#integrante').val() == 'S' || $('#compromiso').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            fecha_sus_ca: {
+                required: {
+                    depends: function() {
+                        return ($('#pago_indirecto').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            fecha_ini_ca: {
+                required: {
+                    depends: function() {
+                        return ($('#pago_indirecto').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            fecha_fin_ca: {
+                required: {
+                    depends: function() {
+                        return ($('#pago_indirecto').val() == 'S');
+                    }
+                },
+                dateISO: true
+            },
+            numero_convenio: {
+                required: {
+                    depends: function() {
+                        return ($('#pago_indirecto').val() == 'S');
+                    }
+                }
+            },
+            firmante_convenio: {
+                required: {
+                    depends: function() {
+                        return ($('#pago_indirecto').val() == 'S');
+                    }
+                }
+            }
+        },
+        messages: {
+            siisa: {
+                required: 'Campo requerido',
+                digits: 'S&oacute;lo se admiten valores num&eacute;ricos',
+                minlength: 'El campo debe ser de 14 d&iacute;gitos',
+                maxlength: 'El campo debe ser de 14 d&iacute;gitos'
+            },
+            nombre: {
+                required: 'Campo requerido',
+                minlength: 'M&iacute;nimo 7 caracteres'
+            },
+            domicilio: {
+                required: 'Campo requerido',
+                minlength: 'M&iacute;nimo 7 caracteres'
+            },
+            codigo_postal: {
+                maxlength: 'El valor no puede superar los 8 caracteres'
+            },
+            tipo_efector: {
+                required: 'Campo requerido'
+            },
+            categorizacion: {
+                required: 'Campo requerido'
+            },
+            dependencia_adm: {
+                required: 'Campo requerido'
+            },
+            referente: {
+                required: 'Campo requerido',
+                minlength: 'M&iacute;nimo 7 caracteres'
+            },
+            departamento: {
+                required: 'Campo requerido'
+            },
+            localidad: {
+                required: 'Campo requerido'
+            },
+            email: {
+                email: 'Ingrese un email v&aacute;lido'
+            },
+            numero_compromiso: {
+                required: 'Campo requerido'
+            },
+            firmante_compromiso: {
+                required: 'Campo requerido'
+            },
+            fecha_sus_cg: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            fecha_ini_cg: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            fecha_fin_cg: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            fecha_sus_ca: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            fecha_ini_ca: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            fecha_fin_ca: {
+                required: 'Campo requerido',
+                dateISO: 'Formato de fecha incorrecto'
+            },
+            numero_convenio: {
+                required: 'Campo requerido'
+            },
+            firmante_convenio: {
+                required: 'Campo requerido'
+            }
+        },
+        debug: false,
+        highlight: function(element) { // hightlight error inputs
+            $(element)
+                .closest('.help-inline').removeClass('ok'); // display OK icon
+            $(element)
+                .closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+        },
+
+        unhighlight: function(element) { // revert the change done by hightlight
+            $(element)
+                .closest('.control-group').removeClass('error'); // set error class to the control group
+        },
+        success: function(label) {
+            label
+                .addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+                .closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+        },
+        submitHandler: function(form) {
+            mostrar_loading();
+
+            console.log($(form).serialize());
+
+            var fecha_var = new Date();
+            var fecha_envio = fecha_var.getDate() + "/" + (fecha_var.getMonth() + 1) + "/" + fecha_var.getFullYear();
+
+            $.ajax({
+                type: 'post',
+                url: 'app/parserAjax.php',
+                data: {
+                    c: 'Efectores',
+                    m: 'alta',
+                    p: $(form).serialize() + "&fecha_envio=" + fecha_envio
+                },
+                success: function(data) {
+                    ocultar_loading();
+                    $("#dialog_respuesta")
+                        .html(data)
+                        .dialog({
+                            title: "Confirmación",
+                            buttons: [{
+                                text: 'Aceptar',
+                                class: 'btn green',
+                                click: function() {
+                                    $(this).dialog("close");
+                                    // $("#formu_alta")[0].reset();
+                                }
+                            }]
+                        });
+                }
+            });
+        },
+        invalidHandler: function(event, validator) {
+            console.log(validator);
+        }
+    });
+
+});
 </script>

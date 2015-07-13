@@ -1,0 +1,88 @@
+<script>
+$("#mod_cuie").parents(".control-group").find("input:checkbox").attr("disabled","disabled");
+$('input:checkbox').uniform();
+
+$("input:checkbox").click(function(){
+	if ($(this).is(':checked')) {
+		$(this).parents(".control-group").find("input , select").removeAttr("disabled");
+	} else {
+		$(this).parents(".control-group").find("input:text , select").attr("disabled","disabled");
+	}
+});
+
+$("#mod_generales").submit(function(event){
+	event.preventDefault();
+
+	if ($('#efector').val().length == 0) {
+		$('#mod_mensajes').html('Por favor, verifique que el CUIE o SIISA estén ingresados');
+		$("#mod_mensajes").dialog({
+			title : 'Atención' ,
+			buttons : [{
+				text : 'Aceptar' ,
+				class : 'btn green' ,
+				click : function () { $(this).dialog("close"); }
+			}]
+		});
+	} else {
+		if ($(this).serialize().length > 0 ) {
+			$.ajax({
+				type : 'post' ,
+				data : $(this).serialize() + '&efector=' + $("#efector").val() ,
+				url  : 'modulos/efectores/abm/modificacion/generales.php' ,
+				success : function (data) {
+					$("#mod_mensajes").html(data);
+					$("#mod_mensajes").dialog({
+						title : 'Modificación' ,
+						buttons : [{
+							text : 'Aceptar' ,
+							class : 'btn green' ,
+							click : function () { $(this).dialog("close"); }
+						}]
+					});
+				}
+			});
+		}
+	}
+});
+
+$("#mod_siisa").blur(function(){
+	if ($(this).val().length != 14) {
+		$(this).parent().append("<span>Verifique que el código SIISA sea de 14 dígitos</span>");
+	}
+}).focus(function(){
+	$(this).parent().find("span").html("");
+});
+
+$("#mod_nombre , #mod_domicilio").blur(function(){
+	if ($(this).val().length < 5) {
+		$(this).parent().append("<span>Ingrese un nombre válido</span>");
+	}
+}).focus(function(){
+	$(this).parent().find("span").html("");
+});
+
+$("#mod_id_tipo_efector , #mod_id_categorizacion , #mod_id_dependencia_administrativa").blur(function(){
+	if ($(this).val() == 0) {
+		$(this).parent().append("<span>Seleccione un valor de la lista</span>");
+	}
+}).focus(function(){$(this).parent().find("span").html("");});
+
+
+
+</script>
+
+<div class="portlet form-up-data">
+	<div class="portlet-title">
+		<div class="caption"><i class="icon-reorder"></i>Modificaci&oacute;n de informaci&oacute;n general</div>
+	</div>
+	<div class="portlet-body form">
+		<form id="mod_generales" class="form-horizontal form-row-seperated">
+				
+			<!--</table>-->
+			<div class="form-actions">
+				<button type="submit" class="btn green"><i class="icon-ok"></i>Modificar</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div id="mod_mensajes"></div>

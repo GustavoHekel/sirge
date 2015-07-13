@@ -2,10 +2,10 @@
 
 require_once '../../../init.php';
 
-$Html = array (
-  '../../vistas/efectores/abm.html'
+$Html = array(
+	'../../vistas/efectores/abm.html',
 );
 
 $diccionario = [];
 
-Html::vista($Html , $diccionario);
+Html::vista($Html, $diccionario);

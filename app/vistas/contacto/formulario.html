@@ -153,7 +153,7 @@ $(document).ready(function() {
         }
 
         var fecha_var = new Date();
-        var fecha = fecha_var.getDate()+"/"+(fecha_var.getMonth()+1)+"/"+fecha_var.getFullYear();
+        var fecha = fecha_var.getDate() + "/" + (fecha_var.getMonth() + 1) + "/" + fecha_var.getFullYear();
 
 
         if (hasError == false) {
@@ -165,33 +165,33 @@ $(document).ready(function() {
             $.post("app/controladores/contacto/contacto.php", {
                     emailTo: emailToVal,
                     emailFrom: emailFromVal,
-                    subject: subjectVal,
+                    subject: "Contacto - " + subjectVal,
                     message: messageVal,
                     fecha: fecha
                 },
                 function(data) {
                     ocultar_loading();
-                    
+
                     var resultado = "";
 
                     if (data == "true") {
 
-                        resultado = "El mensaje ha sido enviado con éxito";                        
-                    }
-                    else{
-                        resultado = "Hubo un error al enviar el mail. " +data;
+                        resultado = "El mensaje ha sido enviado con éxito";
+                    } else {
+                        resultado = "Hubo un error al enviar el mail. " + data;
                     }
 
                     $('#info_mail').html(resultado).dialog({
-                            width: 300,
-                            buttons: [{
-                                text: 'Aceptar',
-                                class: 'btn yellow',
-                                click: function() {
-                                    $(this).dialog('close').empty();
-                                }
-                            }]
-                        });
+                        width: 300,
+                        height: 300,
+                        buttons: [{
+                            text: 'Aceptar',
+                            class: 'btn yellow',
+                            click: function() {
+                                $(this).dialog('close').empty();
+                            }
+                        }]
+                    });
                 }
             );
         }

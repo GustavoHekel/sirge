@@ -28,15 +28,15 @@
 <div id="mensaje_modificacion"></div>
 <div id="contenido" style="display:none;">
 <ul id="tab-mod-efector" class="nav nav-tabs">
-	<li><a data-target="#generales" data-toggle="tab" href="modulos/efectores/abm/modificacion/generales.php">Generales</a></li>
-	<li><a data-target="#geo" data-toggle="tab" href="modulos/efectores/abm/modificacion/datos_geograficos.php">Geo</a></li>
-	<li><a data-target="#com_ges" data-toggle="tab" href="modulos/efectores/abm/modificacion/compromiso_gestion.php">Compromiso gesti&oacute;n</a></li>
-	<li><a data-target="#con_adm" data-toggle="tab" href="modulos/efectores/abm/modificacion/convenio_administrador.php">Convenio administrativo</a></li>
-	<li><a data-target="#ref" data-toggle="tab" href="modulos/efectores/abm/modificacion/referentes.php">Referente</a></li>
-	<li><a data-target="#tel" data-toggle="tab" href="modulos/efectores/abm/modificacion/telefono.php">Tel&eacute;fono</a></li>
-	<li><a data-target="#ema" data-toggle="tab" href="modulos/efectores/abm/modificacion/email.php">Email</a></li>
-	<li><a data-target="#dec" data-toggle="tab" href="modulos/efectores/abm/modificacion/descentralizacion.php">Decentralizaci&oacute;n</a></li>
-	<li><a data-target="#ppac" data-toggle="tab" href="modulos/efectores/abm/modificacion/ppac.php">PPAC</a></li>
+	<li><a data-target="#generales" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/generales.php">Generales</a></li>
+	<li><a data-target="#geo" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/datos_geograficos.php">Geo</a></li>
+	<li><a data-target="#com_ges" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/compromiso_gestion.php">Compromiso gesti&oacute;n</a></li>
+	<li><a data-target="#con_adm" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/convenio_administrador.php">Convenio administrativo</a></li>
+	<li><a data-target="#ref" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/referentes.php">Referente</a></li>
+	<li><a data-target="#tel" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/telefono.php">Tel&eacute;fono</a></li>
+	<li><a data-target="#ema" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/email.php">Email</a></li>
+	<li><a data-target="#dec" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/descentralizacion.php">Decentralizaci&oacute;n</a></li>
+	<li><a data-target="#ppac" data-toggle="tab" href="app/controladores/efectores/abm/modificacion/ppac.php">PPAC</a></li>
 </ul>
 <div class="tab-content tab-contenedor tabs-mod">
 	<div class="tab-pane" id="generales">Cargando...</div>
@@ -128,29 +128,44 @@ $(document).ready(function() {
             console.log($("#formu_modif").serialize());
 
             efector = $("#efector").val();
-            
+            var ajax_query = true;
+
             $.ajax({
                 type: 'POST',
-                data: 'term=' + efector,
-                url: 'modulos/efectores/abm/modificacion.php',
+                data: 'efector=' + efector,
+                url: 'app/controladores/efectores/abm/modificacion.php',
                 success: function(data) {
+                    console.log(data);
+                    
+                    ajax = true;
+
                     if (data == 0) {
-                        dialog_error_modificacion('mensaje_modificacion','Hubo un error en la insercion de los datos. Consultar al administrador.');
-                    } else {
+                        dialog_error_modificacion('mensaje_modificacion','El efector no existe.');
+                    } else if(data == 1){
+                        dialog_error_modificacion('mensaje_modificacion','El efector no pertenece a su provincia.');
+                    }
+                    else {
                     	$("#contenido").show();
                         $(".tabs-mod").show();
-                        $("#tab-mod-efector").tab();
+                        $("#tab-mod-efector").tab();                        
                         $("#tab-mod-efector").bind("show", function(e) {
                             var contentID = $(e.target).attr("data-target");
                             var contentURL = $(e.target).attr("href");
-                            if (typeof(contentURL) != 'undefined')
+                            
+                            if (typeof(contentURL) != 'undefined'){                                
                                 $(contentID).load(contentURL + '?efector=' + efector, function() {
                                     $("#tab-mod-efector").tab();
                                 });
-                            else
+                            }
+                            else{                                                      
                                 $(contentID).tab('show');
-                        });
+                            }
+                        });                                                
                         $('#tab-mod-efector a:first').tab("show");
+                        if(ajax){
+                            $("#generales").load("app/controladores/efectores/abm/modificacion/generales.php" + "?efector=" + efector, function() {return true;});     
+                            ajax = false;
+                        }
                     }
                 }
             });           

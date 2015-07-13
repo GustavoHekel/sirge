@@ -2,7 +2,8 @@
 
 require_once '../../../init.php';
 
-if (!isset($_POST['emailTo'])) {
+if ( ! isset($_POST['emailTo']))
+{
 
 	$html = [
 		'../../vistas/contacto/formulario.html',
@@ -14,6 +15,9 @@ if (!isset($_POST['emailTo'])) {
 	];
 
 	Html::vista($html, $diccionario);
-} else {
+}
+else
+{
 	return Email::enviar_mail($_POST);
+	//print_r('http://'.$_SERVER['HTTP_HOST']);
 }

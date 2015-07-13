@@ -4,11 +4,13 @@ class Geo {
 
 	private $_db;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->_db = Bdd::getInstance();
 	}
 
-	public function dashboardMap() {
+	public function dashboardMap()
+	{
 		$sql = "select geojson_provincia as \"hc-key\", p.id_provincia, habitantes as value-- || '</br>' || 'Inscriptos SUMAR: ' ||
               ,(select sum(i.habitantes_sumar)
                                                                                                   FROM indec.poblacion_departamentos i
@@ -19,40 +21,47 @@ class Geo {
 		echo json_encode($data);
 	}
 
-	public function selectProvincias($id_provincia) {
+	public function selectProvincias($id_provincia)
+	{
 		$sql    = "select * from sistema.provincias";
 		$data   = $this->_db->query($sql)->getResults();
 		$select = '<option value="0">Seleccione una entidad</option>';
-		foreach ($data as $index => $valor) {
-			$select .= '<option value="' . $valor['id_provincia'] . '" ';
-			$select .= $id_provincia != '25' ? ($id_provincia == $valor['id_provincia'] ? 'selected="selected"' : 'disabled="disabled"') : '';
-			$select .= '>' . mb_convert_case($valor['descripcion'], MB_CASE_TITLE, 'UTF-8') . '</option>';
+		foreach ($data as $index => $valor)
+		{
+			$select .= '<option value="'.$valor['id_provincia'].'" ';
+			$select .= $id_provincia != '25' ? ($id_provincia == $valor['id_provincia'] ? '' : 'disabled="disabled"') : '';
+			$select .= '>'.mb_convert_case($valor['descripcion'], MB_CASE_TITLE, 'UTF-8').'</option>';
 		}
 		$select .= '</select>';
 		return $select;
 	}
 
-	public function selectDepartamentos($id_provincia) {
-		$sql    = "select * from geo.departamentos where id_provincia = ?";
+	public function selectDepartamentos($id_provincia)
+	{
+		$sql    = "select * from geo.departamentos where id_provincia                = ?";
 		$data   = $this->_db->query($sql, [$id_provincia])->getResults();
-		$select = '<option value="0">Seleccione un departamento</option>';
-		foreach ($data as $key => $value) {
+		$select = '<option value="">Seleccione un departamento</option>';
+		foreach ($data as $key => $value)
+		{
 			$select .= "<option value='{$value['id_departamento']}'>{$value['nombre_departamento']}</option>";
 		}
 		echo $select;
 	}
 
-	public function selectLocalidad($id_provincia, $id_departamento) {
-		$sql    = "select * from geo.localidades where id_provincia = ? and id_departamento = ?";
+	public function selectLocalidad($id_provincia, $id_departamento)
+	{
+		$sql    = "select * from geo.localidades where id_provincia                = ? and id_departamento                = ?";
 		$data   = $this->_db->query($sql, [$id_provincia, $id_departamento])->getResults();
-		$select = '';
-		foreach ($data as $key => $value) {
+		$select = '<option value="">Seleccione una localidad</option>';
+		foreach ($data as $key => $value)
+		{
 			$select .= "<option value='{$value['id_localidad']}'>{$value['nombre_localidad']}</option>";
 		}
 		echo $select;
 	}
 
-	public function getGraficoProvincia($id_provincia) {
+	public function getGraficoProvincia($id_provincia)
+	{
 
 		$sql = " SELECT id_dto, cantidad, habitantes, habitantes_sumar, (gep.latitud::text || ',' || gep.longitud::text) as ll, dto.nombre_departamento, round (100 * cantidad / (select count(*)
 		FROM efectores.efectores e
@@ -92,7 +101,8 @@ class Geo {
 
 	}
 
-	public function getPosicionProvincia($grupo) {
+	public function getPosicionProvincia($grupo)
+	{
 		return $this->_db->fquery('getPosicionProvincia', [$grupo], false)->getResults();
 	}
 }
